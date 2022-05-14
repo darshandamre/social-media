@@ -187,5 +187,5 @@ const injectedRtkApi = api.injectEndpoints({
 });
 
 export { injectedRtkApi as api };
-export const { useLoginMutation, useLogoutMutation, useRegisterMutation, useHelloQuery, useLazyHelloQuery, useMeQuery, useLazyMeQuery } = injectedRtkApi;
+
 

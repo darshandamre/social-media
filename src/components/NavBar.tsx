@@ -3,7 +3,7 @@ import { AppBar, Box, Button, Toolbar, Typography } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import { api } from "../app/api/baseApi";
 import { store } from "../app/store";
-import { useMeQuery, useLogoutMutation } from "../app/api/generated/graphql";
+import { useMeQuery, useLogoutMutation } from "../app/api";
 
 const NavBar = () => {
   const { data, isLoading } = useMeQuery();

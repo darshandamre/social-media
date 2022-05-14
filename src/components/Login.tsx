@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { MyTextField } from "./MyTextField";
-import { useLoginMutation } from "../app/api/generated/graphql";
+import { useLoginMutation } from "../app/api";
 import { useNavigate } from "react-router-dom";
 
 const loginSchema = yup.object().shape({
