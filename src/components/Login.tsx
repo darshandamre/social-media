@@ -3,6 +3,8 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { MyTextField } from "./MyTextField";
+import { useLoginMutation } from "../app/api/generated/graphql";
+import { useNavigate } from "react-router-dom";
 
 const loginSchema = yup.object().shape({
   email: yup.string().required().email("invalid email"),
@@ -18,6 +20,7 @@ const Login = () => {
   const {
     control,
     handleSubmit,
+    setError,
     formState: { isSubmitting }
   } = useForm<LoginFormData>({
     defaultValues: {
@@ -26,6 +29,9 @@ const Login = () => {
     },
     resolver: yupResolver(loginSchema)
   });
+
+  const [login] = useLoginMutation();
+  const navigate = useNavigate();
 
   return (
     <Box
@@ -37,10 +43,21 @@ const Login = () => {
         Login
       </Typography>
       <form
-        onSubmit={handleSubmit(async data => {
-          return await new Promise(res => {
-            setTimeout(() => res(true), 1000);
-          });
+        onSubmit={handleSubmit(async input => {
+          try {
+            const payload = await login({ input }).unwrap();
+            if (payload.login.errors) {
+              return payload.login.errors.forEach(({ field, message }) => {
+                setError(field as keyof LoginFormData, {
+                  type: "server",
+                  message
+                });
+              });
+            }
+            navigate("/");
+          } catch (err) {
+            console.error(err);
+          }
         })}>
         <MyTextField control={control} name="email" label="email" />
         <MyTextField

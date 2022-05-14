@@ -3,6 +3,8 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { MyTextField } from "./MyTextField";
+import { useRegisterMutation } from "../app/api/generated/graphql";
+import { useNavigate } from "react-router-dom";
 
 const registerSchema = yup.object().shape({
   username: yup
@@ -28,6 +30,7 @@ const Register = () => {
   const {
     control,
     handleSubmit,
+    setError,
     formState: { isSubmitting }
   } = useForm<RegisterFormData>({
     defaultValues: {
@@ -40,6 +43,9 @@ const Register = () => {
     resolver: yupResolver(registerSchema)
   });
 
+  const [register] = useRegisterMutation();
+  const navigate = useNavigate();
+
   return (
     <Box
       sx={{
@@ -50,10 +56,21 @@ const Register = () => {
         Sign up
       </Typography>
       <form
-        onSubmit={handleSubmit(async data => {
-          return await new Promise(res => {
-            setTimeout(() => res(true), 1000);
-          });
+        onSubmit={handleSubmit(async input => {
+          try {
+            const payload = await register({ input }).unwrap();
+            if (payload.register.errors) {
+              return payload.register.errors.forEach(({ field, message }) => {
+                setError(field as keyof RegisterFormData, {
+                  type: "server",
+                  message
+                });
+              });
+            }
+            navigate("/");
+          } catch (err) {
+            console.error(err);
+          }
         })}>
         <MyTextField control={control} name="username" label="username" />
         <MyTextField control={control} name="email" label="email" />
