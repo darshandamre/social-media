@@ -33,6 +33,23 @@ const Login = () => {
   const [login] = useLoginMutation();
   const navigate = useNavigate();
 
+  const handleLogin = handleSubmit(async input => {
+    try {
+      const payload = await login({ input }).unwrap();
+      if (payload.login.errors) {
+        return payload.login.errors.forEach(({ field, message }) => {
+          setError(field as keyof LoginFormData, {
+            type: "server",
+            message
+          });
+        });
+      }
+      navigate("/");
+    } catch (err) {
+      console.error(err);
+    }
+  });
+
   return (
     <Box
       sx={{
@@ -42,23 +59,7 @@ const Login = () => {
       <Typography my={3} variant="h3" component="div" align="center">
         Login
       </Typography>
-      <form
-        onSubmit={handleSubmit(async input => {
-          try {
-            const payload = await login({ input }).unwrap();
-            if (payload.login.errors) {
-              return payload.login.errors.forEach(({ field, message }) => {
-                setError(field as keyof LoginFormData, {
-                  type: "server",
-                  message
-                });
-              });
-            }
-            navigate("/");
-          } catch (err) {
-            console.error(err);
-          }
-        })}>
+      <form onSubmit={handleLogin}>
         <MyTextField control={control} name="email" label="email" />
         <MyTextField
           control={control}

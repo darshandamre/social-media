@@ -46,6 +46,23 @@ const Register = () => {
   const [register] = useRegisterMutation();
   const navigate = useNavigate();
 
+  const handleRegister = handleSubmit(async input => {
+    try {
+      const payload = await register({ input }).unwrap();
+      if (payload.register.errors) {
+        return payload.register.errors.forEach(({ field, message }) => {
+          setError(field as keyof RegisterFormData, {
+            type: "server",
+            message
+          });
+        });
+      }
+      navigate("/");
+    } catch (err) {
+      console.error(err);
+    }
+  });
+
   return (
     <Box
       sx={{
@@ -55,23 +72,7 @@ const Register = () => {
       <Typography my={3} variant="h3" component="div" align="center">
         Sign up
       </Typography>
-      <form
-        onSubmit={handleSubmit(async input => {
-          try {
-            const payload = await register({ input }).unwrap();
-            if (payload.register.errors) {
-              return payload.register.errors.forEach(({ field, message }) => {
-                setError(field as keyof RegisterFormData, {
-                  type: "server",
-                  message
-                });
-              });
-            }
-            navigate("/");
-          } catch (err) {
-            console.error(err);
-          }
-        })}>
+      <form onSubmit={handleRegister}>
         <MyTextField control={control} name="username" label="username" />
         <MyTextField control={control} name="email" label="email" />
         <MyTextField control={control} name="firstName" label="first name" />
