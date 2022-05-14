@@ -4,7 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { MyTextField } from "./MyTextField";
 import { useLoginMutation } from "../app/api";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const loginSchema = yup.object().shape({
   email: yup.string().required().email("invalid email"),
@@ -51,13 +51,9 @@ const Login = () => {
   });
 
   return (
-    <Box
-      sx={{
-        mx: "auto",
-        maxWidth: 350
-      }}>
-      <Typography my={3} variant="h3" component="div" align="center">
-        Login
+    <Box mb={8}>
+      <Typography variant="h4" component="div" align="center" pb={4}>
+        Login.
       </Typography>
       <form onSubmit={handleLogin}>
         <MyTextField control={control} name="email" label="email" />
@@ -68,7 +64,7 @@ const Login = () => {
           type="password"
         />
         <Button
-          sx={{ width: "100%", my: 1, borderRadius: "16px" }}
+          sx={{ width: "100%", my: 1, borderRadius: "16px", fontWeight: "600" }}
           size="large"
           type="submit"
           variant="contained"
@@ -76,6 +72,24 @@ const Login = () => {
           Login
         </Button>
       </form>
+
+      <Typography variant="body1" align="center" my={1}>
+        Don't have an account?{" "}
+        <Typography
+          variant="body1"
+          component={Link}
+          to="/register"
+          sx={{
+            textDecoration: "none",
+            color: "primary.main",
+            fontWeight: "600",
+            "&:hover": {
+              textDecoration: "underline"
+            }
+          }}>
+          Create Account
+        </Typography>
+      </Typography>
     </Box>
   );
 };

@@ -4,7 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { MyTextField } from "./MyTextField";
 import { useRegisterMutation } from "../app/api";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const registerSchema = yup.object().shape({
   username: yup
@@ -64,13 +64,9 @@ const Register = () => {
   });
 
   return (
-    <Box
-      sx={{
-        mx: "auto",
-        maxWidth: 350
-      }}>
-      <Typography my={3} variant="h3" component="div" align="center">
-        Sign up
+    <Box>
+      <Typography variant="h4" component="div" align="center" pb={4}>
+        Sign up.
       </Typography>
       <form onSubmit={handleRegister}>
         <MyTextField control={control} name="username" label="username" />
@@ -84,7 +80,7 @@ const Register = () => {
           type="password"
         />
         <Button
-          sx={{ width: "100%", my: 1, borderRadius: "16px" }}
+          sx={{ width: "100%", my: 1, borderRadius: "16px", fontWeight: "600" }}
           size="large"
           type="submit"
           variant="contained"
@@ -92,6 +88,24 @@ const Register = () => {
           Sign up
         </Button>
       </form>
+
+      <Typography variant="body1" align="center" my={1}>
+        Already have an account?{" "}
+        <Typography
+          variant="body1"
+          component={Link}
+          to="/login"
+          sx={{
+            textDecoration: "none",
+            color: "primary.main",
+            fontWeight: "600",
+            "&:hover": {
+              textDecoration: "underline"
+            }
+          }}>
+          Log in.
+        </Typography>
+      </Typography>
     </Box>
   );
 };
