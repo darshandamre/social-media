@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { MyTextField } from "./MyTextField";
-import { useRegisterMutation } from "../app/api";
+import { useRegisterMutation } from "../../app/api";
 import { Link, useNavigate } from "react-router-dom";
 
 const registerSchema = yup.object().shape({

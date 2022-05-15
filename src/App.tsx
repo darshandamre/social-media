@@ -1,8 +1,6 @@
 import { Route, Routes } from "react-router-dom";
-import { AuthPagesLayout } from "./components/AuthPagesLayout";
-import { Home } from "./components/Home";
-import { Login } from "./components/Login";
-import { Register } from "./components/Register";
+import { AuthPagesLayout, Login, Register } from "./features/auth";
+import { Home } from "./features/common";
 
 const App = () => {
   return (

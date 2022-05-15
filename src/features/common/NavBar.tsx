@@ -1,9 +1,9 @@
 import { LoadingButton } from "@mui/lab";
 import { AppBar, Box, Button, Toolbar, Typography } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
-import { api } from "../app/api/baseApi";
-import { store } from "../app/store";
-import { useMeQuery, useLogoutMutation } from "../app/api";
+import { api } from "../../app/api/baseApi";
+import { store } from "../../app/store";
+import { useMeQuery, useLogoutMutation } from "../../app/api";
 
 const NavBar = () => {
   const { data, isLoading } = useMeQuery();
