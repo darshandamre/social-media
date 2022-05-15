@@ -1,8 +1,6 @@
 import { LoadingButton } from "@mui/lab";
 import { AppBar, Box, Button, Toolbar, Typography } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
-import { api } from "../../app/api/baseApi";
-import { store } from "../../app/store";
 import { useMeQuery, useLogoutMutation } from "../../app/api";
 
 const NavBar = () => {
@@ -22,11 +20,7 @@ const NavBar = () => {
         <LoadingButton
           loading={isLogoutLoading}
           color="inherit"
-          onClick={async () => {
-            const payload = await logout().unwrap();
-            console.log(payload);
-            store.dispatch(api.util.resetApiState());
-          }}>
+          onClick={() => logout()}>
           Logout
         </LoadingButton>
       </>
