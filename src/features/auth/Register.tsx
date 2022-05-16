@@ -69,10 +69,10 @@ const Register = () => {
         Sign up.
       </Typography>
       <form onSubmit={handleRegister}>
-        <MyTextField control={control} name="username" label="username" />
-        <MyTextField control={control} name="email" label="email" />
         <MyTextField control={control} name="firstName" label="first name" />
         <MyTextField control={control} name="lastName" label="last name" />
+        <MyTextField control={control} name="username" label="username" />
+        <MyTextField control={control} name="email" label="email" />
         <MyTextField
           control={control}
           name="password"
