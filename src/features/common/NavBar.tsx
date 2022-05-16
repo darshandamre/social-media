@@ -56,7 +56,7 @@ const NavBar = () => {
               textDecoration: "none",
               color: "inherit"
             }}>
-            Blaze
+            Sauce
           </Typography>
           {body}
         </Toolbar>
