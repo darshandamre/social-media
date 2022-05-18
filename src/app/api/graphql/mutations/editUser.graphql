@@ -1,10 +1,11 @@
-mutation Login($input: LoginInput!) {
-  login(input: $input) {
+mutation EditUser($input: EditUserInput!) {
+  editUser(input: $input) {
     user {
       id
-      name
       username
-      email
+      name
+      bio
+      portfolioLink
       createdAt
       updatedAt
     }

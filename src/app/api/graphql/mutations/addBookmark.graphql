@@ -1,0 +1,3 @@
+mutation AddBookmark($postId: String!) {
+  addBookmark(id: $postId)
+}

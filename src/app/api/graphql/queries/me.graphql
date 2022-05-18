@@ -3,8 +3,7 @@ query Me {
     id
     username
     email
-    firstName
-    lastName
+    name
     createdAt
     updatedAt
     __typename

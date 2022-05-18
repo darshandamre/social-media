@@ -1,18 +1,17 @@
-mutation Register($input: UserRegisterInput!) {
+mutation Register($input: RegisterInput!) {
   register(input: $input) {
-    errors {
-      field
-      message
-    }
     user {
       id
       email
-      firstName
-      lastName
+      name
       username
       createdAt
       updatedAt
       __typename
+    }
+    errors {
+      field
+      message
     }
   }
 }

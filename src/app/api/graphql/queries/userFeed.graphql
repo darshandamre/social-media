@@ -1,0 +1,13 @@
+query UserFeed {
+  userFeed {
+    id
+    content
+    author {
+      id
+      username
+      name
+    }
+    createdAt
+    updatedAt
+  }
+}
