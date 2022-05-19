@@ -23,21 +23,22 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useMeQuery } from "../../app/api";
+import { getInitials } from "../../utils/getInitials";
 import { MyNavLink } from "./MyNavLink";
-
-const getInitials = (name: string): string => {
-  return name
-    .split(/\s/)
-    .map(str => str[0]?.toUpperCase())
-    .join("");
-};
 
 const LeftSidebar = () => {
   const { data, isLoading } = useMeQuery();
-  const initials = getInitials(data?.me?.name ?? "");
+  const initials = getInitials(data?.me?.name);
 
   return (
-    <Box p={1} display="flex" flexDirection="column" height="100%">
+    <Box
+      p={1}
+      display="flex"
+      flexDirection="column"
+      height="100%"
+      maxHeight="100vh"
+      position="sticky"
+      top={0}>
       <Box display="flex">
         <Box
           component={Link}

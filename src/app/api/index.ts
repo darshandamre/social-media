@@ -8,5 +8,7 @@ export const {
   useLazyMeQuery,
   useLoginMutation,
   useLogoutMutation,
-  useRegisterMutation
+  useRegisterMutation,
+  useUserFeedQuery,
+  useLazyUserFeedQuery
 } = enhancedApi;
