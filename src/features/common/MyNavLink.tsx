@@ -19,17 +19,12 @@ export const MyNavLink = ({
   const CurrentIcon = isActive ? activeIcon ?? icon : icon;
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        minWidth: 0
-      }}>
+    <Box display="flex">
       <Box
         component={Link}
         to={to}
         sx={{
           py: "0.5rem",
-          pr: "1rem",
           textDecoration: "none",
           color: "inherit",
           display: "flex",
@@ -39,12 +34,22 @@ export const MyNavLink = ({
             bgcolor: "background.paper"
           }
         }}>
-        {CurrentIcon ? <CurrentIcon sx={{ mx: "1rem" }} /> : null}
+        {CurrentIcon ? (
+          <CurrentIcon
+            sx={{
+              mx: "1rem",
+              fontSize: "1.8rem"
+            }}
+          />
+        ) : null}
+        {/* mx: 0.5rem smaller screens */}
         <Typography
           variant="h6"
           component="div"
           sx={{
-            fontWeight: isActive ? 600 : 400
+            fontWeight: isActive ? 600 : 400,
+            mr: "1.2rem"
+            // display: "none" //smaller screens
           }}>
           {children}
         </Typography>

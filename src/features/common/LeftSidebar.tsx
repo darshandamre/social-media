@@ -7,13 +7,21 @@ import {
   FavoriteBorder,
   Home,
   HomeOutlined,
+  LocalFireDepartment,
   MoreHoriz,
   Notifications,
   NotificationsNone,
   Rocket,
   RocketOutlined
 } from "@mui/icons-material";
-import { Avatar, Box, CircularProgress, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  CircularProgress,
+  Typography
+} from "@mui/material";
+import { Link } from "react-router-dom";
 import { useMeQuery } from "../../app/api";
 import { MyNavLink } from "./MyNavLink";
 
@@ -30,6 +38,36 @@ const LeftSidebar = () => {
 
   return (
     <Box p={1} display="flex" flexDirection="column" height="100%">
+      <Box display="flex">
+        <Box
+          component={Link}
+          to="/"
+          sx={{
+            py: "0.5rem",
+            textDecoration: "none",
+            color: "inherit",
+            display: "flex",
+            alignItems: "center"
+          }}>
+          <LocalFireDepartment
+            sx={{
+              mx: "1rem",
+              fontSize: "1.8rem"
+            }}
+          />
+          <Typography
+            variant="h4"
+            component="div"
+            sx={{
+              cursor: "pointer",
+              textDecoration: "none",
+              color: "inherit"
+            }}>
+            Blaze
+          </Typography>
+        </Box>
+      </Box>
+
       <MyNavLink to="/" icon={HomeOutlined} activeIcon={Home}>
         Home
       </MyNavLink>
@@ -57,6 +95,19 @@ const LeftSidebar = () => {
         activeIcon={AccountCircle}>
         Profile
       </MyNavLink>
+
+      <Button
+        sx={{
+          my: 1,
+          py: 1,
+          maxWidth: "20rem",
+          borderRadius: "16px",
+          fontWeight: "600"
+        }}
+        size="large"
+        variant="contained">
+        create post
+      </Button>
 
       <Box
         sx={{
