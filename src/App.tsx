@@ -1,12 +1,14 @@
 import { Route, Routes } from "react-router-dom";
 import { AuthPagesLayout, Login, Register, RequireAuth } from "./features/auth";
-import { Home } from "./features/common";
+import { Home, Layout } from "./features/common";
 
 const App = () => {
   return (
     <Routes>
       <Route path="/" element={<RequireAuth />}>
-        <Route index element={<Home />} />
+        <Route element={<Layout />}>
+          <Route index element={<Home />} />
+        </Route>
       </Route>
 
       <Route path="/" element={<AuthPagesLayout />}>
