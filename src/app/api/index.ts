@@ -10,5 +10,9 @@ export const {
   useLogoutMutation,
   useRegisterMutation,
   useUserFeedQuery,
-  useLazyUserFeedQuery
+  useLazyUserFeedQuery,
+  usePostQuery,
+  useLazyPostQuery,
+  usePostsQuery,
+  useLazyPostsQuery
 } = enhancedApi;

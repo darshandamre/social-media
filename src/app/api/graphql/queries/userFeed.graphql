@@ -2,8 +2,8 @@ query UserFeed {
   userFeed {
     id
     content
+    authorId
     author {
-      id
       username
       name
     }

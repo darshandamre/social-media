@@ -268,17 +268,17 @@ export type PostQueryVariables = Exact<{
 }>;
 
 
-export type PostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', id: string, content: string, authorId: string, createdAt: string, updatedAt: string } | null };
+export type PostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', id: string, content: string, authorId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', name?: string | null, username: string } | null } | null };
 
 export type PostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type PostsQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'Post', id: string, content: string, authorId: string, createdAt: string, updatedAt: string }> };
+export type PostsQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'Post', id: string, content: string, authorId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', name?: string | null, username: string } | null }> };
 
 export type UserFeedQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserFeedQuery = { __typename?: 'Query', userFeed: Array<{ __typename?: 'Post', id: string, content: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', id: string, username: string, name?: string | null } | null }> };
+export type UserFeedQuery = { __typename?: 'Query', userFeed: Array<{ __typename?: 'Post', id: string, content: string, authorId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', username: string, name?: string | null } | null }> };
 
 
 export const AddBookmarkDocument = `
@@ -423,6 +423,10 @@ export const PostDocument = `
     id
     content
     authorId
+    author {
+      name
+      username
+    }
     createdAt
     updatedAt
   }
@@ -434,6 +438,10 @@ export const PostsDocument = `
     id
     content
     authorId
+    author {
+      name
+      username
+    }
     createdAt
     updatedAt
   }
@@ -444,8 +452,8 @@ export const UserFeedDocument = `
   userFeed {
     id
     content
+    authorId
     author {
-      id
       username
       name
     }
