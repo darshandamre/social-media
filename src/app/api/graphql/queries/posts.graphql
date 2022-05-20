@@ -2,6 +2,8 @@ query Posts {
   posts {
     id
     content
+    isLikedByMe
+    isBookmarkedByMe
     authorId
     author {
       name
