@@ -19,7 +19,9 @@ const CreatePostModal = ({ open, onClose }: CreatePostModalProps) => {
       }}>
       <Box
         sx={{
-          minWidth: "40rem",
+          mx: "2rem",
+          width: "40rem",
+          maxWidth: "100%",
           bgcolor: "background.paper"
         }}>
         <Typography
