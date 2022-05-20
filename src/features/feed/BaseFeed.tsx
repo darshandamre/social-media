@@ -1,7 +1,6 @@
 import { Box, CircularProgress } from "@mui/material";
 import { PostsQuery } from "../../app/api/generated/graphql";
-import { CreatePost } from "../post/CreatePost";
-import { PostCard } from "../post/PostCard";
+import { CreatePost, PostCard } from "../post";
 
 type BaseFeedProps = {
   isLoading?: boolean;

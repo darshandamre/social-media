@@ -61,7 +61,7 @@ const CreatePost = () => {
         <Button
           sx={{
             my: 1,
-            borderRadius: "100vh",
+            borderRadius: "16px",
             fontWeight: "600",
             alignSelf: "end"
           }}
