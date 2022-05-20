@@ -10,19 +10,21 @@ const registerSchema = yup.object().shape({
   username: yup
     .string()
     .required()
-    .min(3, "username too short")
-    .max(50, "username too long"),
-  email: yup.string().required().email("invalid email"),
-  firstName: yup.string(),
-  lastName: yup.string(),
+    .trim()
+    .matches(/^[a-zA-Z0-9_]*$/, {
+      message: "username can only contain letters, numbers and '_'"
+    })
+    .min(3, "must be more that 3 characters")
+    .max(15, "must be less then 15 characters"),
+  email: yup.string().required().trim().email("invalid email"),
+  name: yup.string().trim().max(50, "name can't be more than 50 characters"),
   password: yup.string().required().min(4, "password too short")
 });
 
 type RegisterFormData = {
   username: string;
   email: string;
-  firstName: string;
-  lastName: string;
+  name: string;
   password: string;
 };
 
@@ -36,8 +38,7 @@ const Register = () => {
     defaultValues: {
       username: "",
       email: "",
-      firstName: "",
-      lastName: "",
+      name: "",
       password: ""
     },
     resolver: yupResolver(registerSchema)
@@ -69,8 +70,7 @@ const Register = () => {
         Sign up.
       </Typography>
       <form onSubmit={handleRegister}>
-        <MyTextField control={control} name="firstName" label="first name" />
-        <MyTextField control={control} name="lastName" label="last name" />
+        <MyTextField control={control} name="name" label="name" />
         <MyTextField control={control} name="username" label="username" />
         <MyTextField control={control} name="email" label="email" />
         <MyTextField

@@ -7,7 +7,7 @@ import { useLoginMutation } from "../../app/api";
 import { Link, useNavigate } from "react-router-dom";
 
 const loginSchema = yup.object().shape({
-  email: yup.string().required().email("invalid email"),
+  email: yup.string().required().trim().email("invalid email"),
   password: yup.string().required()
 });
 
