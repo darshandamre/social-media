@@ -1,5 +1,6 @@
 import { Box, CircularProgress } from "@mui/material";
 import { PostsQuery } from "../../app/api/generated/graphql";
+import { CreatePost } from "../post/CreatePost";
 import { PostCard } from "../post/PostCard";
 
 type BaseFeedProps = {
@@ -9,7 +10,7 @@ type BaseFeedProps = {
 
 const BaseFeed = ({ isLoading, posts }: BaseFeedProps) => {
   return (
-    <Box height="100%">
+    <>
       {isLoading ? (
         <Box
           sx={{
@@ -21,9 +22,14 @@ const BaseFeed = ({ isLoading, posts }: BaseFeedProps) => {
           <CircularProgress color="primary" />
         </Box>
       ) : (
-        posts?.map(post => <PostCard key={post.id} post={post} />)
+        <>
+          <CreatePost />
+          {posts?.map(post => (
+            <PostCard key={post.id} post={post} />
+          ))}
+        </>
       )}
-    </Box>
+    </>
   );
 };
 

@@ -6,7 +6,7 @@ import { LeftSidebar } from "./LeftSidebar";
 const Layout = () => {
   return (
     <Grid container height="100%" maxWidth="120rem" mx="auto">
-      <Grid item xs={4} md={3} lg={2}>
+      <Grid item xs={4} md={3.5} lg={2.5}>
         <LeftSidebar />
       </Grid>
       <Grid

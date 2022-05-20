@@ -14,5 +14,8 @@ export const {
   usePostQuery,
   useLazyPostQuery,
   usePostsQuery,
-  useLazyPostsQuery
+  useLazyPostsQuery,
+  useCreatePostMutation,
+  useEditPostMutation,
+  useDeletePostMutation
 } = enhancedApi;
