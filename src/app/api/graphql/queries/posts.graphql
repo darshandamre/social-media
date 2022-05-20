@@ -3,6 +3,10 @@ query Posts {
     id
     content
     authorId
+    author {
+      name
+      username
+    }
     createdAt
     updatedAt
   }

@@ -1,6 +1,9 @@
-import React from "react";
-import { NavBar } from "./NavBar";
+import { UserFeed } from "../feed";
 
 export const Home = () => {
-  return <NavBar />;
+  return (
+    <>
+      <UserFeed />
+    </>
+  );
 };
