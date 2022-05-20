@@ -7,7 +7,7 @@ import {
 import { Avatar, Box, BoxProps, styled, Typography } from "@mui/material";
 import { UserFeedQuery } from "../../app/api/generated/graphql";
 import { theme } from "../../theme";
-import { getInitials } from "../../utils/getInitials";
+import { stringAvatar } from "../../utils/stringAvatar";
 
 const PostActionContainer = styled(Box)<BoxProps>({
   display: "flex",
@@ -30,7 +30,7 @@ const PostCard = ({ post }: PostCardProps) => {
         display: "flex",
         borderBottom: `1px solid ${theme.palette.background.paper}`
       }}>
-      <Avatar>{getInitials(author?.name)}</Avatar>
+      <Avatar {...stringAvatar(author?.name)} />
       <Box mx="0.75rem" flexGrow={1}>
         <Box display="flex">
           {author?.name ? (

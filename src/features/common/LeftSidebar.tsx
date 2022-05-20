@@ -23,12 +23,11 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useMeQuery } from "../../app/api";
-import { getInitials } from "../../utils/getInitials";
+import { stringAvatar } from "../../utils/stringAvatar";
 import { MyNavLink } from "./MyNavLink";
 
 const LeftSidebar = () => {
   const { data, isLoading } = useMeQuery();
-  const initials = getInitials(data?.me?.name);
 
   return (
     <Box
@@ -128,7 +127,7 @@ const LeftSidebar = () => {
           <CircularProgress color="primary" />
         ) : (
           <>
-            <Avatar sx={{ bgcolor: "primary.main" }}>{initials}</Avatar>
+            <Avatar {...stringAvatar(data?.me?.name)} />
             <Box mx={1}>
               <Typography>{data?.me?.name}</Typography>
               <Typography color="InactiveCaptionText" lineHeight={1}>
