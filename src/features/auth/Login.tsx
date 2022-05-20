@@ -21,6 +21,7 @@ const Login = () => {
     control,
     handleSubmit,
     setError,
+    setValue,
     formState: { isSubmitting }
   } = useForm<LoginFormData>({
     defaultValues: {
@@ -70,6 +71,19 @@ const Login = () => {
           variant="contained"
           disabled={isSubmitting}>
           Login
+        </Button>
+        <Button
+          sx={{ width: "100%", my: 1, borderRadius: "16px", fontWeight: "600" }}
+          size="large"
+          type="button"
+          onClick={() => {
+            setValue("email", "bob@bob.com");
+            setValue("password", "bob123");
+            handleLogin();
+          }}
+          variant="outlined"
+          disabled={isSubmitting}>
+          Login with test credentials
         </Button>
       </form>
 
