@@ -118,6 +118,7 @@ export type Post = {
   isBookmarkedByMe: Scalars['Boolean'];
   isLikedByMe: Scalars['Boolean'];
   likedBy?: Maybe<Array<User>>;
+  likes: Scalars['Int'];
   updatedAt: Scalars['String'];
 };
 
@@ -270,17 +271,17 @@ export type PostQueryVariables = Exact<{
 }>;
 
 
-export type PostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', id: string, content: string, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', name?: string | null, username: string } | null } | null };
+export type PostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', name?: string | null, username: string } | null } | null };
 
 export type PostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type PostsQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'Post', id: string, content: string, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', name?: string | null, username: string } | null }> };
+export type PostsQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', name?: string | null, username: string } | null }> };
 
 export type UserFeedQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserFeedQuery = { __typename?: 'Query', userFeed: Array<{ __typename?: 'Post', id: string, content: string, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', username: string, name?: string | null } | null }> };
+export type UserFeedQuery = { __typename?: 'Query', userFeed: Array<{ __typename?: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', username: string, name?: string | null } | null }> };
 
 
 export const AddBookmarkDocument = `
@@ -424,6 +425,7 @@ export const PostDocument = `
   post(id: $postId) {
     id
     content
+    likes
     isLikedByMe
     isBookmarkedByMe
     authorId
@@ -441,6 +443,7 @@ export const PostsDocument = `
   posts {
     id
     content
+    likes
     isLikedByMe
     isBookmarkedByMe
     authorId
@@ -458,6 +461,7 @@ export const UserFeedDocument = `
   userFeed {
     id
     content
+    likes
     isLikedByMe
     isBookmarkedByMe
     authorId

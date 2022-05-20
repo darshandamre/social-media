@@ -2,6 +2,7 @@ query UserFeed {
   userFeed {
     id
     content
+    likes
     isLikedByMe
     isBookmarkedByMe
     authorId

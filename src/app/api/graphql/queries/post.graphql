@@ -2,6 +2,7 @@ query Post($postId: String!) {
   post(id: $postId) {
     id
     content
+    likes
     isLikedByMe
     isBookmarkedByMe
     authorId
