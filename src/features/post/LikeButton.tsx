@@ -1,7 +1,7 @@
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
-import { Typography } from "@mui/material";
+import { IconButton, Typography } from "@mui/material";
 import { useDislikeMutation, useLikeMutation } from "../../app/api";
-import { PostActionContainer } from "./PostCard";
+import { PostActionContainer } from "./PostActionContainer";
 
 const LikeButton = ({
   likes,
@@ -26,12 +26,8 @@ const LikeButton = ({
       onClick={() => {
         isLiked ? dislike({ postId }) : like({ postId });
       }}>
-      {likeIcon}
-      {likes === 0 ? null : (
-        <Typography variant="body2" mx="0.5rem">
-          {likes}
-        </Typography>
-      )}
+      <IconButton>{likeIcon}</IconButton>
+      {likes ? <Typography variant="body2">{likes}</Typography> : null}
     </PostActionContainer>
   );
 };

@@ -1,27 +1,11 @@
-import {
-  Bookmark,
-  BookmarkAddOutlined,
-  ChatBubbleOutlineOutlined,
-  MoreHoriz
-} from "@mui/icons-material";
-import {
-  Avatar,
-  Box,
-  Button,
-  ButtonProps,
-  styled,
-  Typography
-} from "@mui/material";
+import { ChatBubbleOutline, MoreHoriz } from "@mui/icons-material";
+import { Avatar, Box, IconButton, Typography } from "@mui/material";
 import { PostWithAuthorFieldFragment } from "../../app/api/generated/graphql";
 import { theme } from "../../theme";
 import { stringAvatar } from "../../utils/stringAvatar";
-import { LikeButton } from "./LikeButtom";
-
-export const PostActionContainer = styled(Button)<ButtonProps>({
-  display: "flex",
-  alignItems: "center",
-  cursor: "pointer"
-});
+import { BookmarkButton } from "./BookmarkButton";
+import { LikeButton } from "./LikeButton";
+import { PostActionContainer } from "./PostActionContainer";
 
 interface PostCardProps {
   post: PostWithAuthorFieldFragment;
@@ -30,17 +14,12 @@ interface PostCardProps {
 const PostCard = ({ post }: PostCardProps) => {
   const { content, author, likes, isLikedByMe, isBookmarkedByMe } = post;
 
-  const bookmarkIcon = isBookmarkedByMe ? (
-    <Bookmark fontSize="small" />
-  ) : (
-    <BookmarkAddOutlined fontSize="small" />
-  );
-
   return (
     <Box
       sx={{
         px: "1rem",
-        py: "0.75em",
+        pt: "0.75rem",
+        pb: "0.25rem",
         display: "flex",
         borderBottom: `1px solid ${theme.palette.background.paper}`
       }}>
@@ -55,17 +34,21 @@ const PostCard = ({ post }: PostCardProps) => {
           </Typography>
         </Box>
         <Typography>{content}</Typography>
-        <Box mt="0.5rem" display="flex" justifyContent="space-around">
+        <Box display="flex" justifyContent="space-around">
           <PostActionContainer>
-            <ChatBubbleOutlineOutlined fontSize="small" />
+            <IconButton>
+              <ChatBubbleOutline fontSize="small" />
+            </IconButton>
             {/* <Typography variant="body2" mx="0.5rem">
               4
             </Typography> */}
           </PostActionContainer>
 
           <LikeButton likes={likes} isLiked={isLikedByMe} postId={post.id} />
-
-          <PostActionContainer>{bookmarkIcon}</PostActionContainer>
+          <BookmarkButton
+            isBookmarkedByMe={isBookmarkedByMe}
+            postId={post.id}
+          />
         </Box>
       </Box>
       <MoreHoriz color="disabled" />
