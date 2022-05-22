@@ -1,16 +1,5 @@
 query UserFeed {
   userFeed {
-    id
-    content
-    likes
-    isLikedByMe
-    isBookmarkedByMe
-    authorId
-    author {
-      username
-      name
-    }
-    createdAt
-    updatedAt
+    ...PostWithAuthorField
   }
 }
