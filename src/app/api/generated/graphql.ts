@@ -130,12 +130,18 @@ export type Query = {
   me?: Maybe<User>;
   post?: Maybe<Post>;
   posts: Array<Post>;
+  user?: Maybe<User>;
   userFeed: Array<Post>;
 };
 
 
 export type QueryPostArgs = {
   id: Scalars['String'];
+};
+
+
+export type QueryUserArgs = {
+  username: Scalars['String'];
 };
 
 export type RegisterInput = {
@@ -156,6 +162,8 @@ export type User = {
   id: Scalars['ID'];
   likes?: Maybe<Array<Post>>;
   name?: Maybe<Scalars['String']>;
+  numFollowers?: Maybe<Scalars['Int']>;
+  numFollowing?: Maybe<Scalars['Int']>;
   portfolioLink?: Maybe<Scalars['String']>;
   posts?: Maybe<Array<Post>>;
   updatedAt: Scalars['String'];
@@ -297,6 +305,13 @@ export type PostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type PostsQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', id: string, name?: string | null, username: string } | null }> };
+
+export type UserQueryVariables = Exact<{
+  username: Scalars['String'];
+}>;
+
+
+export type UserQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: string, name?: string | null, username: string, bio?: string | null, portfolioLink?: string | null, numFollowers?: number | null, numFollowing?: number | null, posts?: Array<{ __typename?: 'Post', id: string, content: string, isBookmarkedByMe: boolean, isLikedByMe: boolean, likes: number, createdAt: string, updatedAt: string }> | null } | null };
 
 export type UserFeedQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -500,6 +515,28 @@ export const PostsDocument = `
   }
 }
     ${PostWithAuthorFieldFragmentDoc}`;
+export const UserDocument = `
+    query User($username: String!) {
+  user(username: $username) {
+    id
+    name
+    username
+    bio
+    portfolioLink
+    numFollowers
+    numFollowing
+    posts {
+      id
+      content
+      isBookmarkedByMe
+      isLikedByMe
+      likes
+      createdAt
+      updatedAt
+    }
+  }
+}
+    `;
 export const UserFeedDocument = `
     query UserFeed {
   userFeed {
@@ -566,6 +603,9 @@ const injectedRtkApi = api.injectEndpoints({
     }),
     Posts: build.query<PostsQuery, PostsQueryVariables | void>({
       query: (variables) => ({ document: PostsDocument, variables })
+    }),
+    User: build.query<UserQuery, UserQueryVariables>({
+      query: (variables) => ({ document: UserDocument, variables })
     }),
     UserFeed: build.query<UserFeedQuery, UserFeedQueryVariables | void>({
       query: (variables) => ({ document: UserFeedDocument, variables })
