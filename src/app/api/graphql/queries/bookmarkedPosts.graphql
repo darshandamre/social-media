@@ -1,0 +1,5 @@
+query BookmarkedPosts {
+  bookmarkedPosts {
+    ...PostWithAuthorField
+  }
+}

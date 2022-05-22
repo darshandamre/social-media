@@ -1,5 +1,5 @@
-import { Box, CircularProgress } from "@mui/material";
 import { PostWithAuthorFieldFragment } from "../../app/api/generated/graphql";
+import { Loader } from "../common";
 import { CreatePost, PostCard } from "../post";
 
 type BaseFeedProps = {
@@ -11,15 +11,7 @@ const BaseFeed = ({ isLoading, posts }: BaseFeedProps) => {
   return (
     <>
       {isLoading ? (
-        <Box
-          sx={{
-            height: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center"
-          }}>
-          <CircularProgress color="primary" />
-        </Box>
+        <Loader />
       ) : (
         <>
           <CreatePost />

@@ -124,7 +124,9 @@ export type Post = {
 
 export type Query = {
   __typename?: 'Query';
+  bookmarkedPosts?: Maybe<Array<Post>>;
   hello: Scalars['String'];
+  likedPosts?: Maybe<Array<Post>>;
   me?: Maybe<User>;
   post?: Maybe<Post>;
   posts: Array<Post>;
@@ -264,10 +266,20 @@ export type UnfollowMutationVariables = Exact<{
 
 export type UnfollowMutation = { __typename?: 'Mutation', unfollow: boolean };
 
+export type BookmarkedPostsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type BookmarkedPostsQuery = { __typename?: 'Query', bookmarkedPosts?: Array<{ __typename?: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', id: string, name?: string | null, username: string } | null }> | null };
+
 export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type HelloQuery = { __typename?: 'Query', hello: string };
+
+export type LikedPostsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type LikedPostsQuery = { __typename?: 'Query', likedPosts?: Array<{ __typename?: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', id: string, name?: string | null, username: string } | null }> | null };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -448,11 +460,25 @@ export const UnfollowDocument = `
   unfollow(unfollowId: $unfollowId)
 }
     `;
+export const BookmarkedPostsDocument = `
+    query BookmarkedPosts {
+  bookmarkedPosts {
+    ...PostWithAuthorField
+  }
+}
+    ${PostWithAuthorFieldFragmentDoc}`;
 export const HelloDocument = `
     query Hello {
   hello
 }
     `;
+export const LikedPostsDocument = `
+    query LikedPosts {
+  likedPosts {
+    ...PostWithAuthorField
+  }
+}
+    ${PostWithAuthorFieldFragmentDoc}`;
 export const MeDocument = `
     query Me {
   me {
@@ -523,8 +549,14 @@ const injectedRtkApi = api.injectEndpoints({
     Unfollow: build.mutation<UnfollowMutation, UnfollowMutationVariables>({
       query: (variables) => ({ document: UnfollowDocument, variables })
     }),
+    BookmarkedPosts: build.query<BookmarkedPostsQuery, BookmarkedPostsQueryVariables | void>({
+      query: (variables) => ({ document: BookmarkedPostsDocument, variables })
+    }),
     Hello: build.query<HelloQuery, HelloQueryVariables | void>({
       query: (variables) => ({ document: HelloDocument, variables })
+    }),
+    LikedPosts: build.query<LikedPostsQuery, LikedPostsQueryVariables | void>({
+      query: (variables) => ({ document: LikedPostsDocument, variables })
     }),
     Me: build.query<MeQuery, MeQueryVariables | void>({
       query: (variables) => ({ document: MeDocument, variables })
