@@ -16,10 +16,10 @@ export const enhancedApi = generatedApi.enhanceEndpoints({
       invalidatesTags: ["Me"]
     },
     LikedPosts: {
-      providesTags: ["Like"]
+      providesTags: ["Like", "Bookmark"]
     },
     BookmarkedPosts: {
-      providesTags: ["Bookmark"]
+      providesTags: ["Like", "Bookmark"]
     },
     Like: {
       invalidatesTags: ["Like"],
