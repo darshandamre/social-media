@@ -19,5 +19,7 @@ export const {
   useEditPostMutation,
   useDeletePostMutation,
   useLikeMutation,
-  useDislikeMutation
+  useDislikeMutation,
+  useAddBookmarkMutation,
+  useRemoveBookmarkMutation
 } = enhancedApi;
