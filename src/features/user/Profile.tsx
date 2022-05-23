@@ -46,12 +46,14 @@ const Profile = () => {
       <Box mx="1rem">
         <Box mt="2rem" mb="1.5rem" display="flex" alignItems="center">
           <Avatar
-            {...stringAvatar(name)}
             sx={{
               width: "7rem",
-              height: "7rem"
-            }}
-          />
+              height: "7rem",
+              fontSize: "2rem",
+              ...stringAvatar(name)?.sx
+            }}>
+            {stringAvatar(name)?.children}
+          </Avatar>
 
           <ProfileButton user={user} />
         </Box>
