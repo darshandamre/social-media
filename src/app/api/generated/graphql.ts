@@ -115,13 +115,18 @@ export type Post = {
   content: Scalars['String'];
   createdAt: Scalars['String'];
   id: Scalars['ID'];
+  isBookmarkedByMe: Scalars['Boolean'];
+  isLikedByMe: Scalars['Boolean'];
   likedBy?: Maybe<Array<User>>;
+  likes: Scalars['Int'];
   updatedAt: Scalars['String'];
 };
 
 export type Query = {
   __typename?: 'Query';
+  bookmarkedPosts?: Maybe<Array<Post>>;
   hello: Scalars['String'];
+  likedPosts?: Maybe<Array<Post>>;
   me?: Maybe<User>;
   post?: Maybe<Post>;
   posts: Array<Post>;
@@ -162,6 +167,14 @@ export type UserResponse = {
   errors?: Maybe<Array<FieldError>>;
   user?: Maybe<User>;
 };
+
+export type PostWithAuthorFieldFragment = { __typename?: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', id: string, name?: string | null, username: string } | null };
+
+export type RegularErrorFragment = { __typename?: 'FieldError', field?: string | null, message: string };
+
+export type RegularUserFragment = { __typename?: 'User', id: string, name?: string | null, username: string };
+
+export type RegularUserResponseFragment = { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field?: string | null, message: string }> | null, user?: { __typename?: 'User', id: string, name?: string | null, username: string } | null };
 
 export type AddBookmarkMutationVariables = Exact<{
   postId: Scalars['String'];
@@ -253,34 +266,82 @@ export type UnfollowMutationVariables = Exact<{
 
 export type UnfollowMutation = { __typename?: 'Mutation', unfollow: boolean };
 
+export type BookmarkedPostsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type BookmarkedPostsQuery = { __typename?: 'Query', bookmarkedPosts?: Array<{ __typename?: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', id: string, name?: string | null, username: string } | null }> | null };
+
 export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type HelloQuery = { __typename?: 'Query', hello: string };
 
+export type LikedPostsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type LikedPostsQuery = { __typename?: 'Query', likedPosts?: Array<{ __typename?: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', id: string, name?: string | null, username: string } | null }> | null };
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: { __typename: 'User', id: string, username: string, email: string, name?: string | null, createdAt: string, updatedAt: string } | null };
+export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, name?: string | null, username: string } | null };
 
 export type PostQueryVariables = Exact<{
   postId: Scalars['String'];
 }>;
 
 
-export type PostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', id: string, content: string, authorId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', name?: string | null, username: string } | null } | null };
+export type PostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', id: string, name?: string | null, username: string } | null } | null };
 
 export type PostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type PostsQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'Post', id: string, content: string, authorId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', name?: string | null, username: string } | null }> };
+export type PostsQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', id: string, name?: string | null, username: string } | null }> };
 
 export type UserFeedQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserFeedQuery = { __typename?: 'Query', userFeed: Array<{ __typename?: 'Post', id: string, content: string, authorId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', username: string, name?: string | null } | null }> };
+export type UserFeedQuery = { __typename?: 'Query', userFeed: Array<{ __typename?: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', id: string, name?: string | null, username: string } | null }> };
 
-
+export const RegularUserFragmentDoc = `
+    fragment RegularUser on User {
+  id
+  name
+  username
+}
+    `;
+export const PostWithAuthorFieldFragmentDoc = `
+    fragment PostWithAuthorField on Post {
+  id
+  content
+  likes
+  isLikedByMe
+  isBookmarkedByMe
+  authorId
+  author {
+    ...RegularUser
+  }
+  createdAt
+  updatedAt
+}
+    ${RegularUserFragmentDoc}`;
+export const RegularErrorFragmentDoc = `
+    fragment RegularError on FieldError {
+  field
+  message
+}
+    `;
+export const RegularUserResponseFragmentDoc = `
+    fragment RegularUserResponse on UserResponse {
+  errors {
+    ...RegularError
+  }
+  user {
+    ...RegularUser
+  }
+}
+    ${RegularErrorFragmentDoc}
+${RegularUserFragmentDoc}`;
 export const AddBookmarkDocument = `
     mutation AddBookmark($postId: String!) {
   addBookmark(id: $postId)
@@ -399,69 +460,53 @@ export const UnfollowDocument = `
   unfollow(unfollowId: $unfollowId)
 }
     `;
+export const BookmarkedPostsDocument = `
+    query BookmarkedPosts {
+  bookmarkedPosts {
+    ...PostWithAuthorField
+  }
+}
+    ${PostWithAuthorFieldFragmentDoc}`;
 export const HelloDocument = `
     query Hello {
   hello
 }
     `;
+export const LikedPostsDocument = `
+    query LikedPosts {
+  likedPosts {
+    ...PostWithAuthorField
+  }
+}
+    ${PostWithAuthorFieldFragmentDoc}`;
 export const MeDocument = `
     query Me {
   me {
-    id
-    username
-    email
-    name
-    createdAt
-    updatedAt
-    __typename
+    ...RegularUser
   }
 }
-    `;
+    ${RegularUserFragmentDoc}`;
 export const PostDocument = `
     query Post($postId: String!) {
   post(id: $postId) {
-    id
-    content
-    authorId
-    author {
-      name
-      username
-    }
-    createdAt
-    updatedAt
+    ...PostWithAuthorField
   }
 }
-    `;
+    ${PostWithAuthorFieldFragmentDoc}`;
 export const PostsDocument = `
     query Posts {
   posts {
-    id
-    content
-    authorId
-    author {
-      name
-      username
-    }
-    createdAt
-    updatedAt
+    ...PostWithAuthorField
   }
 }
-    `;
+    ${PostWithAuthorFieldFragmentDoc}`;
 export const UserFeedDocument = `
     query UserFeed {
   userFeed {
-    id
-    content
-    authorId
-    author {
-      username
-      name
-    }
-    createdAt
-    updatedAt
+    ...PostWithAuthorField
   }
 }
-    `;
+    ${PostWithAuthorFieldFragmentDoc}`;
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -504,8 +549,14 @@ const injectedRtkApi = api.injectEndpoints({
     Unfollow: build.mutation<UnfollowMutation, UnfollowMutationVariables>({
       query: (variables) => ({ document: UnfollowDocument, variables })
     }),
+    BookmarkedPosts: build.query<BookmarkedPostsQuery, BookmarkedPostsQueryVariables | void>({
+      query: (variables) => ({ document: BookmarkedPostsDocument, variables })
+    }),
     Hello: build.query<HelloQuery, HelloQueryVariables | void>({
       query: (variables) => ({ document: HelloDocument, variables })
+    }),
+    LikedPosts: build.query<LikedPostsQuery, LikedPostsQueryVariables | void>({
+      query: (variables) => ({ document: LikedPostsDocument, variables })
     }),
     Me: build.query<MeQuery, MeQueryVariables | void>({
       query: (variables) => ({ document: MeDocument, variables })

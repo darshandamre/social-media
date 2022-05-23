@@ -17,5 +17,13 @@ export const {
   useLazyPostsQuery,
   useCreatePostMutation,
   useEditPostMutation,
-  useDeletePostMutation
+  useDeletePostMutation,
+  useLikeMutation,
+  useDislikeMutation,
+  useAddBookmarkMutation,
+  useRemoveBookmarkMutation,
+  useLikedPostsQuery,
+  useLazyLikedPostsQuery,
+  useBookmarkedPostsQuery,
+  useLazyBookmarkedPostsQuery
 } = enhancedApi;

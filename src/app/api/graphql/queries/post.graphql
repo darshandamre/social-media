@@ -1,13 +1,5 @@
 query Post($postId: String!) {
   post(id: $postId) {
-    id
-    content
-    authorId
-    author {
-      name
-      username
-    }
-    createdAt
-    updatedAt
+    ...PostWithAuthorField
   }
 }

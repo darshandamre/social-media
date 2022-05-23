@@ -1,0 +1,13 @@
+fragment PostWithAuthorField on Post {
+  id
+  content
+  likes
+  isLikedByMe
+  isBookmarkedByMe
+  authorId
+  author {
+    ...RegularUser
+  }
+  createdAt
+  updatedAt
+}

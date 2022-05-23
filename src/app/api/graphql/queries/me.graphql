@@ -1,11 +1,5 @@
 query Me {
   me {
-    id
-    username
-    email
-    name
-    createdAt
-    updatedAt
-    __typename
+    ...RegularUser
   }
 }

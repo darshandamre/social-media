@@ -1,13 +1,5 @@
 query Posts {
   posts {
-    id
-    content
-    authorId
-    author {
-      name
-      username
-    }
-    createdAt
-    updatedAt
+    ...PostWithAuthorField
   }
 }

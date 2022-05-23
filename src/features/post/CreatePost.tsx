@@ -44,6 +44,7 @@ const CreatePost = () => {
 
         <TextField
           multiline
+          fullWidth
           minRows={2}
           variant="standard"
           placeholder="Share something interesting..."
@@ -53,7 +54,7 @@ const CreatePost = () => {
           helperText={error}
           sx={{
             mx: "1rem",
-            width: "100%",
+            // width: "100%",
             flexGrow: 1
           }}
         />
