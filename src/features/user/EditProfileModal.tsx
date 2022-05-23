@@ -3,6 +3,7 @@ import { ArrowBack } from "@mui/icons-material";
 import { Box, Button, IconButton, Modal, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
+import { useEditUserMutation } from "../../app/api";
 import { UserQuery } from "../../app/api/generated/graphql";
 import { MyTextField } from "../common";
 
@@ -36,6 +37,7 @@ const EditProfileModal = ({
   const {
     control,
     handleSubmit,
+    setValue,
     setError,
     formState: { isSubmitting }
   } = useForm<EditProfileFormData>({
@@ -47,8 +49,31 @@ const EditProfileModal = ({
     resolver: yupResolver(userEditSchema)
   });
 
-  const saveUser = handleSubmit(() => {
-    //
+  const [editUser] = useEditUserMutation();
+
+  const saveUser = handleSubmit(async input => {
+    try {
+      const {
+        editUser: { user: editedUser, errors }
+      } = await editUser({ input }).unwrap();
+      if (errors) {
+        errors.forEach(({ field, message }) => {
+          setError(field as keyof EditProfileFormData, {
+            type: "server",
+            message
+          });
+        });
+        return;
+      }
+
+      setValue("name", editedUser?.name ?? "");
+      setValue("bio", editedUser?.bio ?? "");
+      setValue("portfolioLink", editedUser?.portfolioLink ?? "");
+
+      handleClose();
+    } catch (err) {
+      console.error(err);
+    }
   });
 
   return (

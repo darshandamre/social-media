@@ -27,5 +27,6 @@ export const {
   useBookmarkedPostsQuery,
   useLazyBookmarkedPostsQuery,
   useUserQuery,
-  useLazyUserQuery
+  useLazyUserQuery,
+  useEditUserMutation
 } = enhancedApi;
