@@ -46,6 +46,14 @@ export const enhancedApi = generatedApi.enhanceEndpoints({
               }
             )
           );
+          dispatch(
+            enhancedApi.util.updateQueryData("Me", undefined, draft => {
+              if (!draft.me) return;
+              draft.me.id = user.id;
+              draft.me.username = user.username;
+              draft.me.name = user.name;
+            })
+          );
         } catch (err) {
           console.error(err);
         }

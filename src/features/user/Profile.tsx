@@ -40,7 +40,7 @@ const Profile = () => {
           }}>
           <ArrowBack />
         </IconButton>
-        <span>{name ?? `@${username}`}</span>
+        <span>{name ? name : `@${username}`}</span>
       </Typography>
 
       <Box mx="1rem">
