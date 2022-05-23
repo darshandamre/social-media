@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Typography, IconButton, Avatar, Box, Button } from "@mui/material";
 import { useUserQuery } from "../../app/api";
 import { Loader } from "../common";
@@ -14,6 +14,7 @@ const Profile = () => {
   const { username } = useParams<ProfileParams>();
   const { data, isLoading } = useUserQuery({ username: username! });
   const { user } = data ?? {};
+  const navigate = useNavigate();
 
   if (isLoading) return <Loader />;
 
@@ -32,6 +33,7 @@ const Profile = () => {
           alignItems: "center"
         })}>
         <IconButton
+          onClick={() => navigate(-1)}
           sx={{
             mx: 1
           }}>
@@ -55,10 +57,9 @@ const Profile = () => {
               ml: "auto",
               mr: "0.5rem",
               mt: "2rem",
-              borderRadius: "16px",
+              borderRadius: "100vw",
               fontWeight: "600"
             }}
-            size="large"
             type="submit"
             variant="contained">
             Follow
@@ -83,25 +84,31 @@ const Profile = () => {
             {portfolioLink}
           </Box>
         ) : null}
-
-        <Typography variant="h5" my="1rem">
-          Posts
-        </Typography>
-        {posts?.map(post => (
-          <PostCard
-            key={post.id}
-            post={{
-              ...post,
-              authorId: id,
-              author: {
-                id,
-                username: user.username,
-                name
-              }
-            }}
-          />
-        ))}
       </Box>
+      <Typography
+        variant="h5"
+        py="0.5rem"
+        px="1rem"
+        sx={({ palette }) => ({
+          borderTop: `1px solid ${palette.background.paper}`,
+          borderBottom: `1px solid ${palette.background.paper}`
+        })}>
+        Posts
+      </Typography>
+      {posts?.map(post => (
+        <PostCard
+          key={post.id}
+          post={{
+            ...post,
+            authorId: id,
+            author: {
+              id,
+              username: user.username,
+              name
+            }
+          }}
+        />
+      ))}
     </>
   );
 };

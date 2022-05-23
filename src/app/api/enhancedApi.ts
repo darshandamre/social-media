@@ -15,6 +15,9 @@ export const enhancedApi = generatedApi.enhanceEndpoints({
     Logout: {
       invalidatesTags: ["Me"]
     },
+    User: {
+      providesTags: ["Like", "Bookmark"]
+    },
     LikedPosts: {
       providesTags: ["Like", "Bookmark"]
     },
