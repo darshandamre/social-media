@@ -24,6 +24,33 @@ export const enhancedApi = generatedApi.enhanceEndpoints({
     BookmarkedPosts: {
       providesTags: ["Like", "Bookmark"]
     },
+    EditUser: {
+      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+        try {
+          const {
+            data: {
+              editUser: { user }
+            }
+          } = await queryFulfilled;
+
+          if (!user) return;
+          dispatch(
+            enhancedApi.util.updateQueryData(
+              "User",
+              { username: user.username },
+              draft => {
+                draft.user = {
+                  ...draft.user,
+                  ...user
+                };
+              }
+            )
+          );
+        } catch (err) {
+          console.error(err);
+        }
+      }
+    },
     Like: {
       invalidatesTags: ["Like"],
       onQueryStarted: async ({ postId }, { dispatch, queryFulfilled }) => {
