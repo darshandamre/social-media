@@ -19,6 +19,7 @@ import {
   Box,
   Button,
   CircularProgress,
+  IconButton,
   Typography
 } from "@mui/material";
 import { useState } from "react";
@@ -97,7 +98,7 @@ const LeftSidebar = () => {
           Notifications
         </MyNavLink>
         <MyNavLink
-          to="/profile"
+          to={data?.me ? `/u/${data.me.username}` : "/login"}
           icon={AccountCircleOutlined}
           activeIcon={AccountCircle}>
           Profile
@@ -117,24 +118,29 @@ const LeftSidebar = () => {
           create post
         </Button>
 
-        <Box
-          sx={{
-            mt: "auto",
-            p: 1,
-            maxWidth: "20rem",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            cursor: "pointer",
-            borderRadius: "100vh",
-            "&:hover": {
-              bgcolor: "background.paper"
-            }
-          }}>
+        <Box mt="auto">
           {isLoading ? (
-            <CircularProgress color="primary" />
+            <Box display="flex" alignItems="center" justifyContent="center">
+              <CircularProgress color="primary" />
+            </Box>
           ) : (
-            <>
+            <Box
+              component={Link}
+              to={`/u/${data?.me?.username}`}
+              sx={{
+                p: 1,
+                maxWidth: "20rem",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+                borderRadius: "100vh",
+                textDecoration: "none",
+                color: "inherit",
+                "&:hover": {
+                  bgcolor: "background.paper"
+                }
+              }}>
               <Avatar {...stringAvatar(data?.me?.name)} />
               <Box mx={1}>
                 <Typography>{data?.me?.name}</Typography>
@@ -142,8 +148,10 @@ const LeftSidebar = () => {
                   @{data?.me?.username}
                 </Typography>
               </Box>
-              <MoreHoriz sx={{ ml: "auto" }} />
-            </>
+              <IconButton onClick={e => e.preventDefault()} sx={{ ml: "auto" }}>
+                <MoreHoriz />
+              </IconButton>
+            </Box>
           )}
         </Box>
       </Box>

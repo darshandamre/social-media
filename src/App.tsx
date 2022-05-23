@@ -4,6 +4,7 @@ import { BookmarksPage } from "./features/bookmarks";
 import { Layout } from "./features/common";
 import { ExploreFeed, UserFeed } from "./features/feed";
 import { LikesPage } from "./features/likes";
+import { Profile } from "./features/user";
 
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
           <Route path="explore" element={<ExploreFeed />} />
           <Route path="likes" element={<LikesPage />} />
           <Route path="bookmarks" element={<BookmarksPage />} />
+          <Route path="u/:username" element={<Profile />} />
         </Route>
       </Route>
 

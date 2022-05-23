@@ -1,5 +1,6 @@
 import { ChatBubbleOutline, MoreHoriz } from "@mui/icons-material";
 import { Avatar, Box, IconButton, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
 import { PostWithAuthorFieldFragment } from "../../app/api/generated/graphql";
 import { theme } from "../../theme";
 import { stringAvatar } from "../../utils/stringAvatar";
@@ -13,6 +14,7 @@ interface PostCardProps {
 
 const PostCard = ({ post }: PostCardProps) => {
   const { content, author, likes, isLikedByMe, isBookmarkedByMe } = post;
+  const profileUrl = `/u/${author?.username}`;
 
   return (
     <Box
@@ -23,13 +25,32 @@ const PostCard = ({ post }: PostCardProps) => {
         display: "flex",
         borderBottom: `1px solid ${theme.palette.background.paper}`
       }}>
-      <Avatar {...stringAvatar(author?.name)} />
+      <Avatar
+        component={Link}
+        to={profileUrl}
+        sx={{ textDecoration: "none", ...stringAvatar(author?.name)?.sx }}>
+        {stringAvatar(author?.name)?.children}
+      </Avatar>
       <Box mx="0.75rem" flexGrow={1}>
         <Box display="flex">
           {author?.name ? (
-            <Typography mr="0.5rem">{author.name}</Typography>
+            <Typography
+              component={Link}
+              to={profileUrl}
+              sx={{
+                mr: "0.5rem",
+                color: "inherit",
+                textDecoration: "none",
+                "&:hover": { textDecoration: "underline" }
+              }}>
+              {author.name}
+            </Typography>
           ) : null}
-          <Typography component="span" color="InactiveCaptionText">
+          <Typography
+            component={Link}
+            to={profileUrl}
+            color="InactiveCaptionText"
+            sx={{ textDecoration: "none" }}>
             @{author?.username}
           </Typography>
         </Box>

@@ -2,7 +2,7 @@ import { Box, Button, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { MyTextField } from "./MyTextField";
+import { MyTextField } from "../common";
 import { useLoginMutation } from "../../app/api";
 import { Link, useNavigate } from "react-router-dom";
 

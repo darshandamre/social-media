@@ -1,20 +1,16 @@
-import { TextField } from "@mui/material";
+import { TextField, TextFieldProps } from "@mui/material";
 import {
   FieldValues,
   useController,
   UseControllerProps
 } from "react-hook-form";
 
-type MyTextFieldProps<T> = UseControllerProps<T> & {
-  label: string;
-  type?: string;
-};
+type MyTextFieldProps<T> = UseControllerProps<T> & TextFieldProps;
 
 const MyTextField = <T extends FieldValues>({
   control,
   name,
-  label,
-  type
+  ...props
 }: MyTextFieldProps<T>) => {
   const {
     field,
@@ -24,10 +20,9 @@ const MyTextField = <T extends FieldValues>({
   return (
     <TextField
       fullWidth
+      {...props}
       sx={{ my: 1 }}
       {...field}
-      label={label}
-      type={type}
       error={!!error}
       helperText={error?.message}
     />
