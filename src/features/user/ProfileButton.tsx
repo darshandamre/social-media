@@ -40,11 +40,13 @@ const ProfileButton = ({ user }: ProfileButtonProps) => {
         onClick={buttonAction}>
         {buttonText}
       </Button>
-      <EditProfileModal
-        open={showModal}
-        handleClose={toggleModal}
-        user={user}
-      />
+      {showModal ? (
+        <EditProfileModal
+          open={showModal}
+          handleClose={toggleModal}
+          user={user}
+        />
+      ) : null}
     </>
   );
 };
