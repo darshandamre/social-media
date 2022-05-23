@@ -1,10 +1,11 @@
-import { useNavigate, useParams } from "react-router-dom";
-import { Typography, IconButton, Avatar, Box, Button } from "@mui/material";
-import { useUserQuery } from "../../app/api";
-import { Loader } from "../common";
 import { ArrowBack } from "@mui/icons-material";
+import { Avatar, Box, IconButton, Typography } from "@mui/material";
+import { useNavigate, useParams } from "react-router-dom";
+import { useUserQuery } from "../../app/api";
 import { stringAvatar } from "../../utils/stringAvatar";
+import { Loader } from "../common";
 import { PostCard } from "../post";
+import { ProfileButton } from "./ProfileButton";
 
 type ProfileParams = {
   username: string;
@@ -12,8 +13,8 @@ type ProfileParams = {
 
 const Profile = () => {
   const { username } = useParams<ProfileParams>();
-  const { data, isLoading } = useUserQuery({ username: username! });
-  const { user } = data ?? {};
+  const { data: userData, isLoading } = useUserQuery({ username: username! });
+  const { user } = userData ?? {};
   const navigate = useNavigate();
 
   if (isLoading) return <Loader />;
@@ -52,18 +53,7 @@ const Profile = () => {
             }}
           />
 
-          <Button
-            sx={{
-              ml: "auto",
-              mr: "0.5rem",
-              mt: "2rem",
-              borderRadius: "100vw",
-              fontWeight: "600"
-            }}
-            type="submit"
-            variant="contained">
-            Follow
-          </Button>
+          <ProfileButton userId={id} />
         </Box>
 
         <Box my="1rem">
@@ -80,7 +70,9 @@ const Profile = () => {
             href={portfolioLink}
             target="_blank"
             rel="noreferrer"
-            color="primary.dark">
+            my="0.5rem"
+            color="primary.dark"
+            display="block">
             {portfolioLink}
           </Box>
         ) : null}
