@@ -53,7 +53,7 @@ const Profile = () => {
             }}
           />
 
-          <ProfileButton userId={id} />
+          <ProfileButton user={user} />
         </Box>
 
         <Box my="1rem">

@@ -1,14 +1,16 @@
-import { Box, Button, ButtonProps, Modal } from "@mui/material";
+import { Button, ButtonProps } from "@mui/material";
 import { useReducer } from "react";
 import { useMeQuery } from "../../app/api";
+import { UserQuery } from "../../app/api/generated/graphql";
+import { EditProfileModal } from "./EditProfileModal";
 
 type ProfileButtonProps = {
-  userId: string;
+  user: NonNullable<UserQuery["user"]>;
 };
 
-const ProfileButton = ({ userId }: ProfileButtonProps) => {
+const ProfileButton = ({ user }: ProfileButtonProps) => {
   const { data } = useMeQuery();
-  const isMyProfile = data?.me?.id === userId;
+  const isMyProfile = data?.me?.id === user.id;
 
   const [showModal, toggleModal] = useReducer(s => !s, false);
 
@@ -38,18 +40,11 @@ const ProfileButton = ({ userId }: ProfileButtonProps) => {
         onClick={buttonAction}>
         {buttonText}
       </Button>
-      <Modal
+      <EditProfileModal
         open={showModal}
-        onClose={toggleModal}
-        sx={({ palette }) => ({
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center"
-        })}>
-        <Box bgcolor="background.paper">
-          edit profile modal will appear here
-        </Box>
-      </Modal>
+        handleClose={toggleModal}
+        user={user}
+      />
     </>
   );
 };

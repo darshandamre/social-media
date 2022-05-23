@@ -8,13 +8,15 @@ import {
 type MyTextFieldProps<T> = UseControllerProps<T> & {
   label: string;
   type?: string;
+  multiline?: boolean;
 };
 
 const MyTextField = <T extends FieldValues>({
   control,
   name,
   label,
-  type
+  type,
+  multiline = false
 }: MyTextFieldProps<T>) => {
   const {
     field,
@@ -24,6 +26,7 @@ const MyTextField = <T extends FieldValues>({
   return (
     <TextField
       fullWidth
+      multiline={multiline}
       sx={{ my: 1 }}
       {...field}
       label={label}
