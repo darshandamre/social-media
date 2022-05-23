@@ -40,7 +40,7 @@ const Profile = () => {
           }}>
           <ArrowBack />
         </IconButton>
-        <span>{name}</span>
+        <span>{name ?? `@${username}`}</span>
       </Typography>
 
       <Box mx="1rem">
@@ -54,7 +54,6 @@ const Profile = () => {
             }}>
             {stringAvatar(name)?.children}
           </Avatar>
-
           <ProfileButton user={user} />
         </Box>
 
@@ -74,7 +73,10 @@ const Profile = () => {
             rel="noreferrer"
             my="0.5rem"
             color="primary.dark"
-            display="block">
+            display="block"
+            sx={{
+              wordWrap: "break-word"
+            }}>
             {portfolioLink}
           </Box>
         ) : null}
