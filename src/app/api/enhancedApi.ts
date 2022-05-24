@@ -1,7 +1,7 @@
 import { api as generatedApi } from "./generated/graphql";
 
 export const enhancedApi = generatedApi.enhanceEndpoints({
-  addTagTypes: ["Me", "Like", "Bookmark"],
+  addTagTypes: ["Me", "User", "Post", "Likes", "Bookmarks"],
   endpoints: {
     Me: {
       providesTags: ["Me"]
@@ -16,13 +16,40 @@ export const enhancedApi = generatedApi.enhanceEndpoints({
       invalidatesTags: ["Me"]
     },
     User: {
-      providesTags: ["Like", "Bookmark"]
+      providesTags: result =>
+        result
+          ? [
+              ...(result.user?.posts?.map(({ id }) => ({
+                type: "Post" as const,
+                id
+              })) ?? ["Post" as const]),
+              { type: "User", id: result.user?.id }
+            ]
+          : ["User", "Post"]
     },
     LikedPosts: {
-      providesTags: ["Like", "Bookmark"]
+      providesTags: result =>
+        result
+          ? [
+              ...(result.likedPosts?.map(post => ({
+                type: "Post" as const,
+                id: post.id
+              })) ?? []),
+              "Likes"
+            ]
+          : ["Post"]
     },
     BookmarkedPosts: {
-      providesTags: ["Like", "Bookmark"]
+      providesTags: result =>
+        result
+          ? [
+              ...(result.bookmarkedPosts?.map(post => ({
+                type: "Post" as const,
+                id: post.id
+              })) ?? []),
+              "Bookmarks"
+            ]
+          : ["Post"]
     },
     EditUser: {
       onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
@@ -60,7 +87,8 @@ export const enhancedApi = generatedApi.enhanceEndpoints({
       }
     },
     Like: {
-      invalidatesTags: ["Like"],
+      invalidatesTags: (result, _, { postId }) =>
+        result?.like ? [{ type: "Post", id: postId }, "Likes"] : [],
       onQueryStarted: async ({ postId }, { dispatch, queryFulfilled }) => {
         const userFeedPatchResult = dispatch(
           enhancedApi.util.updateQueryData("UserFeed", undefined, draft => {
@@ -91,7 +119,8 @@ export const enhancedApi = generatedApi.enhanceEndpoints({
       }
     },
     Dislike: {
-      invalidatesTags: ["Like"],
+      invalidatesTags: (result, _, { postId }) =>
+        result?.dislike ? [{ type: "Post", id: postId }, "Likes"] : [],
       onQueryStarted: async ({ postId }, { dispatch, queryFulfilled }) => {
         const userFeedPatchResult = dispatch(
           enhancedApi.util.updateQueryData("UserFeed", undefined, draft => {
@@ -122,7 +151,8 @@ export const enhancedApi = generatedApi.enhanceEndpoints({
       }
     },
     AddBookmark: {
-      invalidatesTags: ["Bookmark"],
+      invalidatesTags: (result, _, { postId }) =>
+        result?.addBookmark ? [{ type: "Post", id: postId }, "Bookmarks"] : [],
       onQueryStarted: async ({ postId }, { dispatch, queryFulfilled }) => {
         const userFeedPatchResult = dispatch(
           enhancedApi.util.updateQueryData("UserFeed", undefined, draft => {
@@ -151,7 +181,10 @@ export const enhancedApi = generatedApi.enhanceEndpoints({
       }
     },
     RemoveBookmark: {
-      invalidatesTags: ["Bookmark"],
+      invalidatesTags: (result, _, { postId }) =>
+        result?.removeBookmark
+          ? [{ type: "Post", id: postId }, "Bookmarks"]
+          : [],
       onQueryStarted: async ({ postId }, { dispatch, queryFulfilled }) => {
         const userFeedPatchResult = dispatch(
           enhancedApi.util.updateQueryData("UserFeed", undefined, draft => {

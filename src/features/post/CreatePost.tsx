@@ -21,7 +21,11 @@ const CreatePost = () => {
 
   const handleCreatePost: React.FormEventHandler<HTMLFormElement> = async e => {
     e.preventDefault();
-    if (error || content.length === 0) return;
+    if (content.trim().length === 0) {
+      setError(`can't create empty post`);
+      return;
+    }
+    if (error) return;
     await createPost({ content });
     setShowAlert(true);
     setTimeout(() => {
