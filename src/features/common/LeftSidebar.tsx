@@ -59,8 +59,9 @@ const LeftSidebar = () => {
             }}>
             <LocalFireDepartment
               sx={{
-                mx: "1rem",
-                fontSize: "1.8rem"
+                mx: "0.8rem",
+                fontSize: "2.2rem",
+                color: "primary.main"
               }}
             />
             <Typography
