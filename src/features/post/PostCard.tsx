@@ -1,4 +1,4 @@
-import { ChatBubbleOutline, MoreHoriz } from "@mui/icons-material";
+import { ChatBubbleOutline } from "@mui/icons-material";
 import { Avatar, Box, IconButton, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { PostWithAuthorFieldFragment } from "../../app/api/generated/graphql";
@@ -7,6 +7,7 @@ import { stringAvatar } from "../../utils/stringAvatar";
 import { BookmarkButton } from "./BookmarkButton";
 import { LikeButton } from "./LikeButton";
 import { PostActionContainer } from "./PostActionContainer";
+import { PostCardOptions } from "./PostCardOptions";
 
 interface PostCardProps {
   post: PostWithAuthorFieldFragment;
@@ -23,6 +24,8 @@ const PostCard = ({ post }: PostCardProps) => {
         pt: "0.75rem",
         pb: "0.25rem",
         display: "flex",
+        alignItems: "start",
+        position: "relative",
         borderBottom: `1px solid ${theme.palette.background.paper}`
       }}>
       <Avatar
@@ -72,7 +75,8 @@ const PostCard = ({ post }: PostCardProps) => {
           />
         </Box>
       </Box>
-      <MoreHoriz color="disabled" />
+
+      <PostCardOptions post={post} />
     </Box>
   );
 };

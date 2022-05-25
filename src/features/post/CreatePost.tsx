@@ -58,7 +58,6 @@ const CreatePost = () => {
           helperText={error}
           sx={{
             mx: "1rem",
-            // width: "100%",
             flexGrow: 1
           }}
         />
