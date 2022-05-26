@@ -1,4 +1,5 @@
 import { Avatar, Box, Button, Modal, Typography } from "@mui/material";
+import { useDeletePostMutation } from "../../app/api";
 import { PostWithAuthorFieldFragment } from "../../app/api/generated/graphql";
 import { stringAvatar } from "../../utils/stringAvatar";
 
@@ -9,7 +10,8 @@ type DeletePostModalProps = {
 };
 
 const DeletePostModal = ({ post, open, handleClose }: DeletePostModalProps) => {
-  const { author, content } = post;
+  const { id, author, content } = post;
+  const [deletePost] = useDeletePostMutation();
   return (
     <Modal
       open={open}
@@ -62,7 +64,13 @@ const DeletePostModal = ({ post, open, handleClose }: DeletePostModalProps) => {
             onClick={handleClose}>
             Cancel
           </Button>
-          <Button variant="contained" color="error">
+          <Button
+            onClick={() => {
+              deletePost({ postId: id });
+              handleClose();
+            }}
+            variant="contained"
+            color="error">
             Delete
           </Button>
         </Box>
