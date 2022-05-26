@@ -26,7 +26,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useMeQuery } from "../../app/api";
 import { stringAvatar } from "../../utils/stringAvatar";
-import { CreatePostModal } from "../post";
+import { CreateOrEditPostModal } from "../post";
 import { MyNavLink } from "./MyNavLink";
 
 const LeftSidebar = () => {
@@ -156,7 +156,7 @@ const LeftSidebar = () => {
           )}
         </Box>
       </Box>
-      <CreatePostModal open={isOpen} onClose={handleClose} />
+      <CreateOrEditPostModal open={isOpen} onClose={handleClose} />
     </>
   );
 };

@@ -1,13 +1,16 @@
 import { Close } from "@mui/icons-material";
 import { Box, Modal, Typography } from "@mui/material";
-import { CreatePost } from "./CreatePost";
+import { CreateOrEditPost } from "./CreateOrEditPost";
 
-interface CreatePostModalProps {
+interface CreateOrEditPostModalProps {
   open: boolean;
   onClose: () => void;
 }
 
-const CreatePostModal = ({ open, onClose }: CreatePostModalProps) => {
+const CreateOrEditPostModal = ({
+  open,
+  onClose
+}: CreateOrEditPostModalProps) => {
   return (
     <Modal
       open={open}
@@ -33,10 +36,10 @@ const CreatePostModal = ({ open, onClose }: CreatePostModalProps) => {
           Create post
           <Close sx={{ ml: "auto", cursor: "pointer" }} onClick={onClose} />
         </Typography>
-        <CreatePost />
+        <CreateOrEditPost />
       </Box>
     </Modal>
   );
 };
 
-export { CreatePostModal };
+export { CreateOrEditPostModal };

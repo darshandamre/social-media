@@ -4,7 +4,7 @@ import { useCreatePostMutation, useMeQuery } from "../../app/api";
 import { theme } from "../../theme";
 import { stringAvatar } from "../../utils/stringAvatar";
 
-const CreatePost = () => {
+const CreateOrEditPost = () => {
   const { data } = useMeQuery();
   const [createPost, { isLoading, isSuccess }] = useCreatePostMutation();
   const [content, setContent] = useState("");
@@ -88,4 +88,4 @@ const CreatePost = () => {
   );
 };
 
-export { CreatePost };
+export { CreateOrEditPost };
