@@ -1,7 +1,9 @@
 import { Avatar, Box, Button, Modal, Typography } from "@mui/material";
 import { useDeletePostMutation } from "../../app/api";
 import { PostWithAuthorFieldFragment } from "../../app/api/generated/graphql";
+import { useAppDispatch } from "../../app/hooks";
 import { stringAvatar } from "../../utils/stringAvatar";
+import { showAlertThenHide } from "../alert";
 
 type DeletePostModalProps = {
   open: boolean;
@@ -12,6 +14,7 @@ type DeletePostModalProps = {
 const DeletePostModal = ({ post, open, handleClose }: DeletePostModalProps) => {
   const { id, author, content } = post;
   const [deletePost] = useDeletePostMutation();
+  const dispatch = useAppDispatch();
   return (
     <Modal
       open={open}
@@ -65,8 +68,26 @@ const DeletePostModal = ({ post, open, handleClose }: DeletePostModalProps) => {
             Cancel
           </Button>
           <Button
-            onClick={() => {
-              deletePost({ postId: id });
+            onClick={async () => {
+              try {
+                const response = await deletePost({ postId: id }).unwrap();
+                if (response.deletePost) {
+                  showAlertThenHide(dispatch, {
+                    message: "post deleted successfully",
+                    severity: "success"
+                  });
+                } else {
+                  showAlertThenHide(dispatch, {
+                    message: "some error occured, post not deleted",
+                    severity: "error"
+                  });
+                }
+              } catch {
+                showAlertThenHide(dispatch, {
+                  message: "some error occured, post not deleted",
+                  severity: "error"
+                });
+              }
               handleClose();
             }}
             variant="contained"

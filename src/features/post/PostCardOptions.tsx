@@ -3,6 +3,7 @@ import { Backdrop, IconButton, List, ListItemButton } from "@mui/material";
 import { useReducer } from "react";
 import { useMeQuery } from "../../app/api";
 import { PostWithAuthorFieldFragment } from "../../app/api/generated/graphql";
+import { CreateOrEditPostModal } from "./CreateOrEditPostModal";
 import { DeletePostModal } from "./DeletePostModal";
 
 type PostCardOptionsProps = {
@@ -15,6 +16,7 @@ const PostCardOptions = ({ post }: PostCardOptionsProps) => {
   const isMyPost = data?.me?.id === post.authorId;
 
   const [showDeleteModal, toggleDeleteModal] = useReducer(d => !d, false);
+  const [showEditModal, toggleEditModal] = useReducer(e => !e, false);
 
   return (
     <>
@@ -41,7 +43,13 @@ const PostCardOptions = ({ post }: PostCardOptionsProps) => {
           }}>
           {isMyPost ? (
             <>
-              <ListItemButton>Edit Post</ListItemButton>
+              <ListItemButton
+                onClick={() => {
+                  toggleEditModal();
+                  toggleOptions();
+                }}>
+                Edit Post
+              </ListItemButton>
               <ListItemButton
                 onClick={() => {
                   toggleDeleteModal();
@@ -62,6 +70,14 @@ const PostCardOptions = ({ post }: PostCardOptionsProps) => {
         post={post}
         open={showDeleteModal}
         handleClose={toggleDeleteModal}
+      />
+
+      <CreateOrEditPostModal
+        type="edit"
+        editContent={post.content}
+        postId={post.id}
+        open={showEditModal}
+        onClose={toggleEditModal}
       />
     </>
   );

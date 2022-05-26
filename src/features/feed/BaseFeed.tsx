@@ -14,7 +14,7 @@ const BaseFeed = ({ isLoading, posts }: BaseFeedProps) => {
         <Loader />
       ) : (
         <>
-          <CreateOrEditPost />
+          <CreateOrEditPost type="create" />
           {posts?.map(post => (
             <PostCard key={post.id} post={post} />
           ))}

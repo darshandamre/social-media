@@ -1,15 +1,16 @@
 import { Close } from "@mui/icons-material";
-import { Box, Modal, Typography } from "@mui/material";
-import { CreateOrEditPost } from "./CreateOrEditPost";
+import { Box, IconButton, Modal, Typography } from "@mui/material";
+import { CreateOrEditPost, CreateOrEditPostProps } from "./CreateOrEditPost";
 
-interface CreateOrEditPostModalProps {
+type CreateOrEditPostModalProps = {
   open: boolean;
   onClose: () => void;
-}
+} & CreateOrEditPostProps;
 
 const CreateOrEditPostModal = ({
   open,
-  onClose
+  onClose,
+  ...props
 }: CreateOrEditPostModalProps) => {
   return (
     <Modal
@@ -33,10 +34,12 @@ const CreateOrEditPostModal = ({
           mx="1rem"
           display="flex"
           alignItems="center">
-          Create post
-          <Close sx={{ ml: "auto", cursor: "pointer" }} onClick={onClose} />
+          {props.type === "edit" ? "Edit" : "Create"} post
+          <IconButton sx={{ ml: "auto" }} onClick={onClose}>
+            <Close />
+          </IconButton>
         </Typography>
-        <CreateOrEditPost />
+        <CreateOrEditPost {...props} onClose={onClose} />
       </Box>
     </Modal>
   );

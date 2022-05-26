@@ -156,7 +156,11 @@ const LeftSidebar = () => {
           )}
         </Box>
       </Box>
-      <CreateOrEditPostModal open={isOpen} onClose={handleClose} />
+      <CreateOrEditPostModal
+        type="create"
+        open={isOpen}
+        onClose={handleClose}
+      />
     </>
   );
 };
