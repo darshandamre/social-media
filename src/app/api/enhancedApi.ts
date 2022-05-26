@@ -27,6 +27,17 @@ export const enhancedApi = generatedApi.enhanceEndpoints({
             ]
           : ["User", "Post"]
     },
+    CreatePost: {
+      invalidatesTags: result =>
+        result?.createPost.authorId
+          ? [
+              {
+                type: "User",
+                id: result.createPost.authorId
+              }
+            ]
+          : []
+    },
     DeletePost: {
       invalidatesTags: (result, _, { postId }) =>
         result?.deletePost ? [{ type: "Post", id: postId }] : [],
