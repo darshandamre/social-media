@@ -12,8 +12,8 @@ const LikeButton = ({
   isLiked: boolean;
   postId: string;
 }) => {
-  const [like] = useLikeMutation();
-  const [dislike] = useDislikeMutation();
+  const [like, { isLoading: isLikeLoading }] = useLikeMutation();
+  const [dislike, { isLoading: isDislikeLoading }] = useDislikeMutation();
 
   const likeIcon = isLiked ? (
     <Favorite fontSize="small" color="error" />
@@ -22,11 +22,14 @@ const LikeButton = ({
   );
 
   return (
-    <PostActionContainer
-      onClick={() => {
-        isLiked ? dislike({ postId }) : like({ postId });
-      }}>
-      <IconButton>{likeIcon}</IconButton>
+    <PostActionContainer>
+      <IconButton
+        onClick={() => {
+          if (isLikeLoading || isDislikeLoading) return;
+          isLiked ? dislike({ postId }) : like({ postId });
+        }}>
+        {likeIcon}
+      </IconButton>
       {likes ? <Typography variant="body2">{likes}</Typography> : null}
     </PostActionContainer>
   );

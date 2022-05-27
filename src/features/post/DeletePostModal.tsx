@@ -13,7 +13,7 @@ type DeletePostModalProps = {
 
 const DeletePostModal = ({ post, open, handleClose }: DeletePostModalProps) => {
   const { id, author, content } = post;
-  const [deletePost] = useDeletePostMutation();
+  const [deletePost, { isLoading }] = useDeletePostMutation();
   const dispatch = useAppDispatch();
   return (
     <Modal
@@ -69,6 +69,7 @@ const DeletePostModal = ({ post, open, handleClose }: DeletePostModalProps) => {
           </Button>
           <Button
             onClick={async () => {
+              if (isLoading) return;
               try {
                 const response = await deletePost({ postId: id }).unwrap();
                 if (response.deletePost) {

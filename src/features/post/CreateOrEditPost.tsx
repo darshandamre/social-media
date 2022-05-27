@@ -67,6 +67,7 @@ const CreateOrEditPost = ({
       severity: "success"
     });
     onClose?.();
+    setContent("");
   };
 
   return (
