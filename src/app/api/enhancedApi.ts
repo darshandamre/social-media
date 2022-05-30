@@ -27,6 +27,70 @@ export const enhancedApi = generatedApi.enhanceEndpoints({
             ]
           : ["User", "Post"]
     },
+    Follow: {
+      invalidatesTags: (result, _, { followId }) =>
+        result?.follow ? [{ type: "User", id: followId }] : [],
+      onQueryStarted: async ({ followId }, { dispatch, queryFulfilled }) => {
+        try {
+          const { data } = await queryFulfilled;
+          if (!data.follow) return;
+
+          dispatch(
+            enhancedApi.util.updateQueryData("UserFeed", undefined, draft => {
+              draft.userFeed.forEach(post => {
+                if (post.authorId === followId && post.author) {
+                  post.author.amIFollowingThem = true;
+                }
+              });
+            })
+          );
+
+          dispatch(
+            enhancedApi.util.updateQueryData("Posts", undefined, draft => {
+              draft.posts.forEach(post => {
+                if (post.authorId === followId && post.author) {
+                  post.author.amIFollowingThem = true;
+                }
+              });
+            })
+          );
+        } catch (err) {
+          console.error(err);
+        }
+      }
+    },
+    Unfollow: {
+      invalidatesTags: (result, _, { unfollowId }) =>
+        result?.unfollow ? [{ type: "User", id: unfollowId }] : [],
+      onQueryStarted: async ({ unfollowId }, { dispatch, queryFulfilled }) => {
+        try {
+          const { data } = await queryFulfilled;
+          if (!data.unfollow) return;
+
+          dispatch(
+            enhancedApi.util.updateQueryData("UserFeed", undefined, draft => {
+              draft.userFeed.forEach(post => {
+                if (post.authorId === unfollowId && post.author) {
+                  post.author.amIFollowingThem = false;
+                }
+              });
+            })
+          );
+
+          dispatch(
+            enhancedApi.util.updateQueryData("Posts", undefined, draft => {
+              draft.posts.forEach(post => {
+                if (post.authorId === unfollowId && post.author) {
+                  post.author.amIFollowingThem = false;
+                }
+              });
+            })
+          );
+        } catch (err) {
+          console.error(err);
+        }
+      }
+    },
     CreatePost: {
       invalidatesTags: result =>
         result?.createPost.authorId
@@ -134,6 +198,7 @@ export const enhancedApi = generatedApi.enhanceEndpoints({
               "User",
               { username: user.username },
               draft => {
+                if (!draft.user) return;
                 draft.user = {
                   ...draft.user,
                   ...user

@@ -1,7 +1,11 @@
 import { MoreHoriz } from "@mui/icons-material";
 import { Backdrop, IconButton, List, ListItemButton } from "@mui/material";
 import { useReducer } from "react";
-import { useMeQuery } from "../../app/api";
+import {
+  useFollowMutation,
+  useMeQuery,
+  useUnfollowMutation
+} from "../../app/api";
 import { PostWithAuthorFieldFragment } from "../../app/api/generated/graphql";
 import { CreateOrEditPostModal } from "./CreateOrEditPostModal";
 import { DeletePostModal } from "./DeletePostModal";
@@ -17,6 +21,9 @@ const PostCardOptions = ({ post }: PostCardOptionsProps) => {
 
   const [showDeleteModal, toggleDeleteModal] = useReducer(d => !d, false);
   const [showEditModal, toggleEditModal] = useReducer(e => !e, false);
+
+  const [follow] = useFollowMutation();
+  const [unfollow] = useUnfollowMutation();
 
   return (
     <>
@@ -60,8 +67,19 @@ const PostCardOptions = ({ post }: PostCardOptionsProps) => {
               </ListItemButton>
             </>
           ) : (
-            <ListItemButton sx={{ color: "primary.main" }}>
-              Follow @{post.author?.username}
+            <ListItemButton
+              onClick={() => {
+                post.author?.amIFollowingThem
+                  ? unfollow({ unfollowId: post.authorId })
+                  : follow({ followId: post.authorId });
+              }}
+              sx={{
+                color: post.author?.amIFollowingThem
+                  ? "error.main"
+                  : "primary.main"
+              }}>
+              {post.author?.amIFollowingThem ? "Unfollow" : "Follow"} @
+              {post.author?.username}
             </ListItemButton>
           )}
         </List>

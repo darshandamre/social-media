@@ -1,6 +1,10 @@
 import { Button, ButtonProps } from "@mui/material";
 import { useReducer } from "react";
-import { useMeQuery } from "../../app/api";
+import {
+  useFollowMutation,
+  useMeQuery,
+  useUnfollowMutation
+} from "../../app/api";
 import { UserQuery } from "../../app/api/generated/graphql";
 import { EditProfileModal } from "./EditProfileModal";
 
@@ -8,21 +12,32 @@ type ProfileButtonProps = {
   user: NonNullable<UserQuery["user"]>;
 };
 
+type ProfileActions = "Follow" | "Following" | "Unfollow" | "Edit Profile";
+
 const ProfileButton = ({ user }: ProfileButtonProps) => {
   const { data } = useMeQuery();
   const isMyProfile = data?.me?.id === user.id;
 
   const [showModal, toggleModal] = useReducer(s => !s, false);
 
+  const [follow] = useFollowMutation();
+  const [unfollow] = useUnfollowMutation();
+
   let buttonVariant: ButtonProps["variant"] = "contained";
   let buttonColor: ButtonProps["color"];
-  let buttonText: string = "Follow";
-  let buttonAction: ButtonProps["onClick"];
+  let buttonText: ProfileActions = "Follow";
+  let buttonAction: ButtonProps["onClick"] = () =>
+    follow({ followId: user.id });
 
   if (isMyProfile) {
     buttonVariant = "outlined";
     buttonText = "Edit Profile";
     buttonAction = toggleModal;
+  } else if (user.amIFollowingThem) {
+    buttonVariant = "outlined";
+    buttonColor = "error";
+    buttonText = "Unfollow";
+    buttonAction = () => unfollow({ unfollowId: user.id });
   }
 
   return (
