@@ -1,6 +1,6 @@
 import { MoreHoriz } from "@mui/icons-material";
-import { Backdrop, IconButton, List, ListItemButton } from "@mui/material";
-import { useReducer } from "react";
+import { IconButton, MenuItem, Menu } from "@mui/material";
+import { useReducer, useState } from "react";
 import {
   useFollowMutation,
   useMeQuery,
@@ -16,7 +16,10 @@ type PostCardOptionsProps = {
 
 const PostCardOptions = ({ post }: PostCardOptionsProps) => {
   const { data } = useMeQuery();
-  const [showOptions, toggleOptions] = useReducer(s => !s, false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = !!anchorEl;
+  const closeMenu = () => setAnchorEl(null);
+
   const isMyPost = data?.me?.id === post.authorId;
 
   const [showDeleteModal, toggleDeleteModal] = useReducer(d => !d, false);
@@ -27,63 +30,57 @@ const PostCardOptions = ({ post }: PostCardOptionsProps) => {
 
   return (
     <>
-      <IconButton onClick={toggleOptions}>
+      <IconButton
+        id="post-options-button"
+        aria-controls={open ? "post-options-menu" : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? "true" : undefined}
+        onClick={e => setAnchorEl(e.currentTarget)}>
         <MoreHoriz color="disabled" />
       </IconButton>
-      <Backdrop
-        sx={{
-          bgcolor: "rgba(0, 0, 0, 0)",
-          zIndex: 5
-        }}
-        open={showOptions}
-        onClick={toggleOptions}
-      />
-      {showOptions ? (
-        <List
-          sx={{
-            bgcolor: "background.paper",
-            position: "absolute",
-            right: "1rem",
-            top: "1rem",
-            zIndex: 6,
-            borderRadius: 1
-          }}>
-          {isMyPost ? (
-            <>
-              <ListItemButton
-                onClick={() => {
-                  toggleEditModal();
-                  toggleOptions();
-                }}>
-                Edit Post
-              </ListItemButton>
-              <ListItemButton
-                onClick={() => {
-                  toggleDeleteModal();
-                  toggleOptions();
-                }}
-                sx={{ color: "error.main" }}>
-                Delete Post
-              </ListItemButton>
-            </>
-          ) : (
-            <ListItemButton
+      <Menu
+        id="post-options-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={closeMenu}
+        MenuListProps={{
+          "aria-labelledby": "post-options-button"
+        }}>
+        {isMyPost ? (
+          <>
+            <MenuItem
               onClick={() => {
-                post.author?.amIFollowingThem
-                  ? unfollow({ unfollowId: post.authorId })
-                  : follow({ followId: post.authorId });
-              }}
-              sx={{
-                color: post.author?.amIFollowingThem
-                  ? "error.main"
-                  : "primary.main"
+                toggleEditModal();
+                closeMenu();
               }}>
-              {post.author?.amIFollowingThem ? "Unfollow" : "Follow"} @
-              {post.author?.username}
-            </ListItemButton>
-          )}
-        </List>
-      ) : null}
+              Edit Post
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                toggleDeleteModal();
+                closeMenu();
+              }}
+              sx={{ color: "error.main" }}>
+              Delete Post
+            </MenuItem>
+          </>
+        ) : (
+          <MenuItem
+            onClick={() => {
+              post.author?.amIFollowingThem
+                ? unfollow({ unfollowId: post.authorId })
+                : follow({ followId: post.authorId });
+            }}
+            sx={{
+              color: post.author?.amIFollowingThem
+                ? "error.main"
+                : "primary.main"
+            }}>
+            {post.author?.amIFollowingThem ? "Unfollow" : "Follow"} @
+            {post.author?.username}
+          </MenuItem>
+        )}
+      </Menu>
       <DeletePostModal
         post={post}
         open={showDeleteModal}
