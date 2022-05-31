@@ -153,6 +153,7 @@ export type RegisterInput = {
 
 export type User = {
   __typename?: 'User';
+  amIFollowingThem: Scalars['Boolean'];
   bio?: Maybe<Scalars['String']>;
   bookmarks?: Maybe<Array<Post>>;
   createdAt: Scalars['String'];
@@ -160,6 +161,7 @@ export type User = {
   followers?: Maybe<Array<User>>;
   following?: Maybe<Array<User>>;
   id: Scalars['ID'];
+  isMyFollower: Scalars['Boolean'];
   likes?: Maybe<Array<Post>>;
   name?: Maybe<Scalars['String']>;
   numFollowers?: Maybe<Scalars['Int']>;
@@ -176,13 +178,13 @@ export type UserResponse = {
   user?: Maybe<User>;
 };
 
-export type PostWithAuthorFieldFragment = { __typename?: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', id: string, name?: string | null, username: string } | null };
+export type PostWithAuthorFieldFragment = { __typename?: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean } | null };
 
 export type RegularErrorFragment = { __typename?: 'FieldError', field?: string | null, message: string };
 
-export type RegularUserFragment = { __typename?: 'User', id: string, name?: string | null, username: string };
+export type RegularUserFragment = { __typename?: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean };
 
-export type RegularUserResponseFragment = { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field?: string | null, message: string }> | null, user?: { __typename?: 'User', id: string, name?: string | null, username: string } | null };
+export type RegularUserResponseFragment = { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field?: string | null, message: string }> | null, user?: { __typename?: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean } | null };
 
 export type AddBookmarkMutationVariables = Exact<{
   postId: Scalars['String'];
@@ -277,7 +279,7 @@ export type UnfollowMutation = { __typename?: 'Mutation', unfollow: boolean };
 export type BookmarkedPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type BookmarkedPostsQuery = { __typename?: 'Query', bookmarkedPosts?: Array<{ __typename?: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', id: string, name?: string | null, username: string } | null }> | null };
+export type BookmarkedPostsQuery = { __typename?: 'Query', bookmarkedPosts?: Array<{ __typename?: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean } | null }> | null };
 
 export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -287,42 +289,43 @@ export type HelloQuery = { __typename?: 'Query', hello: string };
 export type LikedPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type LikedPostsQuery = { __typename?: 'Query', likedPosts?: Array<{ __typename?: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', id: string, name?: string | null, username: string } | null }> | null };
+export type LikedPostsQuery = { __typename?: 'Query', likedPosts?: Array<{ __typename?: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean } | null }> | null };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, name?: string | null, username: string } | null };
+export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean } | null };
 
 export type PostQueryVariables = Exact<{
   postId: Scalars['String'];
 }>;
 
 
-export type PostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', id: string, name?: string | null, username: string } | null } | null };
+export type PostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean } | null } | null };
 
 export type PostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type PostsQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', id: string, name?: string | null, username: string } | null }> };
+export type PostsQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean } | null }> };
 
 export type UserQueryVariables = Exact<{
   username: Scalars['String'];
 }>;
 
 
-export type UserQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: string, name?: string | null, username: string, bio?: string | null, portfolioLink?: string | null, numFollowers?: number | null, numFollowing?: number | null, posts?: Array<{ __typename?: 'Post', id: string, content: string, isBookmarkedByMe: boolean, isLikedByMe: boolean, likes: number, createdAt: string, updatedAt: string }> | null } | null };
+export type UserQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: string, name?: string | null, username: string, bio?: string | null, portfolioLink?: string | null, numFollowers?: number | null, numFollowing?: number | null, isMyFollower: boolean, amIFollowingThem: boolean, posts?: Array<{ __typename?: 'Post', id: string, content: string, isBookmarkedByMe: boolean, isLikedByMe: boolean, likes: number, createdAt: string, updatedAt: string }> | null } | null };
 
 export type UserFeedQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserFeedQuery = { __typename?: 'Query', userFeed: Array<{ __typename?: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', id: string, name?: string | null, username: string } | null }> };
+export type UserFeedQuery = { __typename?: 'Query', userFeed: Array<{ __typename?: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean } | null }> };
 
 export const RegularUserFragmentDoc = `
     fragment RegularUser on User {
   id
   name
   username
+  amIFollowingThem
 }
     `;
 export const PostWithAuthorFieldFragmentDoc = `
@@ -525,6 +528,8 @@ export const UserDocument = `
     portfolioLink
     numFollowers
     numFollowing
+    isMyFollower
+    amIFollowingThem
     posts {
       id
       content

@@ -100,7 +100,8 @@ const Profile = () => {
             author: {
               id,
               username: user.username,
-              name
+              name,
+              amIFollowingThem: false
             }
           }}
         />

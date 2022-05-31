@@ -7,6 +7,8 @@ query User($username: String!) {
     portfolioLink
     numFollowers
     numFollowing
+    isMyFollower
+    amIFollowingThem
     posts {
       id
       content
