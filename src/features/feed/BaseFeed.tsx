@@ -1,6 +1,6 @@
 import { PostWithAuthorFieldFragment } from "../../app/api/generated/graphql";
 import { Loader } from "../common";
-import { CreatePost, PostCard } from "../post";
+import { CreateOrEditPost, PostCard } from "../post";
 
 type BaseFeedProps = {
   isLoading?: boolean;
@@ -14,7 +14,7 @@ const BaseFeed = ({ isLoading, posts }: BaseFeedProps) => {
         <Loader />
       ) : (
         <>
-          <CreatePost />
+          <CreateOrEditPost type="create" />
           {posts?.map(post => (
             <PostCard key={post.id} post={post} />
           ))}

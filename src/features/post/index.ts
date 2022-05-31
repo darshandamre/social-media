@@ -1,3 +1,3 @@
-export { CreatePost } from "./CreatePost";
-export { CreatePostModal } from "./CreatePostModal";
+export { CreateOrEditPost } from "./CreateOrEditPost";
+export { CreateOrEditPostModal } from "./CreateOrEditPostModal";
 export { PostCard } from "./PostCard";

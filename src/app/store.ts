@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/dist/query";
+import { alertReducer } from "../features/alert/alertSlice";
 import { api } from "./api";
 
 export const store = configureStore({
   reducer: {
-    [api.reducerPath]: api.reducer
+    [api.reducerPath]: api.reducer,
+    alert: alertReducer
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware().concat(api.middleware)

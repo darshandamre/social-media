@@ -12,19 +12,26 @@ interface BookmarkButtonProps {
 }
 
 const BookmarkButton = ({ isBookmarkedByMe, postId }: BookmarkButtonProps) => {
-  const [addBookmark] = useAddBookmarkMutation();
-  const [removeBookmark] = useRemoveBookmarkMutation();
+  const [addBookmark, { isLoading: isAddBookmarkLoading }] =
+    useAddBookmarkMutation();
+  const [removeBookmark, { isLoading: isRemoveBookmarkLoading }] =
+    useRemoveBookmarkMutation();
   const bookmarkIcon = isBookmarkedByMe ? (
     <Bookmark fontSize="small" />
   ) : (
     <BookmarkAddOutlined fontSize="small" />
   );
   return (
-    <PostActionContainer
-      onClick={() => {
-        isBookmarkedByMe ? removeBookmark({ postId }) : addBookmark({ postId });
-      }}>
-      <IconButton>{bookmarkIcon}</IconButton>
+    <PostActionContainer>
+      <IconButton
+        onClick={() => {
+          if (isAddBookmarkLoading || isRemoveBookmarkLoading) return;
+          isBookmarkedByMe
+            ? removeBookmark({ postId })
+            : addBookmark({ postId });
+        }}>
+        {bookmarkIcon}
+      </IconButton>
     </PostActionContainer>
   );
 };
