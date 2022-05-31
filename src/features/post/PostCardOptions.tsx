@@ -43,22 +43,20 @@ const PostCardOptions = ({ post }: PostCardOptionsProps) => {
         showAlertThenHide(dispatch, {
           message: `You Followed @${post.author?.username}`
         });
-        return closeMenu();
       }
       if ("unfollow" in result && result.unfollow) {
         showAlertThenHide(dispatch, {
           message: `You unfollowed @${post.author?.username}`
         });
-        return closeMenu();
       }
     } catch (err) {
       console.error(err);
-      closeMenu();
       showAlertThenHide(dispatch, {
         message: "some error occured",
         severity: "error"
       });
     }
+    closeMenu();
   };
 
   return (
