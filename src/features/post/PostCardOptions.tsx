@@ -1,39 +1,20 @@
 import { MoreHoriz } from "@mui/icons-material";
-import {
-  IconButton,
-  MenuItem,
-  Popper,
-  Paper,
-  ClickAwayListener,
-  MenuList,
-  Grow,
-  PopperPlacementType
-} from "@mui/material";
-import React, { useEffect, useReducer, useRef, useState } from "react";
+import { IconButton, MenuItem } from "@mui/material";
+import React, { useReducer, useRef, useState } from "react";
 import {
   useFollowMutation,
   useMeQuery,
   useUnfollowMutation
 } from "../../app/api";
 import { PostWithAuthorFieldFragment } from "../../app/api/generated/graphql";
+import { useAppDispatch } from "../../app/hooks";
+import { showAlertThenHide } from "../alert";
 import { CreateOrEditPostModal } from "./CreateOrEditPostModal";
 import { DeletePostModal } from "./DeletePostModal";
+import { PostCardMenu } from "./PostCardMenu";
 
 type PostCardOptionsProps = {
   post: PostWithAuthorFieldFragment;
-};
-
-const getMenuOrigin = (placement: PopperPlacementType) => {
-  switch (placement) {
-    case "bottom-start":
-      return "top left";
-    case "bottom-end":
-      return "top right";
-    case "top-start":
-      return "bottom left";
-    case "top-end":
-      return "bottom right";
-  }
 };
 
 const PostCardOptions = ({ post }: PostCardOptionsProps) => {
@@ -43,41 +24,42 @@ const PostCardOptions = ({ post }: PostCardOptionsProps) => {
   const [showDeleteModal, toggleDeleteModal] = useReducer(d => !d, false);
   const [showEditModal, toggleEditModal] = useReducer(e => !e, false);
 
-  const [follow] = useFollowMutation();
-  const [unfollow] = useUnfollowMutation();
-
   const anchorRef = useRef<HTMLButtonElement>(null);
   const [openMenu, setOpenMenu] = useState<boolean>(false);
   const toggleMenu = () => setOpenMenu(prevOpen => !prevOpen);
-  const handleCloseMenu = (event: Event | React.SyntheticEvent) => {
-    if (
-      anchorRef.current &&
-      anchorRef.current.contains(event.target as HTMLElement)
-    ) {
-      return;
+  const closeMenu = () => setOpenMenu(false);
+
+  const dispatch = useAppDispatch();
+  const [follow] = useFollowMutation();
+  const [unfollow] = useUnfollowMutation();
+
+  const handleFollowUnfollow = async () => {
+    try {
+      const result = post.author?.amIFollowingThem
+        ? await unfollow({ unfollowId: post.authorId }).unwrap()
+        : await follow({ followId: post.authorId }).unwrap();
+
+      if ("follow" in result && result.follow) {
+        showAlertThenHide(dispatch, {
+          message: `You Followed @${post.author?.username}`
+        });
+        return closeMenu();
+      }
+      if ("unfollow" in result && result.unfollow) {
+        showAlertThenHide(dispatch, {
+          message: `You unfollowed @${post.author?.username}`
+        });
+        return closeMenu();
+      }
+    } catch (err) {
+      console.error(err);
+      closeMenu();
+      showAlertThenHide(dispatch, {
+        message: "some error occured",
+        severity: "error"
+      });
     }
-    setOpenMenu(false);
   };
-
-  const handleListKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === "Tab") {
-      event.preventDefault();
-      setOpenMenu(false);
-    } else if (event.key === "Escape") {
-      setOpenMenu(false);
-    }
-  };
-
-  const prevOpen = useRef(openMenu);
-  useEffect(() => {
-    console.log(prevOpen);
-
-    if (prevOpen.current === true && openMenu === false) {
-      anchorRef.current!.focus();
-    }
-
-    prevOpen.current = openMenu;
-  }, [openMenu]);
 
   return (
     <>
@@ -90,70 +72,43 @@ const PostCardOptions = ({ post }: PostCardOptionsProps) => {
         onClick={toggleMenu}>
         <MoreHoriz color="disabled" />
       </IconButton>
-      <Popper
-        sx={{ zIndex: 10 }}
+      <PostCardMenu
         open={openMenu}
-        anchorEl={anchorRef.current}
-        role={undefined}
-        placement="bottom-start"
-        transition
-        disablePortal>
-        {({ TransitionProps, placement }) => (
-          <Grow
-            {...TransitionProps}
-            style={{
-              transformOrigin: getMenuOrigin(placement)
+        handleClose={closeMenu}
+        anchorRef={anchorRef}>
+        {isMyPost ? (
+          [
+            <MenuItem
+              key={0}
+              onClick={() => {
+                toggleEditModal();
+                closeMenu();
+              }}>
+              Edit Post
+            </MenuItem>,
+            <MenuItem
+              key={1}
+              onClick={() => {
+                toggleDeleteModal();
+                closeMenu();
+              }}
+              sx={{ color: "error.main" }}>
+              Delete Post
+            </MenuItem>
+          ]
+        ) : (
+          <MenuItem
+            onClick={handleFollowUnfollow}
+            sx={{
+              color: post.author?.amIFollowingThem
+                ? "error.main"
+                : "primary.main"
             }}>
-            <Paper>
-              <ClickAwayListener onClickAway={handleCloseMenu}>
-                <MenuList
-                  variant="menu"
-                  autoFocusItem={openMenu}
-                  id="post-options-menu"
-                  aria-labelledby="post-options-button"
-                  onKeyDown={handleListKeyDown}>
-                  {isMyPost ? (
-                    [
-                      <MenuItem
-                        key={0}
-                        onClick={() => {
-                          toggleEditModal();
-                          setOpenMenu(false);
-                        }}>
-                        Edit Post
-                      </MenuItem>,
-                      <MenuItem
-                        key={1}
-                        onClick={() => {
-                          toggleDeleteModal();
-                          setOpenMenu(false);
-                        }}
-                        sx={{ color: "error.main" }}>
-                        Delete Post
-                      </MenuItem>
-                    ]
-                  ) : (
-                    <MenuItem
-                      onClick={() => {
-                        post.author?.amIFollowingThem
-                          ? unfollow({ unfollowId: post.authorId })
-                          : follow({ followId: post.authorId });
-                      }}
-                      sx={{
-                        color: post.author?.amIFollowingThem
-                          ? "error.main"
-                          : "primary.main"
-                      }}>
-                      {post.author?.amIFollowingThem ? "Unfollow" : "Follow"} @
-                      {post.author?.username}
-                    </MenuItem>
-                  )}
-                </MenuList>
-              </ClickAwayListener>
-            </Paper>
-          </Grow>
+            {post.author?.amIFollowingThem ? "Unfollow" : "Follow"} @
+            {post.author?.username}
+          </MenuItem>
         )}
-      </Popper>
+      </PostCardMenu>
 
       <DeletePostModal
         post={post}

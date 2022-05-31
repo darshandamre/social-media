@@ -1,7 +1,7 @@
 import { api as generatedApi } from "./generated/graphql";
 
 export const enhancedApi = generatedApi.enhanceEndpoints({
-  addTagTypes: ["Me", "User", "Post", "Likes", "Bookmarks"],
+  addTagTypes: ["Me", "User", "Post", "Likes", "Bookmarks", "UserFeed"],
   endpoints: {
     Me: {
       providesTags: ["Me"]
@@ -14,6 +14,9 @@ export const enhancedApi = generatedApi.enhanceEndpoints({
     },
     Logout: {
       invalidatesTags: ["Me"]
+    },
+    UserFeed: {
+      providesTags: ["UserFeed"]
     },
     User: {
       providesTags: result =>
@@ -29,21 +32,11 @@ export const enhancedApi = generatedApi.enhanceEndpoints({
     },
     Follow: {
       invalidatesTags: (result, _, { followId }) =>
-        result?.follow ? [{ type: "User", id: followId }] : [],
+        result?.follow ? [{ type: "User", id: followId }, "UserFeed"] : [],
       onQueryStarted: async ({ followId }, { dispatch, queryFulfilled }) => {
         try {
           const { data } = await queryFulfilled;
           if (!data.follow) return;
-
-          dispatch(
-            enhancedApi.util.updateQueryData("UserFeed", undefined, draft => {
-              draft.userFeed.forEach(post => {
-                if (post.authorId === followId && post.author) {
-                  post.author.amIFollowingThem = true;
-                }
-              });
-            })
-          );
 
           dispatch(
             enhancedApi.util.updateQueryData("Posts", undefined, draft => {
@@ -69,11 +62,9 @@ export const enhancedApi = generatedApi.enhanceEndpoints({
 
           dispatch(
             enhancedApi.util.updateQueryData("UserFeed", undefined, draft => {
-              draft.userFeed.forEach(post => {
-                if (post.authorId === unfollowId && post.author) {
-                  post.author.amIFollowingThem = false;
-                }
-              });
+              draft.userFeed = draft.userFeed.filter(
+                post => post.authorId !== unfollowId
+              );
             })
           );
 
