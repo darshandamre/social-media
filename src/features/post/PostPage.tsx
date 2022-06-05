@@ -1,13 +1,15 @@
 import { ArrowBack, ChatBubbleOutline } from "@mui/icons-material";
 import { Avatar, Box, IconButton, Typography } from "@mui/material";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { useCommentsQuery, usePostQuery } from "../../app/api";
+import { usePostQuery } from "../../app/api";
 import {
   Post,
   PostWithAuthorFieldFragment
 } from "../../app/api/generated/graphql";
 import { isObjectWithKey } from "../../utils/isObjectWithKey";
 import { stringAvatar } from "../../utils/stringAvatar";
+import { CommentBox } from "../comments/CommentBox";
+import { CommentsList } from "../comments/CommentsList";
 import { Loader } from "../common";
 import { BookmarkButton } from "./BookmarkButton";
 import { LikeButton } from "./LikeButton";
@@ -25,7 +27,6 @@ const PostPage = () => {
   const { data: postData, isLoading: isPostLoading } = usePostQuery({
     postId: postId!
   });
-  const { data: commentsData } = useCommentsQuery({ postId: postId! });
   const { state } = useLocation();
 
   let post: PostWithAuthorFieldFragment | undefined | null;
@@ -57,7 +58,7 @@ const PostPage = () => {
   }
 
   const { author, content, likes, isLikedByMe, isBookmarkedByMe } = post;
-  const profileUrl = `/u/${author?.id}`;
+  const profileUrl = `/u/${author?.username}`;
 
   return (
     <>
@@ -153,6 +154,8 @@ const PostPage = () => {
         <LikeButton likes={likes} isLiked={isLikedByMe} postId={post.id} />
         <BookmarkButton isBookmarkedByMe={isBookmarkedByMe} postId={post.id} />
       </Box>
+      <CommentBox post={post} />
+      <CommentsList post={post} />
     </>
   );
 };

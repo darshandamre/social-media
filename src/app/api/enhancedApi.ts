@@ -18,6 +18,9 @@ export const enhancedApi = generatedApi.enhanceEndpoints({
     UserFeed: {
       providesTags: ["UserFeed"]
     },
+    Post: {
+      providesTags: (_, __, { postId }) => [{ type: "Post", id: postId }]
+    },
     User: {
       providesTags: result =>
         result

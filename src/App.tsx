@@ -19,8 +19,8 @@ const App = () => {
             <Route path="likes" element={<LikesPage />} />
             <Route path="bookmarks" element={<BookmarksPage />} />
             <Route path="u/:username" element={<Profile />} />
+            <Route path="p/:postId" element={<PostPage />} />
           </Route>
-          <Route path="p/:postId" element={<PostPage />} />
         </Route>
 
         <Route path="/" element={<AuthPagesLayout />}>

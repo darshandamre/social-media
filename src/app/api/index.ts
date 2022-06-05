@@ -31,5 +31,6 @@ export const {
   useEditUserMutation,
   useFollowMutation,
   useUnfollowMutation,
-  useCommentsQuery
+  useCommentsQuery,
+  useCreateCommentMutation
 } = enhancedApi;
