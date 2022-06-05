@@ -30,5 +30,6 @@ export const {
   useLazyUserQuery,
   useEditUserMutation,
   useFollowMutation,
-  useUnfollowMutation
+  useUnfollowMutation,
+  useCommentsQuery
 } = enhancedApi;
