@@ -1,8 +1,12 @@
-import { Avatar, Box, Button, TextField } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
+import { Avatar, Box, TextField } from "@mui/material";
 import { useState } from "react";
-import { useMeQuery } from "../../app/api";
+import { useCreateCommentMutation, useMeQuery } from "../../app/api";
 import { PostWithAuthorFieldFragment } from "../../app/api/generated/graphql";
+import { useAppDispatch } from "../../app/hooks";
 import { stringAvatar } from "../../utils/stringAvatar";
+import { showAlertThenHide } from "../alert";
+import "./enhancedCommentsApi";
 
 type CommentBoxProps = {
   post: PostWithAuthorFieldFragment;
@@ -11,9 +15,25 @@ type CommentBoxProps = {
 const CommentBox = ({ post }: CommentBoxProps) => {
   const { data } = useMeQuery();
   const [content, setContent] = useState("");
+  const [error, setError] = useState("");
+  const [createComment, { isLoading }] = useCreateCommentMutation();
+  const dispatch = useAppDispatch();
 
-  const handleCreateComment: React.FormEventHandler<HTMLFormElement> = e => {
+  const handleCreateComment: React.FormEventHandler<
+    HTMLFormElement
+  > = async e => {
     e.preventDefault();
+    if (error) return;
+
+    try {
+      await createComment({ content, postId: post.id }).unwrap();
+      setContent("");
+    } catch {
+      showAlertThenHide(dispatch, {
+        message: "some error occured",
+        severity: "error"
+      });
+    }
   };
 
   return (
@@ -24,25 +44,34 @@ const CommentBox = ({ post }: CommentBoxProps) => {
         variant="standard"
         placeholder={`Reply to @${post.author?.username}`}
         value={content}
-        onChange={e => setContent(e.target.value)}
-        // error={!!error}
-        // helperText={error}
+        onChange={e => {
+          setContent(e.target.value);
+          if (e.target.value.length > 500) {
+            setError("comment cannot be more than 500 characters");
+          } else {
+            setError("");
+          }
+        }}
+        error={!!error}
+        helperText={error}
         sx={{
           mx: 2,
           flexGrow: 1,
           alignSelf: "center"
         }}
       />
-      <Button
+      <LoadingButton
+        variant="outlined"
         sx={{
           my: 1,
           borderRadius: "100vw",
           alignSelf: "end"
         }}
         type="submit"
-        variant="outlined">
+        loading={isLoading}
+        disabled={!!error || content.length === 0}>
         Comment
-      </Button>
+      </LoadingButton>
     </Box>
   );
 };
