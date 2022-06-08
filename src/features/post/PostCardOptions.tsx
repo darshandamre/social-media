@@ -67,7 +67,10 @@ const PostCardOptions = ({ post }: PostCardOptionsProps) => {
         aria-controls={openMenu ? "post-options-menu" : undefined}
         aria-haspopup="true"
         aria-expanded={openMenu ? "true" : undefined}
-        onClick={toggleMenu}>
+        onClick={e => {
+          e.stopPropagation();
+          toggleMenu();
+        }}>
         <MoreHoriz color="disabled" />
       </IconButton>
       <PostCardMenu
