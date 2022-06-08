@@ -121,7 +121,7 @@ const PostPage = () => {
           </Typography>
         </Box>
 
-        <PostCardOptions post={post} />
+        <PostCardOptions postOrComment={post} />
       </Box>
 
       <Typography

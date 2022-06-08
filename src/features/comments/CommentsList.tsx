@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useCommentsQuery } from "../../app/api";
 import { PostWithAuthorFieldFragment } from "../../app/api/generated/graphql";
 import { stringAvatar } from "../../utils/stringAvatar";
+import { PostCardOptions } from "../post/PostCardOptions";
 
 type CommentsListProps = {
   post: PostWithAuthorFieldFragment;
@@ -17,7 +18,8 @@ const CommentsList = ({ post }: CommentsListProps) => {
       sx={theme => ({
         borderTop: `1px solid ${theme.palette.background.paper}`
       })}>
-      {data?.comments.map(({ id, content, author }) => {
+      {data?.comments.map(comment => {
+        const { id, author, content } = comment;
         const profileUrl = `/u/${author?.username}`;
         return (
           <Box
@@ -37,7 +39,7 @@ const CommentsList = ({ post }: CommentsListProps) => {
               }}>
               {stringAvatar(author?.name)?.children}
             </Avatar>
-            <Box mx={2}>
+            <Box mx={2} mr="auto">
               <Box display="flex">
                 {author?.name ? (
                   <Typography
@@ -53,6 +55,7 @@ const CommentsList = ({ post }: CommentsListProps) => {
                   </Typography>
                 ) : null}
                 <Typography
+                  mr="auto"
                   component={Link}
                   to={profileUrl}
                   color="InactiveCaptionText"
@@ -65,6 +68,7 @@ const CommentsList = ({ post }: CommentsListProps) => {
               </Typography>
               <Typography>{content}</Typography>
             </Box>
+            <PostCardOptions postOrComment={comment} />
           </Box>
         );
       })}

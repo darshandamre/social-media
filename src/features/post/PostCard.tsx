@@ -80,7 +80,7 @@ const PostCard = ({ post }: PostCardProps) => {
         </Box>
       </Box>
 
-      <PostCardOptions post={post} />
+      <PostCardOptions postOrComment={post} />
     </Box>
   );
 };

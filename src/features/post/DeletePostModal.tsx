@@ -1,6 +1,9 @@
 import { Avatar, Box, Button, Modal, Typography } from "@mui/material";
 import { useDeletePostMutation } from "../../app/api";
-import { PostWithAuthorFieldFragment } from "../../app/api/generated/graphql";
+import {
+  CommentsQuery,
+  PostWithAuthorFieldFragment
+} from "../../app/api/generated/graphql";
 import { useAppDispatch } from "../../app/hooks";
 import { stringAvatar } from "../../utils/stringAvatar";
 import { showAlertThenHide } from "../alert";
@@ -8,11 +11,17 @@ import { showAlertThenHide } from "../alert";
 type DeletePostModalProps = {
   open: boolean;
   handleClose: () => void;
-  post: PostWithAuthorFieldFragment;
+  postOrComment:
+    | PostWithAuthorFieldFragment
+    | CommentsQuery["comments"][number];
 };
 
-const DeletePostModal = ({ post, open, handleClose }: DeletePostModalProps) => {
-  const { id, author, content } = post;
+const DeletePostModal = ({
+  postOrComment,
+  open,
+  handleClose
+}: DeletePostModalProps) => {
+  const { id, author, content } = postOrComment;
   const [deletePost, { isLoading }] = useDeletePostMutation();
   const dispatch = useAppDispatch();
   return (

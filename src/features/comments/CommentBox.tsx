@@ -1,7 +1,7 @@
 import { LoadingButton } from "@mui/lab";
 import { Avatar, Box, TextField } from "@mui/material";
 import { useState } from "react";
-import { useCreateCommentMutation, useMeQuery } from "../../app/api";
+import { useMeQuery, useCreateCommentMutation } from "../../app/api";
 import { PostWithAuthorFieldFragment } from "../../app/api/generated/graphql";
 import { useAppDispatch } from "../../app/hooks";
 import { stringAvatar } from "../../utils/stringAvatar";

@@ -6,7 +6,10 @@ import {
   useMeQuery,
   useUnfollowMutation
 } from "../../app/api";
-import { PostWithAuthorFieldFragment } from "../../app/api/generated/graphql";
+import {
+  CommentsQuery,
+  PostWithAuthorFieldFragment
+} from "../../app/api/generated/graphql";
 import { useAppDispatch } from "../../app/hooks";
 import { showAlertThenHide } from "../alert";
 import { CreateOrEditPostModal } from "./CreateOrEditPostModal";
@@ -14,12 +17,14 @@ import { DeletePostModal } from "./DeletePostModal";
 import { PostCardMenu } from "./PostCardMenu";
 
 type PostCardOptionsProps = {
-  post: PostWithAuthorFieldFragment;
+  postOrComment:
+    | PostWithAuthorFieldFragment
+    | CommentsQuery["comments"][number];
 };
 
-const PostCardOptions = ({ post }: PostCardOptionsProps) => {
+const PostCardOptions = ({ postOrComment }: PostCardOptionsProps) => {
   const { data } = useMeQuery();
-  const isMyPost = data?.me?.id === post.authorId;
+  const isMyPost = data?.me?.id === postOrComment.authorId;
 
   const [showDeleteModal, toggleDeleteModal] = useReducer(d => !d, false);
   const [showEditModal, toggleEditModal] = useReducer(e => !e, false);
@@ -35,18 +40,18 @@ const PostCardOptions = ({ post }: PostCardOptionsProps) => {
 
   const handleFollowUnfollow = async () => {
     try {
-      const result = post.author?.amIFollowingThem
-        ? await unfollow({ unfollowId: post.authorId }).unwrap()
-        : await follow({ followId: post.authorId }).unwrap();
+      const result = postOrComment.author?.amIFollowingThem
+        ? await unfollow({ unfollowId: postOrComment.authorId }).unwrap()
+        : await follow({ followId: postOrComment.authorId }).unwrap();
 
       if ("follow" in result && result.follow) {
         showAlertThenHide(dispatch, {
-          message: `You Followed @${post.author?.username}`
+          message: `You Followed @${postOrComment.author?.username}`
         });
       }
       if ("unfollow" in result && result.unfollow) {
         showAlertThenHide(dispatch, {
-          message: `You unfollowed @${post.author?.username}`
+          message: `You unfollowed @${postOrComment.author?.username}`
         });
       }
     } catch (err) {
@@ -98,25 +103,25 @@ const PostCardOptions = ({ post }: PostCardOptionsProps) => {
           <MenuItem
             onClick={handleFollowUnfollow}
             sx={{
-              color: post.author?.amIFollowingThem
+              color: postOrComment.author?.amIFollowingThem
                 ? "error.main"
                 : "primary.main"
             }}>
-            {post.author?.amIFollowingThem ? "Unfollow" : "Follow"} @
-            {post.author?.username}
+            {postOrComment.author?.amIFollowingThem ? "Unfollow" : "Follow"} @
+            {postOrComment.author?.username}
           </MenuItem>
         )}
       </PostCardMenu>
 
       <DeletePostModal
-        post={post}
+        postOrComment={postOrComment}
         open={showDeleteModal}
         handleClose={toggleDeleteModal}
       />
       <CreateOrEditPostModal
         type="edit"
-        editContent={post.content}
-        postId={post.id}
+        editContent={postOrComment.content}
+        postId={postOrComment.id}
         open={showEditModal}
         onClose={toggleEditModal}
       />
