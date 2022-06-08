@@ -24,7 +24,8 @@ const LikeButton = ({
   return (
     <PostActionContainer>
       <IconButton
-        onClick={() => {
+        onClick={e => {
+          e.stopPropagation();
           if (isLikeLoading || isDislikeLoading) return;
           isLiked ? dislike({ postId }) : like({ postId });
         }}>

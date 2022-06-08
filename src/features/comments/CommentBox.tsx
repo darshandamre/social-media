@@ -1,23 +1,32 @@
 import { LoadingButton } from "@mui/lab";
 import { Avatar, Box, TextField } from "@mui/material";
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import { useCreateCommentMutation, useMeQuery } from "../../app/api";
 import { PostWithAuthorFieldFragment } from "../../app/api/generated/graphql";
 import { useAppDispatch } from "../../app/hooks";
+import { isObjectWithKey } from "../../utils/isObjectWithKey";
 import { stringAvatar } from "../../utils/stringAvatar";
 import { showAlertThenHide } from "../alert";
 import "./enhancedCommentsApi";
 
 type CommentBoxProps = {
   post: PostWithAuthorFieldFragment;
+  commentRef: React.RefObject<HTMLInputElement>;
 };
 
-const CommentBox = ({ post }: CommentBoxProps) => {
+const CommentBox = ({ post, commentRef }: CommentBoxProps) => {
   const { data } = useMeQuery();
   const [content, setContent] = useState("");
   const [error, setError] = useState("");
   const [createComment, { isLoading }] = useCreateCommentMutation();
   const dispatch = useAppDispatch();
+  const { state } = useLocation();
+
+  let autoFocusComment = false;
+  if (isObjectWithKey(state, "autoFocusComment")) {
+    autoFocusComment = state.autoFocusComment as boolean;
+  }
 
   const handleCreateComment: React.FormEventHandler<
     HTMLFormElement
@@ -41,6 +50,8 @@ const CommentBox = ({ post }: CommentBoxProps) => {
       <Avatar {...stringAvatar(data?.me?.name)} />
       <TextField
         multiline
+        autoFocus={autoFocusComment}
+        inputRef={commentRef}
         variant="standard"
         placeholder={`Reply to @${post.author?.username}`}
         value={content}

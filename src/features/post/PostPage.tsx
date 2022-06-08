@@ -1,5 +1,6 @@
 import { ArrowBack, ChatBubbleOutline } from "@mui/icons-material";
 import { Avatar, Box, IconButton, Typography } from "@mui/material";
+import { useRef } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { usePostQuery } from "../../app/api";
 import {
@@ -23,6 +24,7 @@ type PostParams = {
 const PostPage = () => {
   const { postId } = useParams<PostParams>();
   const navigate = useNavigate();
+  const commentRef = useRef<HTMLInputElement>(null);
 
   const { data: postData, isLoading: isPostLoading } = usePostQuery({
     postId: postId!
@@ -143,18 +145,15 @@ const PostPage = () => {
           borderBlock: `1px solid ${theme.palette.background.paper}`
         })}>
         <PostActionContainer>
-          <IconButton>
+          <IconButton onClick={() => commentRef.current?.focus()}>
             <ChatBubbleOutline fontSize="small" />
           </IconButton>
-          {/* <Typography variant="body2" mx="0.5rem">
-              4
-            </Typography> */}
         </PostActionContainer>
 
         <LikeButton likes={likes} isLiked={isLikedByMe} postId={post.id} />
         <BookmarkButton isBookmarkedByMe={isBookmarkedByMe} postId={post.id} />
       </Box>
-      <CommentBox post={post} />
+      <CommentBox post={post} commentRef={commentRef} />
       <CommentsList post={post} />
     </>
   );

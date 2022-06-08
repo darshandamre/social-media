@@ -1,6 +1,6 @@
 import { ChatBubbleOutline } from "@mui/icons-material";
 import { Avatar, Box, IconButton, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { PostWithAuthorFieldFragment } from "../../app/api/generated/graphql";
 import { theme } from "../../theme";
 import { stringAvatar } from "../../utils/stringAvatar";
@@ -16,11 +16,13 @@ interface PostCardProps {
 const PostCard = ({ post }: PostCardProps) => {
   const { id, content, author, likes, isLikedByMe, isBookmarkedByMe } = post;
   const profileUrl = `/u/${author?.username}`;
+  const postPageUrl = `/p/${id}`;
+  const navigate = useNavigate();
 
   return (
     <Box
-      component={Link}
-      to={`/p/${id}`}
+      onClick={() => navigate(postPageUrl)}
+      tabIndex={0}
       sx={{
         px: "1rem",
         pt: "0.75rem",
@@ -28,8 +30,7 @@ const PostCard = ({ post }: PostCardProps) => {
         display: "flex",
         alignItems: "start",
         position: "relative",
-        color: "inherit",
-        textDecoration: "none",
+        cursor: "pointer",
         borderBottom: `1px solid ${theme.palette.background.paper}`
       }}>
       <Avatar
@@ -64,12 +65,13 @@ const PostCard = ({ post }: PostCardProps) => {
         <Typography whiteSpace="pre-line">{content}</Typography>
         <Box display="flex" justifyContent="space-around">
           <PostActionContainer>
-            <IconButton>
+            <IconButton
+              onClick={e => {
+                e.stopPropagation();
+                navigate(postPageUrl, { state: { autoFocusComment: true } });
+              }}>
               <ChatBubbleOutline fontSize="small" />
             </IconButton>
-            {/* <Typography variant="body2" mx="0.5rem">
-              4
-            </Typography> */}
           </PostActionContainer>
 
           <LikeButton likes={likes} isLiked={isLikedByMe} postId={post.id} />
