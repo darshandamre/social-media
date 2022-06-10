@@ -1,5 +1,5 @@
 import { MoreHoriz } from "@mui/icons-material";
-import { IconButton, MenuItem } from "@mui/material";
+import { Box, IconButton, MenuItem } from "@mui/material";
 import React, { useReducer, useRef, useState } from "react";
 import {
   useFollowMutation,
@@ -60,7 +60,7 @@ const PostCardOptions = ({ post }: PostCardOptionsProps) => {
   };
 
   return (
-    <>
+    <Box onClick={e => e.stopPropagation()}>
       <IconButton
         ref={anchorRef}
         id="post-options-button"
@@ -120,7 +120,7 @@ const PostCardOptions = ({ post }: PostCardOptionsProps) => {
         open={showEditModal}
         onClose={toggleEditModal}
       />
-    </>
+    </Box>
   );
 };
 

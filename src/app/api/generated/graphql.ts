@@ -13,6 +13,18 @@ export type Scalars = {
   Float: number;
 };
 
+export type Comment = {
+  __typename?: 'Comment';
+  author?: Maybe<User>;
+  authorId: Scalars['ID'];
+  content: Scalars['String'];
+  createdAt: Scalars['String'];
+  id: Scalars['ID'];
+  post?: Maybe<Post>;
+  postId: Scalars['ID'];
+  updatedAt: Scalars['String'];
+};
+
 export type EditUserInput = {
   bio?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
@@ -33,9 +45,12 @@ export type LoginInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   addBookmark: Scalars['Boolean'];
+  createComment: Comment;
   createPost: Post;
+  deleteComment: Scalars['Boolean'];
   deletePost: Scalars['Boolean'];
   dislike: Scalars['Boolean'];
+  editComment?: Maybe<Comment>;
   editPost?: Maybe<Post>;
   editUser: UserResponse;
   follow: Scalars['Boolean'];
@@ -53,8 +68,19 @@ export type MutationAddBookmarkArgs = {
 };
 
 
+export type MutationCreateCommentArgs = {
+  content: Scalars['String'];
+  postId: Scalars['String'];
+};
+
+
 export type MutationCreatePostArgs = {
   content: Scalars['String'];
+};
+
+
+export type MutationDeleteCommentArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -64,6 +90,12 @@ export type MutationDeletePostArgs = {
 
 
 export type MutationDislikeArgs = {
+  id: Scalars['String'];
+};
+
+
+export type MutationEditCommentArgs = {
+  content: Scalars['String'];
   id: Scalars['String'];
 };
 
@@ -112,6 +144,7 @@ export type Post = {
   __typename?: 'Post';
   author?: Maybe<User>;
   authorId: Scalars['ID'];
+  comments?: Maybe<Comment>;
   content: Scalars['String'];
   createdAt: Scalars['String'];
   id: Scalars['ID'];
@@ -125,6 +158,7 @@ export type Post = {
 export type Query = {
   __typename?: 'Query';
   bookmarkedPosts?: Maybe<Array<Post>>;
+  comments: Array<Comment>;
   hello: Scalars['String'];
   likedPosts?: Maybe<Array<Post>>;
   me?: Maybe<User>;
@@ -132,6 +166,11 @@ export type Query = {
   posts: Array<Post>;
   user?: Maybe<User>;
   userFeed: Array<Post>;
+};
+
+
+export type QueryCommentsArgs = {
+  postId: Scalars['String'];
 };
 
 
@@ -193,12 +232,27 @@ export type AddBookmarkMutationVariables = Exact<{
 
 export type AddBookmarkMutation = { __typename?: 'Mutation', addBookmark: boolean };
 
+export type CreateCommentMutationVariables = Exact<{
+  content: Scalars['String'];
+  postId: Scalars['String'];
+}>;
+
+
+export type CreateCommentMutation = { __typename?: 'Mutation', createComment: { __typename?: 'Comment', id: string, content: string, authorId: string, postId: string, createdAt: string, updatedAt: string } };
+
 export type CreatePostMutationVariables = Exact<{
   content: Scalars['String'];
 }>;
 
 
 export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __typename?: 'Post', id: string, content: string, authorId: string, createdAt: string, updatedAt: string } };
+
+export type DeleteCommentMutationVariables = Exact<{
+  commentId: Scalars['String'];
+}>;
+
+
+export type DeleteCommentMutation = { __typename?: 'Mutation', deleteComment: boolean };
 
 export type DeletePostMutationVariables = Exact<{
   postId: Scalars['String'];
@@ -213,6 +267,14 @@ export type DislikeMutationVariables = Exact<{
 
 
 export type DislikeMutation = { __typename?: 'Mutation', dislike: boolean };
+
+export type EditCommentMutationVariables = Exact<{
+  content: Scalars['String'];
+  commentId: Scalars['String'];
+}>;
+
+
+export type EditCommentMutation = { __typename?: 'Mutation', editComment?: { __typename?: 'Comment', id: string, content: string, authorId: string, postId: string, createdAt: string, updatedAt: string } | null };
 
 export type EditPostMutationVariables = Exact<{
   content: Scalars['String'];
@@ -280,6 +342,13 @@ export type BookmarkedPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type BookmarkedPostsQuery = { __typename?: 'Query', bookmarkedPosts?: Array<{ __typename?: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean } | null }> | null };
+
+export type CommentsQueryVariables = Exact<{
+  postId: Scalars['String'];
+}>;
+
+
+export type CommentsQuery = { __typename?: 'Query', comments: Array<{ __typename?: 'Comment', id: string, content: string, authorId: string, postId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean } | null }> };
 
 export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -365,6 +434,18 @@ export const AddBookmarkDocument = `
   addBookmark(id: $postId)
 }
     `;
+export const CreateCommentDocument = `
+    mutation CreateComment($content: String!, $postId: String!) {
+  createComment(content: $content, postId: $postId) {
+    id
+    content
+    authorId
+    postId
+    createdAt
+    updatedAt
+  }
+}
+    `;
 export const CreatePostDocument = `
     mutation CreatePost($content: String!) {
   createPost(content: $content) {
@@ -376,6 +457,11 @@ export const CreatePostDocument = `
   }
 }
     `;
+export const DeleteCommentDocument = `
+    mutation DeleteComment($commentId: String!) {
+  deleteComment(id: $commentId)
+}
+    `;
 export const DeletePostDocument = `
     mutation DeletePost($postId: String!) {
   deletePost(id: $postId)
@@ -384,6 +470,18 @@ export const DeletePostDocument = `
 export const DislikeDocument = `
     mutation Dislike($postId: String!) {
   dislike(id: $postId)
+}
+    `;
+export const EditCommentDocument = `
+    mutation EditComment($content: String!, $commentId: String!) {
+  editComment(content: $content, id: $commentId) {
+    id
+    content
+    authorId
+    postId
+    createdAt
+    updatedAt
+  }
 }
     `;
 export const EditPostDocument = `
@@ -485,6 +583,21 @@ export const BookmarkedPostsDocument = `
   }
 }
     ${PostWithAuthorFieldFragmentDoc}`;
+export const CommentsDocument = `
+    query Comments($postId: String!) {
+  comments(postId: $postId) {
+    id
+    content
+    authorId
+    author {
+      ...RegularUser
+    }
+    postId
+    createdAt
+    updatedAt
+  }
+}
+    ${RegularUserFragmentDoc}`;
 export const HelloDocument = `
     query Hello {
   hello
@@ -555,14 +668,23 @@ const injectedRtkApi = api.injectEndpoints({
     AddBookmark: build.mutation<AddBookmarkMutation, AddBookmarkMutationVariables>({
       query: (variables) => ({ document: AddBookmarkDocument, variables })
     }),
+    CreateComment: build.mutation<CreateCommentMutation, CreateCommentMutationVariables>({
+      query: (variables) => ({ document: CreateCommentDocument, variables })
+    }),
     CreatePost: build.mutation<CreatePostMutation, CreatePostMutationVariables>({
       query: (variables) => ({ document: CreatePostDocument, variables })
+    }),
+    DeleteComment: build.mutation<DeleteCommentMutation, DeleteCommentMutationVariables>({
+      query: (variables) => ({ document: DeleteCommentDocument, variables })
     }),
     DeletePost: build.mutation<DeletePostMutation, DeletePostMutationVariables>({
       query: (variables) => ({ document: DeletePostDocument, variables })
     }),
     Dislike: build.mutation<DislikeMutation, DislikeMutationVariables>({
       query: (variables) => ({ document: DislikeDocument, variables })
+    }),
+    EditComment: build.mutation<EditCommentMutation, EditCommentMutationVariables>({
+      query: (variables) => ({ document: EditCommentDocument, variables })
     }),
     EditPost: build.mutation<EditPostMutation, EditPostMutationVariables>({
       query: (variables) => ({ document: EditPostDocument, variables })
@@ -593,6 +715,9 @@ const injectedRtkApi = api.injectEndpoints({
     }),
     BookmarkedPosts: build.query<BookmarkedPostsQuery, BookmarkedPostsQueryVariables | void>({
       query: (variables) => ({ document: BookmarkedPostsDocument, variables })
+    }),
+    Comments: build.query<CommentsQuery, CommentsQueryVariables>({
+      query: (variables) => ({ document: CommentsDocument, variables })
     }),
     Hello: build.query<HelloQuery, HelloQueryVariables | void>({
       query: (variables) => ({ document: HelloDocument, variables })
