@@ -2,11 +2,11 @@ import { MoreHoriz } from "@mui/icons-material";
 import { Box, IconButton, MenuItem } from "@mui/material";
 import React, { useReducer, useRef, useState } from "react";
 import {
+  PostWithAuthorFieldFragment,
   useFollowMutation,
   useMeQuery,
   useUnfollowMutation
-} from "../../app/api";
-import { PostWithAuthorFieldFragment } from "../../app/api/generated/graphql";
+} from "../../generated/graphql";
 import { useAppDispatch } from "../../app/hooks";
 import { showAlertThenHide } from "../alert";
 import { CreateOrEditPostModal } from "./CreateOrEditPostModal";
@@ -30,25 +30,32 @@ const PostCardOptions = ({ post }: PostCardOptionsProps) => {
   const closeMenu = () => setOpenMenu(false);
 
   const dispatch = useAppDispatch();
-  const [follow] = useFollowMutation();
-  const [unfollow] = useUnfollowMutation();
-
-  const handleFollowUnfollow = async () => {
-    try {
-      const result = post.author?.amIFollowingThem
-        ? await unfollow({ unfollowId: post.authorId }).unwrap()
-        : await follow({ followId: post.authorId }).unwrap();
-
-      if ("follow" in result && result.follow) {
+  const [follow] = useFollowMutation({
+    onCompleted: data => {
+      if (data?.follow) {
         showAlertThenHide(dispatch, {
           message: `You Followed @${post.author?.username}`
         });
       }
-      if ("unfollow" in result && result.unfollow) {
+    }
+  });
+  const [unfollow] = useUnfollowMutation({
+    onCompleted: data => {
+      if (data?.unfollow) {
         showAlertThenHide(dispatch, {
           message: `You unfollowed @${post.author?.username}`
         });
       }
+    }
+  });
+
+  const handleFollowUnfollow = async () => {
+    try {
+      post.author?.amIFollowingThem
+        ? await unfollow({
+            variables: { unfollowId: post.authorId }
+          })
+        : await follow({ variables: { followId: post.authorId } });
     } catch (err) {
       console.error(err);
       showAlertThenHide(dispatch, {

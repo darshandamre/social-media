@@ -3,8 +3,8 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { MyTextField } from "../common";
-import { useRegisterMutation } from "../../app/api";
 import { Link, useNavigate } from "react-router-dom";
+import { useRegisterMutation } from "../../generated/graphql";
 
 const registerSchema = yup.object().shape({
   username: yup
@@ -49,9 +49,9 @@ const Register = () => {
 
   const handleRegister = handleSubmit(async input => {
     try {
-      const payload = await register({ input }).unwrap();
-      if (payload.register.errors) {
-        return payload.register.errors.forEach(({ field, message }) => {
+      const { data } = await register({ variables: { input } });
+      if (data?.register.errors) {
+        return data.register.errors.forEach(({ field, message }) => {
           setError(field as keyof RegisterFormData, {
             type: "server",
             message

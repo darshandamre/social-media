@@ -24,13 +24,13 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useMeQuery } from "../../app/api";
+import { useMeQuery } from "../../generated/graphql";
 import { stringAvatar } from "../../utils/stringAvatar";
 import { CreateOrEditPostModal } from "../post";
 import { MyNavLink } from "./MyNavLink";
 
 const LeftSidebar = () => {
-  const { data, isLoading } = useMeQuery();
+  const { data, loading } = useMeQuery();
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOpen = () => setIsOpen(true);
@@ -120,7 +120,7 @@ const LeftSidebar = () => {
         </Button>
 
         <Box mt="auto">
-          {isLoading ? (
+          {loading ? (
             <Box display="flex" alignItems="center" justifyContent="center">
               <CircularProgress color="primary" />
             </Box>

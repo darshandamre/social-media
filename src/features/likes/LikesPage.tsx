@@ -1,12 +1,12 @@
 import { Typography } from "@mui/material";
-import { useLikedPostsQuery } from "../../app/api";
+import { useLikedPostsQuery } from "../../generated/graphql";
 import { Loader } from "../common";
 import { PostCard } from "../post";
 
 const LikesPage = () => {
-  const { data, isLoading } = useLikedPostsQuery();
+  const { data, loading } = useLikedPostsQuery();
 
-  if (isLoading) return <Loader />;
+  if (loading) return <Loader />;
 
   return (
     <>

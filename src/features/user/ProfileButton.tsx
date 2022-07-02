@@ -4,8 +4,8 @@ import {
   useFollowMutation,
   useMeQuery,
   useUnfollowMutation
-} from "../../app/api";
-import { UserQuery } from "../../app/api/generated/graphql";
+} from "../../generated/graphql";
+import { UserQuery } from "../../generated/graphql";
 import { EditProfileModal } from "./EditProfileModal";
 
 type ProfileButtonProps = {
@@ -27,7 +27,7 @@ const ProfileButton = ({ user }: ProfileButtonProps) => {
   let buttonColor: ButtonProps["color"];
   let buttonText: ProfileActions = "Follow";
   let buttonAction: ButtonProps["onClick"] = () =>
-    follow({ followId: user.id });
+    follow({ variables: { followId: user.id } });
 
   if (isMyProfile) {
     buttonVariant = "outlined";
@@ -37,7 +37,7 @@ const ProfileButton = ({ user }: ProfileButtonProps) => {
     buttonVariant = "outlined";
     buttonColor = "error";
     buttonText = "Unfollow";
-    buttonAction = () => unfollow({ unfollowId: user.id });
+    buttonAction = () => unfollow({ variables: { unfollowId: user.id } });
   }
 
   return (

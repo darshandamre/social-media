@@ -1,5 +1,5 @@
-import { api } from "../../app/api";
-import { MeQuery } from "../../app/api/generated/graphql";
+import { api } from "../../app/api/baseApi";
+import { MeQuery } from "../../generated/graphql";
 
 api.enhanceEndpoints({
   addTagTypes: ["Comment"],

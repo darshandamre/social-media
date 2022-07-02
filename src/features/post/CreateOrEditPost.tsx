@@ -4,7 +4,7 @@ import {
   useCreatePostMutation,
   useEditPostMutation,
   useMeQuery
-} from "../../app/api";
+} from "../../generated/graphql";
 import { useAppDispatch } from "../../app/hooks";
 import { theme } from "../../theme";
 import { stringAvatar } from "../../utils/stringAvatar";
@@ -32,10 +32,9 @@ const CreateOrEditPost = ({
   onClose
 }: CreateOrEditPostProps) => {
   const { data } = useMeQuery();
-  const [createPost, { isLoading: isCreatePostLoading }] =
+  const [createPost, { loading: isCreatePostLoading }] =
     useCreatePostMutation();
-  const [saveEditPost, { isLoading: isEditPostLoading }] =
-    useEditPostMutation();
+  const [saveEditPost, { loading: isEditPostLoading }] = useEditPostMutation();
   const dispatch = useAppDispatch();
 
   const isLoading = type === "edit" ? isEditPostLoading : isCreatePostLoading;
@@ -59,8 +58,8 @@ const CreateOrEditPost = ({
     }
     if (error) return;
     type === "edit"
-      ? await saveEditPost({ postId, content })
-      : await createPost({ content });
+      ? await saveEditPost({ variables: { postId, content } })
+      : await createPost({ variables: { content } });
 
     showAlertThenHide(dispatch, {
       message: `Post ${type === "edit" ? "edited" : "created"} successfully`,

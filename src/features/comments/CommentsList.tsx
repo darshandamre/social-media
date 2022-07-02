@@ -1,8 +1,10 @@
 import { Avatar, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { Link } from "react-router-dom";
-import { useCommentsQuery } from "../../app/api";
-import { PostWithAuthorFieldFragment } from "../../app/api/generated/graphql";
+import {
+  PostWithAuthorFieldFragment,
+  useCommentsQuery
+} from "../../generated/graphql";
 import { stringAvatar } from "../../utils/stringAvatar";
 
 type CommentsListProps = {
@@ -10,7 +12,7 @@ type CommentsListProps = {
 };
 
 const CommentsList = ({ post }: CommentsListProps) => {
-  const { data } = useCommentsQuery({ postId: post.id });
+  const { data } = useCommentsQuery({ variables: { postId: post.id } });
 
   return (
     <Box

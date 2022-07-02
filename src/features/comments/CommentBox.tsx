@@ -2,13 +2,12 @@ import { LoadingButton } from "@mui/lab";
 import { Avatar, Box, TextField } from "@mui/material";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
-import { useCreateCommentMutation, useMeQuery } from "../../app/api";
-import { PostWithAuthorFieldFragment } from "../../app/api/generated/graphql";
+import { useCreateCommentMutation, useMeQuery } from "../../generated/graphql";
+import { PostWithAuthorFieldFragment } from "../../generated/graphql";
 import { useAppDispatch } from "../../app/hooks";
 import { isObjectWithKey } from "../../utils/isObjectWithKey";
 import { stringAvatar } from "../../utils/stringAvatar";
 import { showAlertThenHide } from "../alert";
-import "./enhancedCommentsApi";
 
 type CommentBoxProps = {
   post: PostWithAuthorFieldFragment;
@@ -19,7 +18,7 @@ const CommentBox = ({ post, commentRef }: CommentBoxProps) => {
   const { data } = useMeQuery();
   const [content, setContent] = useState("");
   const [error, setError] = useState("");
-  const [createComment, { isLoading }] = useCreateCommentMutation();
+  const [createComment, { loading }] = useCreateCommentMutation();
   const dispatch = useAppDispatch();
   const { state } = useLocation();
 
@@ -35,7 +34,7 @@ const CommentBox = ({ post, commentRef }: CommentBoxProps) => {
     if (error) return;
 
     try {
-      await createComment({ content, postId: post.id }).unwrap();
+      await createComment({ variables: { content, postId: post.id } });
       setContent("");
     } catch {
       showAlertThenHide(dispatch, {
@@ -79,7 +78,7 @@ const CommentBox = ({ post, commentRef }: CommentBoxProps) => {
           alignSelf: "end"
         }}
         type="submit"
-        loading={isLoading}
+        loading={loading}
         disabled={!!error || content.length === 0}>
         Comment
       </LoadingButton>

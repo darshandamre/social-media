@@ -1,10 +1,10 @@
-import { useUserFeedQuery } from "../../app/api";
+import { useUserFeedQuery } from "../../generated/graphql";
 import { BaseFeed } from "./BaseFeed";
 
 const UserFeed = () => {
-  const { data, isLoading } = useUserFeedQuery();
+  const { data, loading } = useUserFeedQuery();
 
-  return <BaseFeed isLoading={isLoading} posts={data?.userFeed} />;
+  return <BaseFeed isLoading={loading} posts={data?.userFeed} />;
 };
 
 export { UserFeed };

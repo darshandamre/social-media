@@ -3,7 +3,7 @@ import { IconButton } from "@mui/material";
 import {
   useAddBookmarkMutation,
   useRemoveBookmarkMutation
-} from "../../app/api";
+} from "../../generated/graphql";
 import { PostActionContainer } from "./PostActionContainer";
 
 interface BookmarkButtonProps {
@@ -12,15 +12,16 @@ interface BookmarkButtonProps {
 }
 
 const BookmarkButton = ({ isBookmarkedByMe, postId }: BookmarkButtonProps) => {
-  const [addBookmark, { isLoading: isAddBookmarkLoading }] =
+  const [addBookmark, { loading: isAddBookmarkLoading }] =
     useAddBookmarkMutation();
-  const [removeBookmark, { isLoading: isRemoveBookmarkLoading }] =
+  const [removeBookmark, { loading: isRemoveBookmarkLoading }] =
     useRemoveBookmarkMutation();
   const bookmarkIcon = isBookmarkedByMe ? (
     <Bookmark fontSize="small" />
   ) : (
     <BookmarkAddOutlined fontSize="small" />
   );
+
   return (
     <PostActionContainer>
       <IconButton
@@ -28,8 +29,8 @@ const BookmarkButton = ({ isBookmarkedByMe, postId }: BookmarkButtonProps) => {
           e.stopPropagation();
           if (isAddBookmarkLoading || isRemoveBookmarkLoading) return;
           isBookmarkedByMe
-            ? removeBookmark({ postId })
-            : addBookmark({ postId });
+            ? removeBookmark({ variables: { postId } })
+            : addBookmark({ variables: { postId } });
         }}>
         {bookmarkIcon}
       </IconButton>

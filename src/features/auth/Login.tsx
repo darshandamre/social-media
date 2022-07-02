@@ -3,8 +3,8 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { MyTextField } from "../common";
-import { useLoginMutation } from "../../app/api";
 import { Link, useNavigate } from "react-router-dom";
+import { useLoginMutation } from "../../generated/graphql";
 
 const loginSchema = yup.object().shape({
   email: yup.string().required().trim().email("invalid email"),
@@ -36,9 +36,9 @@ const Login = () => {
 
   const handleLogin = handleSubmit(async input => {
     try {
-      const payload = await login({ input }).unwrap();
-      if (payload.login.errors) {
-        return payload.login.errors.forEach(({ field, message }) => {
+      const { data } = await login({ variables: { input } });
+      if (data?.login.errors) {
+        return data.login.errors.forEach(({ field, message }) => {
           setError(field as keyof LoginFormData, {
             type: "server",
             message

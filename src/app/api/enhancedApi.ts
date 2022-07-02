@@ -1,4 +1,4 @@
-import { api as generatedApi } from "./generated/graphql";
+import { api as generatedApi } from "./baseApi";
 
 export const enhancedApi = generatedApi.enhanceEndpoints({
   addTagTypes: ["Me", "User", "Post", "Likes", "Bookmarks", "UserFeed"],

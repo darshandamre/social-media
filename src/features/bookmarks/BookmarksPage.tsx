@@ -1,12 +1,12 @@
 import { Typography } from "@mui/material";
-import { useBookmarkedPostsQuery } from "../../app/api";
+import { useBookmarkedPostsQuery } from "../../generated/graphql";
 import { Loader } from "../common";
 import { PostCard } from "../post";
 
 const BookmarksPage = () => {
-  const { data, isLoading } = useBookmarkedPostsQuery();
+  const { data, loading } = useBookmarkedPostsQuery();
 
-  if (isLoading) return <Loader />;
+  if (loading) return <Loader />;
 
   return (
     <>

@@ -1,7 +1,7 @@
 import { ArrowBack } from "@mui/icons-material";
 import { Avatar, Box, IconButton, Typography } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import { useUserQuery } from "../../app/api";
+import { useUserQuery } from "../../generated/graphql";
 import { stringAvatar } from "../../utils/stringAvatar";
 import { Loader } from "../common";
 import { PostCard } from "../post";
@@ -13,11 +13,13 @@ type ProfileParams = {
 
 const Profile = () => {
   const { username } = useParams<ProfileParams>();
-  const { data: userData, isLoading } = useUserQuery({ username: username! });
+  const { data: userData, loading } = useUserQuery({
+    variables: { username: username! }
+  });
   const { user } = userData ?? {};
   const navigate = useNavigate();
 
-  if (isLoading) return <Loader />;
+  if (loading) return <Loader />;
 
   if (!user) return <Box>user not found</Box>;
 

@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/dist/query";
 import { alertReducer } from "../features/alert/alertSlice";
-import { api } from "./api";
+import { api } from "./api/baseApi";
 
 export const store = configureStore({
   reducer: {

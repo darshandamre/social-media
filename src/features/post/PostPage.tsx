@@ -2,11 +2,11 @@ import { ArrowBack, ChatBubbleOutline } from "@mui/icons-material";
 import { Avatar, Box, IconButton, Typography } from "@mui/material";
 import { useRef } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { usePostQuery } from "../../app/api";
 import {
   Post,
-  PostWithAuthorFieldFragment
-} from "../../app/api/generated/graphql";
+  PostWithAuthorFieldFragment,
+  usePostQuery
+} from "../../generated/graphql";
 import { isObjectWithKey } from "../../utils/isObjectWithKey";
 import { stringAvatar } from "../../utils/stringAvatar";
 import { CommentBox } from "../comments/CommentBox";
@@ -26,8 +26,10 @@ const PostPage = () => {
   const navigate = useNavigate();
   const commentRef = useRef<HTMLInputElement>(null);
 
-  const { data: postData, isLoading: isPostLoading } = usePostQuery({
-    postId: postId!
+  const { data: postData, loading: isPostLoading } = usePostQuery({
+    variables: {
+      postId: postId!
+    }
   });
   const { state } = useLocation();
 
