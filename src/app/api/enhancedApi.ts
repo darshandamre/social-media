@@ -1,44 +1,44 @@
 import { api as generatedApi } from "./baseApi";
 
 export const enhancedApi = generatedApi.enhanceEndpoints({
-  addTagTypes: ["Me", "User", "Post", "Likes", "Bookmarks", "UserFeed"],
+  addTagTypes: ["User", "Post", "Likes", "Bookmarks", "UserFeed"],
   endpoints: {
-    Me: {
-      providesTags: ["Me"]
-    },
-    Register: {
-      invalidatesTags: ["Me"]
-    },
-    Login: {
-      invalidatesTags: ["Me"]
-    },
-    Logout: {
-      invalidatesTags: ["Me"]
-    },
-    UserFeed: {
-      providesTags: ["UserFeed"]
-    },
-    Post: {
-      providesTags: result =>
-        result
-          ? [
-              { type: "Post", id: result.post?.id },
-              { type: "User", id: result.post?.authorId }
-            ]
-          : []
-    },
-    User: {
-      providesTags: result =>
-        result
-          ? [
-              ...(result.user?.posts?.map(({ id }) => ({
-                type: "Post" as const,
-                id
-              })) ?? ["Post" as const]),
-              { type: "User", id: result.user?.id }
-            ]
-          : ["User", "Post"]
-    },
+    // Me: {
+    //   providesTags: ["Me"]
+    // },
+    // Register: {
+    //   invalidatesTags: ["Me"]
+    // },
+    // Login: {
+    //   invalidatesTags: ["Me"]
+    // },
+    // Logout: {
+    //   invalidatesTags: ["Me"]
+    // },
+    // UserFeed: {
+    //   providesTags: ["UserFeed"]
+    // },
+    // Post: {
+    //   providesTags: result =>
+    //     result
+    //       ? [
+    //           { type: "Post", id: result.post?.id },
+    //           { type: "User", id: result.post?.authorId }
+    //         ]
+    //       : []
+    // },
+    // User: {
+    //   providesTags: result =>
+    //     result
+    //       ? [
+    //           ...(result.user?.posts?.map(({ id }) => ({
+    //             type: "Post" as const,
+    //             id
+    //           })) ?? ["Post" as const]),
+    //           { type: "User", id: result.user?.id }
+    //         ]
+    //       : ["User", "Post"]
+    // },
     Follow: {
       invalidatesTags: (result, _, { followId }) =>
         result?.follow ? [{ type: "User", id: followId }, "UserFeed"] : [],

@@ -4,7 +4,12 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { MyTextField } from "../common";
 import { Link, useNavigate } from "react-router-dom";
-import { useRegisterMutation } from "../../generated/graphql";
+import {
+  MeDocument,
+  MeQuery,
+  useRegisterMutation
+} from "../../generated/graphql";
+import { useApolloClient } from "@apollo/client";
 
 const registerSchema = yup.object().shape({
   username: yup
@@ -44,24 +49,40 @@ const Register = () => {
     resolver: yupResolver(registerSchema)
   });
 
-  const [register] = useRegisterMutation();
   const navigate = useNavigate();
-
-  const handleRegister = handleSubmit(async input => {
-    try {
-      const { data } = await register({ variables: { input } });
-      if (data?.register.errors) {
-        return data.register.errors.forEach(({ field, message }) => {
+  const apolloClient = useApolloClient();
+  const [register] = useRegisterMutation({
+    onCompleted: ({ register }) => {
+      if (register.errors) {
+        return register.errors.forEach(({ field, message }) => {
           setError(field as keyof RegisterFormData, {
             type: "server",
             message
           });
         });
       }
-      navigate("/");
-    } catch (err) {
-      console.error(err);
+
+      if (register.user) {
+        apolloClient.writeQuery<MeQuery>({
+          query: MeDocument,
+          data: {
+            __typename: "Query",
+            me: {
+              __typename: "User",
+              id: register.user.id,
+              username: register.user.username,
+              name: register.user.name,
+              amIFollowingThem: false
+            }
+          }
+        });
+        navigate("/");
+      }
     }
+  });
+
+  const handleRegister = handleSubmit(async input => {
+    await register({ variables: { input } });
   });
 
   return (

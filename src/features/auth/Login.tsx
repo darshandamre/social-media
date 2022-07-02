@@ -4,7 +4,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { MyTextField } from "../common";
 import { Link, useNavigate } from "react-router-dom";
-import { useLoginMutation } from "../../generated/graphql";
+import { MeDocument, MeQuery, useLoginMutation } from "../../generated/graphql";
+import { useApolloClient } from "@apollo/client";
 
 const loginSchema = yup.object().shape({
   email: yup.string().required().trim().email("invalid email"),
@@ -31,24 +32,40 @@ const Login = () => {
     resolver: yupResolver(loginSchema)
   });
 
-  const [login] = useLoginMutation();
   const navigate = useNavigate();
-
-  const handleLogin = handleSubmit(async input => {
-    try {
-      const { data } = await login({ variables: { input } });
-      if (data?.login.errors) {
-        return data.login.errors.forEach(({ field, message }) => {
+  const apolloClient = useApolloClient();
+  const [login] = useLoginMutation({
+    onCompleted: ({ login }) => {
+      if (login.errors) {
+        return login.errors.forEach(({ field, message }) => {
           setError(field as keyof LoginFormData, {
             type: "server",
             message
           });
         });
       }
-      navigate("/");
-    } catch (err) {
-      console.error(err);
+
+      if (login.user) {
+        apolloClient.writeQuery<MeQuery>({
+          query: MeDocument,
+          data: {
+            __typename: "Query",
+            me: {
+              __typename: "User",
+              id: login.user.id,
+              username: login.user.username,
+              name: login.user.name,
+              amIFollowingThem: false
+            }
+          }
+        });
+        navigate("/");
+      }
     }
+  });
+
+  const handleLogin = handleSubmit(async input => {
+    await login({ variables: { input } });
   });
 
   return (
