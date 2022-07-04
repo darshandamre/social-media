@@ -15,10 +15,11 @@ const LikeButton = ({
   isLiked: boolean;
   postId: string;
 }) => {
-  const [like, { loading: isLikeLoading }] =
-    useLikeMutationAndUpdateCache(postId);
+  const [like, { loading: isLikeLoading }] = useLikeMutationAndUpdateCache({
+    variables: { postId }
+  });
   const [dislike, { loading: isDislikeLoading }] =
-    useDislikeMutationAndUpdateCache(postId);
+    useDislikeMutationAndUpdateCache({ variables: { postId } });
 
   const likeIcon = isLiked ? (
     <Favorite fontSize="small" color="error" />

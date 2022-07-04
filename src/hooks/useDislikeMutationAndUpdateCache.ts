@@ -10,19 +10,17 @@ import {
 import * as Apollo from "@apollo/client";
 
 export const useDislikeMutationAndUpdateCache = (
-  postId: PostWithAuthorFieldFragment["id"],
   baseOptions?: Apollo.MutationHookOptions<
     DislikeMutation,
     DislikeMutationVariables
   >
 ) =>
   useDislikeMutation({
-    variables: { postId },
-    update(cache, { data: dislikeData }) {
+    update(cache, { data: dislikeData }, { variables }) {
       if (!dislikeData?.dislike) return;
       cache.updateFragment<PostWithAuthorFieldFragment>(
         {
-          id: `Post:${postId}`,
+          id: `Post:${variables?.postId}`,
           fragment: PostWithAuthorFieldFragmentDoc,
           fragmentName: "PostWithAuthorField"
         },
@@ -43,7 +41,9 @@ export const useDislikeMutationAndUpdateCache = (
         },
         data => ({
           __typename: "Query",
-          likedPosts: data?.likedPosts?.filter(post => post.id !== postId)
+          likedPosts: data?.likedPosts?.filter(
+            post => post.id !== variables?.postId
+          )
         })
       );
     },
