@@ -1,9 +1,9 @@
 import { Bookmark, BookmarkAddOutlined } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 import {
-  useAddBookmarkMutation,
-  useRemoveBookmarkMutation
-} from "../../generated/graphql";
+  useAddBookmarkMutationAndUpdateCache,
+  useRemoveBookmarkMutationAndUpdateCache
+} from "../../hooks";
 import { PostActionContainer } from "./PostActionContainer";
 
 interface BookmarkButtonProps {
@@ -13,9 +13,9 @@ interface BookmarkButtonProps {
 
 const BookmarkButton = ({ isBookmarkedByMe, postId }: BookmarkButtonProps) => {
   const [addBookmark, { loading: isAddBookmarkLoading }] =
-    useAddBookmarkMutation();
+    useAddBookmarkMutationAndUpdateCache({ variables: { postId } });
   const [removeBookmark, { loading: isRemoveBookmarkLoading }] =
-    useRemoveBookmarkMutation();
+    useRemoveBookmarkMutationAndUpdateCache({ variables: { postId } });
   const bookmarkIcon = isBookmarkedByMe ? (
     <Bookmark fontSize="small" />
   ) : (
@@ -28,9 +28,7 @@ const BookmarkButton = ({ isBookmarkedByMe, postId }: BookmarkButtonProps) => {
         onClick={e => {
           e.stopPropagation();
           if (isAddBookmarkLoading || isRemoveBookmarkLoading) return;
-          isBookmarkedByMe
-            ? removeBookmark({ variables: { postId } })
-            : addBookmark({ variables: { postId } });
+          isBookmarkedByMe ? removeBookmark() : addBookmark();
         }}>
         {bookmarkIcon}
       </IconButton>
