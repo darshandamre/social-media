@@ -159,18 +159,18 @@ export const enhancedApi = generatedApi.enhanceEndpoints({
         }
       }
     },
-    LikedPosts: {
-      providesTags: result =>
-        result
-          ? [
-              ...(result.likedPosts?.map(post => ({
-                type: "Post" as const,
-                id: post.id
-              })) ?? []),
-              "Likes"
-            ]
-          : ["Post"]
-    },
+    // LikedPosts: {
+    //   providesTags: result =>
+    //     result
+    //       ? [
+    //           ...(result.likedPosts?.map(post => ({
+    //             type: "Post" as const,
+    //             id: post.id
+    //           })) ?? []),
+    //           "Likes"
+    //         ]
+    //       : ["Post"]
+    // },
     BookmarkedPosts: {
       providesTags: result =>
         result
@@ -219,70 +219,70 @@ export const enhancedApi = generatedApi.enhanceEndpoints({
         }
       }
     },
-    Like: {
-      invalidatesTags: (result, _, { postId }) =>
-        result?.like ? [{ type: "Post", id: postId }, "Likes"] : [],
-      onQueryStarted: async ({ postId }, { dispatch, queryFulfilled }) => {
-        const userFeedPatchResult = dispatch(
-          enhancedApi.util.updateQueryData("UserFeed", undefined, draft => {
-            const idx = draft.userFeed.findIndex(post => post.id === postId);
-            if (idx > -1) {
-              draft.userFeed[idx].isLikedByMe = true;
-              draft.userFeed[idx].likes += 1;
-            }
-          })
-        );
+    // Like: {
+    //   invalidatesTags: (result, _, { postId }) =>
+    //     result?.like ? [{ type: "Post", id: postId }, "Likes"] : [],
+    //   onQueryStarted: async ({ postId }, { dispatch, queryFulfilled }) => {
+    //     const userFeedPatchResult = dispatch(
+    //       enhancedApi.util.updateQueryData("UserFeed", undefined, draft => {
+    //         const idx = draft.userFeed.findIndex(post => post.id === postId);
+    //         if (idx > -1) {
+    //           draft.userFeed[idx].isLikedByMe = true;
+    //           draft.userFeed[idx].likes += 1;
+    //         }
+    //       })
+    //     );
 
-        const postsPatchResult = dispatch(
-          enhancedApi.util.updateQueryData("Posts", undefined, draft => {
-            const idx = draft.posts.findIndex(post => post.id === postId);
-            if (idx > -1) {
-              draft.posts[idx].isLikedByMe = true;
-              draft.posts[idx].likes += 1;
-            }
-          })
-        );
+    //     const postsPatchResult = dispatch(
+    //       enhancedApi.util.updateQueryData("Posts", undefined, draft => {
+    //         const idx = draft.posts.findIndex(post => post.id === postId);
+    //         if (idx > -1) {
+    //           draft.posts[idx].isLikedByMe = true;
+    //           draft.posts[idx].likes += 1;
+    //         }
+    //       })
+    //     );
 
-        try {
-          await queryFulfilled;
-        } catch {
-          userFeedPatchResult.undo();
-          postsPatchResult.undo();
-        }
-      }
-    },
-    Dislike: {
-      invalidatesTags: (result, _, { postId }) =>
-        result?.dislike ? [{ type: "Post", id: postId }, "Likes"] : [],
-      onQueryStarted: async ({ postId }, { dispatch, queryFulfilled }) => {
-        const userFeedPatchResult = dispatch(
-          enhancedApi.util.updateQueryData("UserFeed", undefined, draft => {
-            const idx = draft.userFeed.findIndex(post => post.id === postId);
-            if (idx > -1) {
-              draft.userFeed[idx].isLikedByMe = false;
-              draft.userFeed[idx].likes -= 1;
-            }
-          })
-        );
+    //     try {
+    //       await queryFulfilled;
+    //     } catch {
+    //       userFeedPatchResult.undo();
+    //       postsPatchResult.undo();
+    //     }
+    //   }
+    // },
+    // Dislike: {
+    //   invalidatesTags: (result, _, { postId }) =>
+    //     result?.dislike ? [{ type: "Post", id: postId }, "Likes"] : [],
+    //   onQueryStarted: async ({ postId }, { dispatch, queryFulfilled }) => {
+    //     const userFeedPatchResult = dispatch(
+    //       enhancedApi.util.updateQueryData("UserFeed", undefined, draft => {
+    //         const idx = draft.userFeed.findIndex(post => post.id === postId);
+    //         if (idx > -1) {
+    //           draft.userFeed[idx].isLikedByMe = false;
+    //           draft.userFeed[idx].likes -= 1;
+    //         }
+    //       })
+    //     );
 
-        const postsPatchResult = dispatch(
-          enhancedApi.util.updateQueryData("Posts", undefined, draft => {
-            const idx = draft.posts.findIndex(post => post.id === postId);
-            if (idx > -1) {
-              draft.posts[idx].isLikedByMe = false;
-              draft.posts[idx].likes -= 1;
-            }
-          })
-        );
+    //     const postsPatchResult = dispatch(
+    //       enhancedApi.util.updateQueryData("Posts", undefined, draft => {
+    //         const idx = draft.posts.findIndex(post => post.id === postId);
+    //         if (idx > -1) {
+    //           draft.posts[idx].isLikedByMe = false;
+    //           draft.posts[idx].likes -= 1;
+    //         }
+    //       })
+    //     );
 
-        try {
-          await queryFulfilled;
-        } catch {
-          userFeedPatchResult.undo();
-          postsPatchResult.undo();
-        }
-      }
-    },
+    //     try {
+    //       await queryFulfilled;
+    //     } catch {
+    //       userFeedPatchResult.undo();
+    //       postsPatchResult.undo();
+    //     }
+    //   }
+    // },
     AddBookmark: {
       invalidatesTags: (result, _, { postId }) =>
         result?.addBookmark ? [{ type: "Post", id: postId }, "Bookmarks"] : [],

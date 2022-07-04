@@ -3,9 +3,9 @@ import { useReducer } from "react";
 import {
   useFollowMutation,
   useMeQuery,
+  UserQuery,
   useUnfollowMutation
 } from "../../generated/graphql";
-import { UserQuery } from "../../generated/graphql";
 import { EditProfileModal } from "./EditProfileModal";
 
 type ProfileButtonProps = {

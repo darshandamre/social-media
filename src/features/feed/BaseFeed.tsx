@@ -1,4 +1,4 @@
-import { PostWithAuthorFieldFragment } from "../../app/api/generated/graphql";
+import type { PostWithAuthorFieldFragment } from "../../generated/graphql";
 import { Loader } from "../common";
 import { CreateOrEditPost, PostCard } from "../post";
 

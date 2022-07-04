@@ -1,7 +1,7 @@
 import { ChatBubbleOutline } from "@mui/icons-material";
 import { Avatar, Box, IconButton, Typography } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import { PostWithAuthorFieldFragment } from "../../app/api/generated/graphql";
+import type { PostWithAuthorFieldFragment } from "../../generated/graphql";
 import { theme } from "../../theme";
 import { stringAvatar } from "../../utils/stringAvatar";
 import { BookmarkButton } from "./BookmarkButton";
