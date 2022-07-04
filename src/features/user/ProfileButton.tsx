@@ -1,11 +1,10 @@
 import { Button, ButtonProps } from "@mui/material";
 import { useReducer } from "react";
+import { useMeQuery, UserQuery } from "../../generated/graphql";
 import {
-  useFollowMutation,
-  useMeQuery,
-  UserQuery,
-  useUnfollowMutation
-} from "../../generated/graphql";
+  useFollowMutationAndUpdateCache,
+  useUnFollowMutationAndUpdateCache
+} from "../../hooks";
 import { EditProfileModal } from "./EditProfileModal";
 
 type ProfileButtonProps = {
@@ -20,14 +19,17 @@ const ProfileButton = ({ user }: ProfileButtonProps) => {
 
   const [showModal, toggleModal] = useReducer(s => !s, false);
 
-  const [follow] = useFollowMutation();
-  const [unfollow] = useUnfollowMutation();
+  const [follow] = useFollowMutationAndUpdateCache({
+    variables: { followId: user.id }
+  });
+  const [unfollow] = useUnFollowMutationAndUpdateCache({
+    variables: { unfollowId: user.id }
+  });
 
   let buttonVariant: ButtonProps["variant"] = "contained";
   let buttonColor: ButtonProps["color"];
   let buttonText: ProfileActions = "Follow";
-  let buttonAction: ButtonProps["onClick"] = () =>
-    follow({ variables: { followId: user.id } });
+  let buttonAction: ButtonProps["onClick"] = () => follow();
 
   if (isMyProfile) {
     buttonVariant = "outlined";
@@ -37,7 +39,7 @@ const ProfileButton = ({ user }: ProfileButtonProps) => {
     buttonVariant = "outlined";
     buttonColor = "error";
     buttonText = "Unfollow";
-    buttonAction = () => unfollow({ variables: { unfollowId: user.id } });
+    buttonAction = () => unfollow();
   }
 
   return (

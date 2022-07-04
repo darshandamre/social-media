@@ -1,60 +1,8 @@
 import { api as generatedApi } from "./baseApi";
 
 export const enhancedApi = generatedApi.enhanceEndpoints({
-  addTagTypes: ["User", "Post", "UserFeed"],
+  addTagTypes: ["User", "Post"],
   endpoints: {
-    Follow: {
-      invalidatesTags: (result, _, { followId }) =>
-        result?.follow ? [{ type: "User", id: followId }, "UserFeed"] : [],
-      onQueryStarted: async ({ followId }, { dispatch, queryFulfilled }) => {
-        try {
-          const { data } = await queryFulfilled;
-          if (!data.follow) return;
-
-          dispatch(
-            enhancedApi.util.updateQueryData("Posts", undefined, draft => {
-              draft.posts.forEach(post => {
-                if (post.authorId === followId && post.author) {
-                  post.author.amIFollowingThem = true;
-                }
-              });
-            })
-          );
-        } catch (err) {
-          console.error(err);
-        }
-      }
-    },
-    Unfollow: {
-      invalidatesTags: (result, _, { unfollowId }) =>
-        result?.unfollow ? [{ type: "User", id: unfollowId }] : [],
-      onQueryStarted: async ({ unfollowId }, { dispatch, queryFulfilled }) => {
-        try {
-          const { data } = await queryFulfilled;
-          if (!data.unfollow) return;
-
-          dispatch(
-            enhancedApi.util.updateQueryData("UserFeed", undefined, draft => {
-              draft.userFeed = draft.userFeed.filter(
-                post => post.authorId !== unfollowId
-              );
-            })
-          );
-
-          dispatch(
-            enhancedApi.util.updateQueryData("Posts", undefined, draft => {
-              draft.posts.forEach(post => {
-                if (post.authorId === unfollowId && post.author) {
-                  post.author.amIFollowingThem = false;
-                }
-              });
-            })
-          );
-        } catch (err) {
-          console.error(err);
-        }
-      }
-    },
     CreatePost: {
       invalidatesTags: result =>
         result?.createPost.authorId

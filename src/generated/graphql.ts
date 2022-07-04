@@ -384,7 +384,7 @@ export type UserQueryVariables = Exact<{
 }>;
 
 
-export type UserQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: string, name?: string | null, username: string, bio?: string | null, portfolioLink?: string | null, numFollowers?: number | null, numFollowing?: number | null, isMyFollower: boolean, amIFollowingThem: boolean, posts?: Array<{ __typename?: 'Post', id: string, content: string, isBookmarkedByMe: boolean, isLikedByMe: boolean, likes: number, createdAt: string, updatedAt: string }> | null } | null };
+export type UserQuery = { __typename?: 'Query', user?: { __typename?: 'User', bio?: string | null, portfolioLink?: string | null, numFollowers?: number | null, numFollowing?: number | null, isMyFollower: boolean, id: string, name?: string | null, username: string, amIFollowingThem: boolean, posts?: Array<{ __typename?: 'Post', id: string, content: string, isBookmarkedByMe: boolean, isLikedByMe: boolean, likes: number, createdAt: string, updatedAt: string }> | null } | null };
 
 export type UserFeedQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1245,15 +1245,12 @@ export type PostsQueryResult = Apollo.QueryResult<PostsQuery, PostsQueryVariable
 export const UserDocument = gql`
     query User($username: String!) {
   user(username: $username) {
-    id
-    name
-    username
+    ...RegularUser
     bio
     portfolioLink
     numFollowers
     numFollowing
     isMyFollower
-    amIFollowingThem
     posts {
       id
       content
@@ -1265,7 +1262,7 @@ export const UserDocument = gql`
     }
   }
 }
-    `;
+    ${RegularUserFragmentDoc}`;
 
 /**
  * __useUserQuery__

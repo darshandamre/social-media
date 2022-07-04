@@ -1,17 +1,19 @@
 import { MoreHoriz } from "@mui/icons-material";
 import { Box, IconButton, MenuItem } from "@mui/material";
-import React, { useReducer, useRef, useState } from "react";
+import { useReducer, useRef, useState } from "react";
 import {
   PostWithAuthorFieldFragment,
-  useFollowMutation,
-  useMeQuery,
-  useUnfollowMutation
+  useMeQuery
 } from "../../generated/graphql";
 import { useAppDispatch } from "../../app/hooks";
 import { showAlertThenHide } from "../alert";
 import { CreateOrEditPostModal } from "./CreateOrEditPostModal";
 import { DeletePostModal } from "./DeletePostModal";
 import { PostCardMenu } from "./PostCardMenu";
+import {
+  useFollowMutationAndUpdateCache,
+  useUnFollowMutationAndUpdateCache
+} from "../../hooks";
 
 type PostCardOptionsProps = {
   post: PostWithAuthorFieldFragment;
@@ -30,7 +32,8 @@ const PostCardOptions = ({ post }: PostCardOptionsProps) => {
   const closeMenu = () => setOpenMenu(false);
 
   const dispatch = useAppDispatch();
-  const [follow] = useFollowMutation({
+  const [follow] = useFollowMutationAndUpdateCache({
+    variables: { followId: post.authorId },
     onCompleted: data => {
       if (data?.follow) {
         showAlertThenHide(dispatch, {
@@ -39,7 +42,8 @@ const PostCardOptions = ({ post }: PostCardOptionsProps) => {
       }
     }
   });
-  const [unfollow] = useUnfollowMutation({
+  const [unfollow] = useUnFollowMutationAndUpdateCache({
+    variables: { unfollowId: post.authorId },
     onCompleted: data => {
       if (data?.unfollow) {
         showAlertThenHide(dispatch, {
@@ -51,11 +55,7 @@ const PostCardOptions = ({ post }: PostCardOptionsProps) => {
 
   const handleFollowUnfollow = async () => {
     try {
-      post.author?.amIFollowingThem
-        ? await unfollow({
-            variables: { unfollowId: post.authorId }
-          })
-        : await follow({ variables: { followId: post.authorId } });
+      post.author?.amIFollowingThem ? await unfollow() : await follow();
     } catch (err) {
       console.error(err);
       showAlertThenHide(dispatch, {

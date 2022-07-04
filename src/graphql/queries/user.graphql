@@ -1,14 +1,11 @@
 query User($username: String!) {
   user(username: $username) {
-    id
-    name
-    username
+    ...RegularUser
     bio
     portfolioLink
     numFollowers
     numFollowing
     isMyFollower
-    amIFollowingThem
     posts {
       id
       content
