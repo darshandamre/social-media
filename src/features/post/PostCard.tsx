@@ -33,14 +33,16 @@ const PostCard = ({ post }: PostCardProps) => {
         cursor: "pointer",
         borderBottom: `1px solid ${theme.palette.background.paper}`
       }}>
-      <Avatar
-        component={Link}
-        to={profileUrl}
-        sx={{ textDecoration: "none", ...stringAvatar(author?.name)?.sx }}>
-        {stringAvatar(author?.name)?.children}
-      </Avatar>
+      <Box onClick={e => e.stopPropagation()}>
+        <Avatar
+          component={Link}
+          to={profileUrl}
+          sx={{ textDecoration: "none", ...stringAvatar(author?.name)?.sx }}>
+          {stringAvatar(author?.name)?.children}
+        </Avatar>
+      </Box>
       <Box mx="0.75rem" flexGrow={1}>
-        <Box display="flex">
+        <Box display="flex" onClick={e => e.stopPropagation()}>
           {author?.name ? (
             <Typography
               component={Link}
