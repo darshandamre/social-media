@@ -48,11 +48,8 @@ const EditProfileModal = ({
     resolver: yupResolver(userEditSchema)
   });
 
-  const [editUser] = useEditUserMutation();
-
-  const saveUser = handleSubmit(async input => {
-    try {
-      const { data } = await editUser({ variables: { input } });
+  const [editUser] = useEditUserMutation({
+    onCompleted: data => {
       if (data?.editUser.errors) {
         data.editUser.errors.forEach(({ field, message }) => {
           setError(field as keyof EditProfileFormData, {
@@ -66,11 +63,12 @@ const EditProfileModal = ({
       setValue("name", data?.editUser.user?.name ?? "");
       setValue("bio", data?.editUser.user?.bio ?? "");
       setValue("portfolioLink", data?.editUser.user?.portfolioLink ?? "");
-
       handleClose();
-    } catch (err) {
-      console.error(err);
     }
+  });
+
+  const saveUser = handleSubmit(async input => {
+    await editUser({ variables: { input } });
   });
 
   return (

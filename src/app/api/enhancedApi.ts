@@ -70,43 +70,6 @@ export const enhancedApi = generatedApi.enhanceEndpoints({
           console.error(err);
         }
       }
-    },
-
-    EditUser: {
-      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
-        try {
-          const {
-            data: {
-              editUser: { user }
-            }
-          } = await queryFulfilled;
-
-          if (!user) return;
-          dispatch(
-            enhancedApi.util.updateQueryData(
-              "User",
-              { username: user.username },
-              draft => {
-                if (!draft.user) return;
-                draft.user = {
-                  ...draft.user,
-                  ...user
-                };
-              }
-            )
-          );
-          dispatch(
-            enhancedApi.util.updateQueryData("Me", undefined, draft => {
-              if (!draft.me) return;
-              draft.me.id = user.id;
-              draft.me.username = user.username;
-              draft.me.name = user.name;
-            })
-          );
-        } catch (err) {
-          console.error(err);
-        }
-      }
     }
   }
 });
