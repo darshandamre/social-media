@@ -14,6 +14,7 @@ export const useLikeMutationAndUpdateCache = (
   baseOptions?: Apollo.MutationHookOptions<LikeMutation, LikeMutationVariables>
 ) =>
   useLikeMutation({
+    variables: { postId },
     update(cache, { data: likeData }) {
       if (!likeData?.like) return;
       const updatedPost = cache.updateFragment<PostWithAuthorFieldFragment>(

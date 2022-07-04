@@ -17,6 +17,7 @@ export const useDislikeMutationAndUpdateCache = (
   >
 ) =>
   useDislikeMutation({
+    variables: { postId },
     update(cache, { data: dislikeData }) {
       if (!dislikeData?.dislike) return;
       cache.updateFragment<PostWithAuthorFieldFragment>(

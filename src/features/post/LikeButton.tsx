@@ -32,9 +32,7 @@ const LikeButton = ({
         onClick={e => {
           e.stopPropagation();
           if (isLikeLoading || isDislikeLoading) return;
-          isLiked
-            ? dislike({ variables: { postId } })
-            : like({ variables: { postId } });
+          isLiked ? dislike() : like();
         }}>
         {likeIcon}
       </IconButton>
