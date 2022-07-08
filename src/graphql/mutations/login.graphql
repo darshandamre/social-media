@@ -9,8 +9,7 @@ mutation Login($input: LoginInput!) {
       updatedAt
     }
     errors {
-      field
-      message
+      ...RegularError
     }
   }
 }

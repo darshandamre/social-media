@@ -10,4 +10,5 @@ fragment PostWithAuthorField on Post {
   }
   createdAt
   updatedAt
+  __typename
 }

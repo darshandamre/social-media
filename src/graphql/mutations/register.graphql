@@ -10,8 +10,7 @@ mutation Register($input: RegisterInput!) {
       __typename
     }
     errors {
-      field
-      message
+      ...RegularError
     }
   }
 }

@@ -219,13 +219,13 @@ export type UserResponse = {
   user?: Maybe<User>;
 };
 
-export type PostWithAuthorFieldFragment = { __typename?: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean } | null };
+export type PostWithAuthorFieldFragment = { __typename: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean } | null };
 
 export type RegularErrorFragment = { __typename?: 'FieldError', field?: string | null, message: string };
 
-export type RegularUserFragment = { __typename?: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean };
+export type RegularUserFragment = { __typename: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean };
 
-export type RegularUserResponseFragment = { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field?: string | null, message: string }> | null, user?: { __typename?: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean } | null };
+export type RegularUserResponseFragment = { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field?: string | null, message: string }> | null, user?: { __typename: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean } | null };
 
 export type AddBookmarkMutationVariables = Exact<{
   postId: Scalars['String'];
@@ -240,14 +240,14 @@ export type CreateCommentMutationVariables = Exact<{
 }>;
 
 
-export type CreateCommentMutation = { __typename?: 'Mutation', createComment: { __typename?: 'Comment', id: string, content: string, authorId: string, postId: string, createdAt: string, updatedAt: string } };
+export type CreateCommentMutation = { __typename?: 'Mutation', createComment: { __typename: 'Comment', id: string, content: string, authorId: string, postId: string, createdAt: string, updatedAt: string } };
 
 export type CreatePostMutationVariables = Exact<{
   content: Scalars['String'];
 }>;
 
 
-export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __typename?: 'Post', id: string, content: string, authorId: string, createdAt: string, updatedAt: string } };
+export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __typename: 'Post', id: string, content: string, authorId: string, createdAt: string, updatedAt: string } };
 
 export type DeleteCommentMutationVariables = Exact<{
   commentId: Scalars['String'];
@@ -276,7 +276,7 @@ export type EditCommentMutationVariables = Exact<{
 }>;
 
 
-export type EditCommentMutation = { __typename?: 'Mutation', editComment?: { __typename?: 'Comment', id: string, content: string, authorId: string, postId: string, createdAt: string, updatedAt: string } | null };
+export type EditCommentMutation = { __typename?: 'Mutation', editComment?: { __typename: 'Comment', id: string, content: string, authorId: string, postId: string, createdAt: string, updatedAt: string } | null };
 
 export type EditPostMutationVariables = Exact<{
   content: Scalars['String'];
@@ -284,14 +284,14 @@ export type EditPostMutationVariables = Exact<{
 }>;
 
 
-export type EditPostMutation = { __typename?: 'Mutation', editPost?: { __typename?: 'Post', id: string, content: string, authorId: string, createdAt: string, updatedAt: string } | null };
+export type EditPostMutation = { __typename?: 'Mutation', editPost?: { __typename: 'Post', id: string, content: string, authorId: string, createdAt: string, updatedAt: string } | null };
 
 export type EditUserMutationVariables = Exact<{
   input: EditUserInput;
 }>;
 
 
-export type EditUserMutation = { __typename?: 'Mutation', editUser: { __typename?: 'UserResponse', user?: { __typename?: 'User', id: string, username: string, name?: string | null, bio?: string | null, portfolioLink?: string | null, createdAt: string, updatedAt: string } | null, errors?: Array<{ __typename?: 'FieldError', field?: string | null, message: string }> | null } };
+export type EditUserMutation = { __typename?: 'Mutation', editUser: { __typename?: 'UserResponse', user?: { __typename: 'User', id: string, username: string, name?: string | null, bio?: string | null, portfolioLink?: string | null, createdAt: string, updatedAt: string } | null, errors?: Array<{ __typename?: 'FieldError', field?: string | null, message: string }> | null } };
 
 export type FollowMutationVariables = Exact<{
   followId: Scalars['String'];
@@ -343,14 +343,14 @@ export type UnfollowMutation = { __typename?: 'Mutation', unfollow: boolean };
 export type BookmarkedPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type BookmarkedPostsQuery = { __typename?: 'Query', bookmarkedPosts?: Array<{ __typename?: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean } | null }> | null };
+export type BookmarkedPostsQuery = { __typename?: 'Query', bookmarkedPosts?: Array<{ __typename: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean } | null }> | null };
 
 export type CommentsQueryVariables = Exact<{
   postId: Scalars['String'];
 }>;
 
 
-export type CommentsQuery = { __typename?: 'Query', comments: Array<{ __typename?: 'Comment', id: string, content: string, authorId: string, postId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean } | null }> };
+export type CommentsQuery = { __typename?: 'Query', comments: Array<{ __typename: 'Comment', id: string, content: string, authorId: string, postId: string, createdAt: string, updatedAt: string, author?: { __typename: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean } | null }> };
 
 export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -360,36 +360,36 @@ export type HelloQuery = { __typename?: 'Query', hello: string };
 export type LikedPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type LikedPostsQuery = { __typename?: 'Query', likedPosts?: Array<{ __typename?: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean } | null }> | null };
+export type LikedPostsQuery = { __typename?: 'Query', likedPosts?: Array<{ __typename: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean } | null }> | null };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean } | null };
+export type MeQuery = { __typename?: 'Query', me?: { __typename: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean } | null };
 
 export type PostQueryVariables = Exact<{
   postId: Scalars['String'];
 }>;
 
 
-export type PostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean } | null } | null };
+export type PostQuery = { __typename?: 'Query', post?: { __typename: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean } | null } | null };
 
 export type PostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type PostsQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean } | null }> };
+export type PostsQuery = { __typename?: 'Query', posts: Array<{ __typename: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean } | null }> };
 
 export type UserQueryVariables = Exact<{
   username: Scalars['String'];
 }>;
 
 
-export type UserQuery = { __typename?: 'Query', user?: { __typename?: 'User', bio?: string | null, portfolioLink?: string | null, numFollowers?: number | null, numFollowing?: number | null, isMyFollower: boolean, id: string, name?: string | null, username: string, amIFollowingThem: boolean, posts?: Array<{ __typename?: 'Post', id: string, content: string, isBookmarkedByMe: boolean, isLikedByMe: boolean, likes: number, createdAt: string, updatedAt: string }> | null } | null };
+export type UserQuery = { __typename?: 'Query', user?: { __typename: 'User', bio?: string | null, portfolioLink?: string | null, numFollowers?: number | null, numFollowing?: number | null, isMyFollower: boolean, id: string, name?: string | null, username: string, amIFollowingThem: boolean, posts?: Array<{ __typename: 'Post', id: string, content: string, isBookmarkedByMe: boolean, isLikedByMe: boolean, likes: number, createdAt: string, updatedAt: string }> | null } | null };
 
 export type UserFeedQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserFeedQuery = { __typename?: 'Query', userFeed: Array<{ __typename?: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename?: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean } | null }> };
+export type UserFeedQuery = { __typename?: 'Query', userFeed: Array<{ __typename: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean } | null }> };
 
 export const RegularUserFragmentDoc = gql`
     fragment RegularUser on User {
@@ -397,6 +397,7 @@ export const RegularUserFragmentDoc = gql`
   name
   username
   amIFollowingThem
+  __typename
 }
     `;
 export const PostWithAuthorFieldFragmentDoc = gql`
@@ -412,6 +413,7 @@ export const PostWithAuthorFieldFragmentDoc = gql`
   }
   createdAt
   updatedAt
+  __typename
 }
     ${RegularUserFragmentDoc}`;
 export const RegularErrorFragmentDoc = gql`
@@ -471,6 +473,7 @@ export const CreateCommentDocument = gql`
     postId
     createdAt
     updatedAt
+    __typename
   }
 }
     `;
@@ -509,6 +512,7 @@ export const CreatePostDocument = gql`
     authorId
     createdAt
     updatedAt
+    __typename
   }
 }
     `;
@@ -640,6 +644,7 @@ export const EditCommentDocument = gql`
     postId
     createdAt
     updatedAt
+    __typename
   }
 }
     `;
@@ -678,6 +683,7 @@ export const EditPostDocument = gql`
     authorId
     createdAt
     updatedAt
+    __typename
   }
 }
     `;
@@ -719,14 +725,14 @@ export const EditUserDocument = gql`
       portfolioLink
       createdAt
       updatedAt
+      __typename
     }
     errors {
-      field
-      message
+      ...RegularError
     }
   }
 }
-    `;
+    ${RegularErrorFragmentDoc}`;
 export type EditUserMutationFn = Apollo.MutationFunction<EditUserMutation, EditUserMutationVariables>;
 
 /**
@@ -827,12 +833,11 @@ export const LoginDocument = gql`
       updatedAt
     }
     errors {
-      field
-      message
+      ...RegularError
     }
   }
 }
-    `;
+    ${RegularErrorFragmentDoc}`;
 export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>;
 
 /**
@@ -902,12 +907,11 @@ export const RegisterDocument = gql`
       __typename
     }
     errors {
-      field
-      message
+      ...RegularError
     }
   }
 }
-    `;
+    ${RegularErrorFragmentDoc}`;
 export type RegisterMutationFn = Apollo.MutationFunction<RegisterMutation, RegisterMutationVariables>;
 
 /**
@@ -1042,6 +1046,7 @@ export const CommentsDocument = gql`
     postId
     createdAt
     updatedAt
+    __typename
   }
 }
     ${RegularUserFragmentDoc}`;
@@ -1259,6 +1264,7 @@ export const UserDocument = gql`
       likes
       createdAt
       updatedAt
+      __typename
     }
   }
 }

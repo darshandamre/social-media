@@ -5,5 +5,6 @@ mutation CreatePost($content: String!) {
     authorId
     createdAt
     updatedAt
+    __typename
   }
 }

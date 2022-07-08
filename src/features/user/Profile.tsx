@@ -103,7 +103,8 @@ const Profile = () => {
               id,
               username: user.username,
               name,
-              amIFollowingThem: false
+              amIFollowingThem: false,
+              __typename: "User"
             }
           }}
         />

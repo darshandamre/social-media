@@ -6,5 +6,6 @@ mutation EditComment($content: String!, $commentId: String!) {
     postId
     createdAt
     updatedAt
+    __typename
   }
 }

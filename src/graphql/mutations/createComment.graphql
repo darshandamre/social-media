@@ -6,5 +6,6 @@ mutation CreateComment($content: String!, $postId: String!) {
     postId
     createdAt
     updatedAt
+    __typename
   }
 }

@@ -8,10 +8,10 @@ mutation EditUser($input: EditUserInput!) {
       portfolioLink
       createdAt
       updatedAt
+      __typename
     }
     errors {
-      field
-      message
+      ...RegularError
     }
   }
 }
