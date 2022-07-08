@@ -2,7 +2,13 @@ import { LoadingButton } from "@mui/lab";
 import { Avatar, Box, TextField } from "@mui/material";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
-import { useCreateCommentMutation, useMeQuery } from "../../generated/graphql";
+import {
+  CommentsDocument,
+  CommentsQuery,
+  CommentsQueryVariables,
+  useCreateCommentMutation,
+  useMeQuery
+} from "../../generated/graphql";
 import { PostWithAuthorFieldFragment } from "../../generated/graphql";
 import { useAppDispatch } from "../../app/hooks";
 import { isObjectWithKey } from "../../utils/isObjectWithKey";
@@ -15,10 +21,35 @@ type CommentBoxProps = {
 };
 
 const CommentBox = ({ post, commentRef }: CommentBoxProps) => {
-  const { data } = useMeQuery();
+  const { data: meData } = useMeQuery();
   const [content, setContent] = useState("");
   const [error, setError] = useState("");
-  const [createComment, { loading }] = useCreateCommentMutation();
+  const [createComment, { loading }] = useCreateCommentMutation({
+    update(cache, { data: createCommentData }) {
+      if (!createCommentData?.createComment) return;
+
+      cache.updateQuery<CommentsQuery, CommentsQueryVariables>(
+        {
+          query: CommentsDocument,
+          variables: { postId: post.id }
+        },
+        commentsData => {
+          if (!commentsData?.comments) return;
+
+          return {
+            __typename: "Query",
+            comments: [
+              {
+                ...createCommentData.createComment,
+                author: meData?.me
+              },
+              ...commentsData.comments
+            ]
+          };
+        }
+      );
+    }
+  });
   const dispatch = useAppDispatch();
   const { state } = useLocation();
 
@@ -46,7 +77,7 @@ const CommentBox = ({ post, commentRef }: CommentBoxProps) => {
 
   return (
     <Box component="form" onSubmit={handleCreateComment} m={2} display="flex">
-      <Avatar {...stringAvatar(data?.me?.name)} />
+      <Avatar {...stringAvatar(meData?.me?.name)} />
       <TextField
         multiline
         autoFocus={autoFocusComment}
