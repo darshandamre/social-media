@@ -35,12 +35,16 @@ export const useRemoveBookmarkMutationAndUpdateCache = (
         {
           query: BookmarkedPostsDocument
         },
-        data => ({
-          __typename: "Query",
-          bookmarkedPosts: data?.bookmarkedPosts?.filter(
-            post => post.id !== variables?.postId
-          )
-        })
+        data => {
+          if (!data?.bookmarkedPosts) return;
+
+          return {
+            __typename: "Query",
+            bookmarkedPosts: data.bookmarkedPosts.filter(
+              post => post.id !== variables?.postId
+            )
+          };
+        }
       );
     },
     ...baseOptions

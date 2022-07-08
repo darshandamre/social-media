@@ -1,5 +1,6 @@
 query Post($postId: String!) {
   post(id: $postId) {
     ...PostWithAuthorField
+    __typename
   }
 }

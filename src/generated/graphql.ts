@@ -197,7 +197,7 @@ export type User = {
   amIFollowingThem: Scalars['Boolean'];
   bio?: Maybe<Scalars['String']>;
   bookmarks?: Maybe<Array<Post>>;
-  createdAt: Scalars['String'];
+  createdAt?: Maybe<Scalars['String']>;
   email: Scalars['String'];
   followers?: Maybe<Array<User>>;
   following?: Maybe<Array<User>>;
@@ -209,7 +209,7 @@ export type User = {
   numFollowing?: Maybe<Scalars['Int']>;
   portfolioLink?: Maybe<Scalars['String']>;
   posts?: Maybe<Array<Post>>;
-  updatedAt: Scalars['String'];
+  updatedAt?: Maybe<Scalars['String']>;
   username: Scalars['String'];
 };
 
@@ -291,7 +291,7 @@ export type EditUserMutationVariables = Exact<{
 }>;
 
 
-export type EditUserMutation = { __typename?: 'Mutation', editUser: { __typename?: 'UserResponse', user?: { __typename: 'User', id: string, username: string, name?: string | null, bio?: string | null, portfolioLink?: string | null, createdAt: string, updatedAt: string } | null, errors?: Array<{ __typename?: 'FieldError', field?: string | null, message: string }> | null } };
+export type EditUserMutation = { __typename?: 'Mutation', editUser: { __typename?: 'UserResponse', user?: { __typename: 'User', id: string, username: string, name?: string | null, bio?: string | null, portfolioLink?: string | null, createdAt?: string | null, updatedAt?: string | null } | null, errors?: Array<{ __typename?: 'FieldError', field?: string | null, message: string }> | null } };
 
 export type FollowMutationVariables = Exact<{
   followId: Scalars['String'];
@@ -312,7 +312,7 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', user?: { __typename?: 'User', id: string, name?: string | null, username: string, email: string, createdAt: string, updatedAt: string } | null, errors?: Array<{ __typename?: 'FieldError', field?: string | null, message: string }> | null } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', user?: { __typename?: 'User', id: string, name?: string | null, username: string, email: string, createdAt?: string | null, updatedAt?: string | null } | null, errors?: Array<{ __typename?: 'FieldError', field?: string | null, message: string }> | null } };
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -324,7 +324,7 @@ export type RegisterMutationVariables = Exact<{
 }>;
 
 
-export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', user?: { __typename: 'User', id: string, email: string, name?: string | null, username: string, createdAt: string, updatedAt: string } | null, errors?: Array<{ __typename?: 'FieldError', field?: string | null, message: string }> | null } };
+export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', user?: { __typename: 'User', id: string, email: string, name?: string | null, username: string, createdAt?: string | null, updatedAt?: string | null } | null, errors?: Array<{ __typename?: 'FieldError', field?: string | null, message: string }> | null } };
 
 export type RemoveBookmarkMutationVariables = Exact<{
   postId: Scalars['String'];
@@ -384,7 +384,7 @@ export type UserQueryVariables = Exact<{
 }>;
 
 
-export type UserQuery = { __typename?: 'Query', user?: { __typename: 'User', bio?: string | null, portfolioLink?: string | null, numFollowers?: number | null, numFollowing?: number | null, isMyFollower: boolean, id: string, name?: string | null, username: string, amIFollowingThem: boolean, posts?: Array<{ __typename: 'Post', id: string, content: string, isBookmarkedByMe: boolean, isLikedByMe: boolean, likes: number, createdAt: string, updatedAt: string }> | null } | null };
+export type UserQuery = { __typename?: 'Query', user?: { __typename: 'User', bio?: string | null, portfolioLink?: string | null, numFollowers?: number | null, numFollowing?: number | null, isMyFollower: boolean, id: string, name?: string | null, username: string, amIFollowingThem: boolean, posts?: Array<{ __typename: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean } | null }> | null } | null };
 
 export type UserFeedQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1004,6 +1004,7 @@ export const BookmarkedPostsDocument = gql`
     query BookmarkedPosts {
   bookmarkedPosts {
     ...PostWithAuthorField
+    __typename
   }
 }
     ${PostWithAuthorFieldFragmentDoc}`;
@@ -1114,6 +1115,7 @@ export const LikedPostsDocument = gql`
     query LikedPosts {
   likedPosts {
     ...PostWithAuthorField
+    __typename
   }
 }
     ${PostWithAuthorFieldFragmentDoc}`;
@@ -1182,6 +1184,7 @@ export const PostDocument = gql`
     query Post($postId: String!) {
   post(id: $postId) {
     ...PostWithAuthorField
+    __typename
   }
 }
     ${PostWithAuthorFieldFragmentDoc}`;
@@ -1217,6 +1220,7 @@ export const PostsDocument = gql`
     query Posts {
   posts {
     ...PostWithAuthorField
+    __typename
   }
 }
     ${PostWithAuthorFieldFragmentDoc}`;
@@ -1257,18 +1261,12 @@ export const UserDocument = gql`
     numFollowing
     isMyFollower
     posts {
-      id
-      content
-      isBookmarkedByMe
-      isLikedByMe
-      likes
-      createdAt
-      updatedAt
-      __typename
+      ...PostWithAuthorField
     }
   }
 }
-    ${RegularUserFragmentDoc}`;
+    ${RegularUserFragmentDoc}
+${PostWithAuthorFieldFragmentDoc}`;
 
 /**
  * __useUserQuery__
@@ -1301,6 +1299,7 @@ export const UserFeedDocument = gql`
     query UserFeed {
   userFeed {
     ...PostWithAuthorField
+    __typename
   }
 }
     ${PostWithAuthorFieldFragmentDoc}`;

@@ -40,7 +40,7 @@ const PostPage = () => {
     isObjectWithKey(state.post, "id") &&
     postId === state.post.id
   ) {
-    post = state.post as Post;
+    post = state.post as PostWithAuthorFieldFragment;
   } else {
     post = postData?.post;
   }

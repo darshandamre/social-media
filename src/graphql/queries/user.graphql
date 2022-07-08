@@ -7,14 +7,7 @@ query User($username: String!) {
     numFollowing
     isMyFollower
     posts {
-      id
-      content
-      isBookmarkedByMe
-      isLikedByMe
-      likes
-      createdAt
-      updatedAt
-      __typename
+      ...PostWithAuthorField
     }
   }
 }

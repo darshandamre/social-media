@@ -36,10 +36,14 @@ export const useLikeMutationAndUpdateCache = (
         {
           query: LikedPostsDocument
         },
-        data => ({
-          __typename: "Query",
-          likedPosts: [updatedPost, ...(data?.likedPosts ?? [])]
-        })
+        data => {
+          if (!data?.likedPosts) return;
+
+          return {
+            __typename: "Query",
+            likedPosts: [updatedPost, ...data.likedPosts]
+          };
+        }
       );
     },
     ...baseOptions

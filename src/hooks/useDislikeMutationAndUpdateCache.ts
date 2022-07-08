@@ -39,12 +39,16 @@ export const useDislikeMutationAndUpdateCache = (
         {
           query: LikedPostsDocument
         },
-        data => ({
-          __typename: "Query",
-          likedPosts: data?.likedPosts?.filter(
-            post => post.id !== variables?.postId
-          )
-        })
+        data => {
+          if (!data?.likedPosts) return;
+
+          return {
+            __typename: "Query",
+            likedPosts: data.likedPosts.filter(
+              post => post.id !== variables?.postId
+            )
+          };
+        }
       );
     },
     ...baseOptions

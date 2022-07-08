@@ -35,10 +35,14 @@ export const useAddBookmarkMutationAndUpdateCache = (
         {
           query: BookmarkedPostsDocument
         },
-        data => ({
-          __typename: "Query",
-          bookmarkedPosts: [updatedPost, ...(data?.bookmarkedPosts ?? [])]
-        })
+        data => {
+          if (!data?.bookmarkedPosts) return;
+
+          return {
+            __typename: "Query",
+            bookmarkedPosts: [updatedPost, ...data.bookmarkedPosts]
+          };
+        }
       );
     },
     ...baseOptions
