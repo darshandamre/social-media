@@ -1,14 +1,11 @@
 import { Avatar, Box, Button, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import {
-  useCreatePostMutation,
-  useEditPostMutation,
-  useMeQuery
-} from "../../generated/graphql";
+import { useEditPostMutation, useMeQuery } from "../../generated/graphql";
 import { useAppDispatch } from "../../app/hooks";
 import { theme } from "../../theme";
 import { stringAvatar } from "../../utils/stringAvatar";
 import { showAlertThenHide } from "../alert";
+import { useCreatePostMutationAndUpdateCache } from "../../hooks";
 
 export type CreateOrEditPostProps = (
   | {
@@ -31,9 +28,9 @@ const CreateOrEditPost = ({
   postId,
   onClose
 }: CreateOrEditPostProps) => {
-  const { data } = useMeQuery();
+  const { data: meData } = useMeQuery();
   const [createPost, { loading: isCreatePostLoading }] =
-    useCreatePostMutation();
+    useCreatePostMutationAndUpdateCache();
   const [saveEditPost, { loading: isEditPostLoading }] = useEditPostMutation();
   const dispatch = useAppDispatch();
 
@@ -78,7 +75,7 @@ const CreateOrEditPost = ({
         display: "flex",
         borderBottom: `1px solid ${theme.palette.background.paper}`
       }}>
-      <Avatar {...stringAvatar(data?.me?.name)} />
+      <Avatar {...stringAvatar(meData?.me?.name)} />
 
       <TextField
         multiline

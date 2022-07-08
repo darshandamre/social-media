@@ -4,3 +4,4 @@ export { useAddBookmarkMutationAndUpdateCache } from "./useAddBookmarkAndUpdateC
 export { useRemoveBookmarkMutationAndUpdateCache } from "./useRemoveBookmarkMutationAndUpdateCache";
 export { useFollowMutationAndUpdateCache } from "./useFollowMutationAndUpdateCache";
 export { useUnFollowMutationAndUpdateCache } from "./useUnfollowMutationAndUpdateCache";
+export { useCreatePostMutationAndUpdateCache } from "./useCreatePostMutationAndUpdateCache";

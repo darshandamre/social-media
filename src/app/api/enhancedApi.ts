@@ -3,50 +3,6 @@ import { api as generatedApi } from "./baseApi";
 export const enhancedApi = generatedApi.enhanceEndpoints({
   addTagTypes: ["User", "Post"],
   endpoints: {
-    CreatePost: {
-      invalidatesTags: result =>
-        result?.createPost.authorId
-          ? [
-              {
-                type: "User",
-                id: result.createPost.authorId
-              }
-            ]
-          : []
-    },
-    EditPost: {
-      invalidatesTags: result =>
-        result?.editPost ? [{ type: "Post", id: result.editPost.id }] : [],
-      onQueryStarted: async ({ postId }, { dispatch, queryFulfilled }) => {
-        try {
-          const { data } = await queryFulfilled;
-          if (!data.editPost) return;
-
-          dispatch(
-            enhancedApi.util.updateQueryData("Posts", undefined, draft => {
-              const idx = draft.posts.findIndex(p => p.id === postId);
-              if (idx > -1) {
-                draft.posts[idx] = { ...draft.posts[idx], ...data.editPost };
-              }
-            })
-          );
-
-          dispatch(
-            enhancedApi.util.updateQueryData("UserFeed", undefined, draft => {
-              const idx = draft.userFeed.findIndex(p => p.id === postId);
-              if (idx > -1) {
-                draft.userFeed[idx] = {
-                  ...draft.userFeed[idx],
-                  ...data.editPost
-                };
-              }
-            })
-          );
-        } catch (err) {
-          console.error(err);
-        }
-      }
-    },
     DeletePost: {
       invalidatesTags: (result, _, { postId }) =>
         result?.deletePost ? [{ type: "Post", id: postId }] : [],
