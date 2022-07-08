@@ -16,6 +16,10 @@ type DeletePostModalProps = {
 const DeletePostModal = ({ post, open, handleClose }: DeletePostModalProps) => {
   const { id, author, content } = post;
   const [deletePost, { loading }] = useDeletePostMutation({
+    update(cache, { data }) {
+      if (!data?.deletePost) return;
+      cache.evict({ id: `Post:${id}` });
+    },
     onCompleted: ({ deletePost }) => {
       if (deletePost) {
         showAlertThenHide(dispatch, {
