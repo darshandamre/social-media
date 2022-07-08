@@ -3,7 +3,6 @@ import { Avatar, Box, IconButton, Typography } from "@mui/material";
 import { useRef } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import {
-  Post,
   PostWithAuthorFieldFragment,
   usePostQuery
 } from "../../generated/graphql";
@@ -85,14 +84,14 @@ const PostPage = () => {
       </Typography>
 
       <Box
-        sx={theme => ({
+        sx={{
           px: "1rem",
           pt: "0.75rem",
           pb: "0.25rem",
           display: "flex",
           alignItems: "start",
           position: "relative"
-        })}>
+        }}>
         <Avatar
           component={Link}
           to={profileUrl}
