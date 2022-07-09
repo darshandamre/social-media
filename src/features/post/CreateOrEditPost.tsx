@@ -1,11 +1,10 @@
 import { Avatar, Box, Button, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useEditPostMutation, useMeQuery } from "../../generated/graphql";
-import { useAppDispatch } from "../../app/hooks";
 import { theme } from "../../theme";
 import { stringAvatar } from "../../utils/stringAvatar";
-import { showAlertThenHide } from "../alert";
 import { useCreatePostMutationAndUpdateCache } from "../../hooks";
+import { useAlert } from "../alert";
 
 export type CreateOrEditPostProps = (
   | {
@@ -32,9 +31,8 @@ const CreateOrEditPost = ({
   const [createPost, { loading: isCreatePostLoading }] =
     useCreatePostMutationAndUpdateCache();
   const [saveEditPost, { loading: isEditPostLoading }] = useEditPostMutation();
-  const dispatch = useAppDispatch();
-
   const isLoading = type === "edit" ? isEditPostLoading : isCreatePostLoading;
+  const { showAlert } = useAlert();
 
   const [content, setContent] = useState(type === "edit" ? editContent : "");
   const [error, setError] = useState("");
@@ -58,7 +56,7 @@ const CreateOrEditPost = ({
       ? await saveEditPost({ variables: { postId, content } })
       : await createPost({ variables: { content } });
 
-    showAlertThenHide(dispatch, {
+    showAlert({
       message: `Post ${type === "edit" ? "edited" : "created"} successfully`,
       severity: "success"
     });

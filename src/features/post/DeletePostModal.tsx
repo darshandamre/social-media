@@ -3,9 +3,8 @@ import {
   PostWithAuthorFieldFragment,
   useDeletePostMutation
 } from "../../generated/graphql";
-import { useAppDispatch } from "../../app/hooks";
 import { stringAvatar } from "../../utils/stringAvatar";
-import { showAlertThenHide } from "../alert";
+import { useAlert } from "../alert";
 
 type DeletePostModalProps = {
   open: boolean;
@@ -15,6 +14,7 @@ type DeletePostModalProps = {
 
 const DeletePostModal = ({ post, open, handleClose }: DeletePostModalProps) => {
   const { id, author, content } = post;
+  const { showAlert } = useAlert();
   const [deletePost, { loading }] = useDeletePostMutation({
     update(cache, { data }) {
       if (!data?.deletePost) return;
@@ -22,25 +22,24 @@ const DeletePostModal = ({ post, open, handleClose }: DeletePostModalProps) => {
     },
     onCompleted: ({ deletePost }) => {
       if (deletePost) {
-        showAlertThenHide(dispatch, {
+        showAlert({
           message: "post deleted successfully",
           severity: "success"
         });
       } else {
-        showAlertThenHide(dispatch, {
+        showAlert({
           message: "some error occured, post not deleted",
           severity: "error"
         });
       }
     },
     onError: () => {
-      showAlertThenHide(dispatch, {
+      showAlert({
         message: "some error occured, post not deleted",
         severity: "error"
       });
     }
   });
-  const dispatch = useAppDispatch();
 
   return (
     <Modal

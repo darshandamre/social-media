@@ -5,8 +5,6 @@ import {
   PostWithAuthorFieldFragment,
   useMeQuery
 } from "../../generated/graphql";
-import { useAppDispatch } from "../../app/hooks";
-import { showAlertThenHide } from "../alert";
 import { CreateOrEditPostModal } from "./CreateOrEditPostModal";
 import { DeletePostModal } from "./DeletePostModal";
 import { PostCardMenu } from "./PostCardMenu";
@@ -14,6 +12,7 @@ import {
   useFollowMutationAndUpdateCache,
   useUnFollowMutationAndUpdateCache
 } from "../../hooks";
+import { useAlert } from "../alert";
 
 type PostCardOptionsProps = {
   post: PostWithAuthorFieldFragment;
@@ -30,13 +29,13 @@ const PostCardOptions = ({ post }: PostCardOptionsProps) => {
   const [openMenu, setOpenMenu] = useState<boolean>(false);
   const toggleMenu = () => setOpenMenu(prevOpen => !prevOpen);
   const closeMenu = () => setOpenMenu(false);
+  const { showAlert } = useAlert();
 
-  const dispatch = useAppDispatch();
   const [follow] = useFollowMutationAndUpdateCache({
     variables: { followId: post.authorId },
     onCompleted: data => {
       if (data?.follow) {
-        showAlertThenHide(dispatch, {
+        showAlert({
           message: `You Followed @${post.author?.username}`
         });
       }
@@ -46,7 +45,7 @@ const PostCardOptions = ({ post }: PostCardOptionsProps) => {
     variables: { unfollowId: post.authorId },
     onCompleted: data => {
       if (data?.unfollow) {
-        showAlertThenHide(dispatch, {
+        showAlert({
           message: `You unfollowed @${post.author?.username}`
         });
       }
@@ -56,9 +55,8 @@ const PostCardOptions = ({ post }: PostCardOptionsProps) => {
   const handleFollowUnfollow = async () => {
     try {
       post.author?.amIFollowingThem ? await unfollow() : await follow();
-    } catch (err) {
-      console.error(err);
-      showAlertThenHide(dispatch, {
+    } catch {
+      showAlert({
         message: "some error occured",
         severity: "error"
       });

@@ -10,10 +10,9 @@ import {
   useMeQuery
 } from "../../generated/graphql";
 import { PostWithAuthorFieldFragment } from "../../generated/graphql";
-import { useAppDispatch } from "../../app/hooks";
 import { isObjectWithKey } from "../../utils/isObjectWithKey";
 import { stringAvatar } from "../../utils/stringAvatar";
-import { showAlertThenHide } from "../alert";
+import { useAlert } from "../alert";
 
 type CommentBoxProps = {
   post: PostWithAuthorFieldFragment;
@@ -24,6 +23,7 @@ const CommentBox = ({ post, commentRef }: CommentBoxProps) => {
   const { data: meData } = useMeQuery();
   const [content, setContent] = useState("");
   const [error, setError] = useState("");
+  const { showAlert } = useAlert();
   const [createComment, { loading }] = useCreateCommentMutation({
     update(cache, { data: createCommentData }) {
       if (!createCommentData?.createComment) return;
@@ -48,14 +48,24 @@ const CommentBox = ({ post, commentRef }: CommentBoxProps) => {
           };
         }
       );
-    }
+    },
+    onCompleted: ({ createComment }) => {
+      if (createComment) setContent("");
+    },
+    onError: () =>
+      showAlert({
+        message: "some error occured",
+        severity: "error"
+      })
   });
-  const dispatch = useAppDispatch();
   const { state } = useLocation();
 
   let autoFocusComment = false;
-  if (isObjectWithKey(state, "autoFocusComment")) {
-    autoFocusComment = state.autoFocusComment as boolean;
+  if (
+    isObjectWithKey(state, "autoFocusComment") &&
+    typeof state.autoFocusComment === "boolean"
+  ) {
+    autoFocusComment = state.autoFocusComment;
   }
 
   const handleCreateComment: React.FormEventHandler<
@@ -63,16 +73,7 @@ const CommentBox = ({ post, commentRef }: CommentBoxProps) => {
   > = async e => {
     e.preventDefault();
     if (error) return;
-
-    try {
-      await createComment({ variables: { content, postId: post.id } });
-      setContent("");
-    } catch {
-      showAlertThenHide(dispatch, {
-        message: "some error occured",
-        severity: "error"
-      });
-    }
+    await createComment({ variables: { content, postId: post.id } });
   };
 
   return (

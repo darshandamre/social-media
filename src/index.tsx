@@ -3,8 +3,6 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import { App } from "./App";
 import { BrowserRouter } from "react-router-dom";
-import { Provider } from "react-redux";
-import { store } from "./app/store";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "./theme";
 import { CssBaseline } from "@mui/material";
@@ -14,6 +12,7 @@ import {
   ApolloProvider,
   createHttpLink
 } from "@apollo/client";
+import { AlertProvider } from "./features/alert";
 
 const link = createHttpLink({
   uri: process.env.REACT_APP_GRAPHQL_ENDPOINT,
@@ -29,12 +28,12 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <ApolloProvider client={client}>
-        <Provider store={store}>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <AlertProvider>
             <App />
-          </ThemeProvider>
-        </Provider>
+          </AlertProvider>
+        </ThemeProvider>
       </ApolloProvider>
     </BrowserRouter>
   </React.StrictMode>
