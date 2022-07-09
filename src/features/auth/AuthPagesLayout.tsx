@@ -1,9 +1,11 @@
 import { Grid } from "@mui/material";
-import { Outlet } from "react-router-dom";
+import React from "react";
 
-// interface AuthPagesLayoutProps {}
+type AuthPagesLayoutProps = {
+  children: React.ReactNode;
+};
 
-const AuthPagesLayout = () => {
+const AuthPagesLayout = ({ children }: AuthPagesLayoutProps) => {
   return (
     <Grid
       container
@@ -13,7 +15,7 @@ const AuthPagesLayout = () => {
       justifyContent="center"
       sx={{ minHeight: "100vh" }}>
       <Grid item maxWidth="22rem">
-        <Outlet />
+        {children}
       </Grid>
     </Grid>
   );

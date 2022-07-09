@@ -1,7 +1,6 @@
 import { ArrowBack, ChatBubbleOutline } from "@mui/icons-material";
 import { Avatar, Box, IconButton, Typography } from "@mui/material";
 import { useRef } from "react";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   PostWithAuthorFieldFragment,
   usePostQuery
@@ -93,7 +92,7 @@ const PostPage = () => {
           position: "relative"
         }}>
         <Avatar
-          component={Link}
+          component={NextLinkComposed}
           to={profileUrl}
           sx={{ textDecoration: "none", ...stringAvatar(author?.name)?.sx }}>
           {stringAvatar(author?.name)?.children}
@@ -101,7 +100,7 @@ const PostPage = () => {
         <Box mx="0.75rem" flexGrow={1}>
           {author?.name ? (
             <Typography
-              component={Link}
+              component={NextLinkComposed}
               to={profileUrl}
               sx={{
                 mr: "0.5rem",
@@ -114,7 +113,7 @@ const PostPage = () => {
             </Typography>
           ) : null}
           <Typography
-            component={Link}
+            component={NextLinkComposed}
             to={profileUrl}
             color="InactiveCaptionText"
             lineHeight={1}

@@ -1,7 +1,7 @@
 import { LoadingButton } from "@mui/lab";
 import { Avatar, Box, TextField } from "@mui/material";
+import { useRouter } from "next/router";
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
 import {
   CommentsDocument,
   CommentsQuery,
@@ -58,14 +58,12 @@ const CommentBox = ({ post, commentRef }: CommentBoxProps) => {
         severity: "error"
       })
   });
-  const { state } = useLocation();
+
+  const { query } = useRouter();
 
   let autoFocusComment = false;
-  if (
-    isObjectWithKey(state, "autoFocusComment") &&
-    typeof state.autoFocusComment === "boolean"
-  ) {
-    autoFocusComment = state.autoFocusComment;
+  if (isObjectWithKey(query, "fc") && typeof query.fc === "boolean") {
+    autoFocusComment = query.fc;
   }
 
   const handleCreateComment: React.FormEventHandler<

@@ -1,6 +1,7 @@
 import { Box, SvgIcon, Typography } from "@mui/material";
+import { useRouter } from "next/router";
 import { ReactNode } from "react";
-import { Link, useMatch } from "react-router-dom";
+import { NextLinkComposed } from "./NextLinkComposed";
 
 interface MyNavLinkProps {
   children: ReactNode;
@@ -15,13 +16,14 @@ export const MyNavLink = ({
   icon,
   activeIcon
 }: MyNavLinkProps) => {
-  const isActive = !!useMatch(to);
+  const router = useRouter();
+  const isActive = router.asPath === to;
   const CurrentIcon = isActive ? activeIcon ?? icon : icon;
 
   return (
     <Box display="flex">
       <Box
-        component={Link}
+        component={NextLinkComposed}
         to={to}
         sx={{
           py: "0.5rem",

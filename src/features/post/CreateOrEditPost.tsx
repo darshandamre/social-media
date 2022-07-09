@@ -1,7 +1,6 @@
 import { Avatar, Box, Button, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useEditPostMutation, useMeQuery } from "../../generated/graphql";
-import { theme } from "../../theme";
 import { stringAvatar } from "../../utils/stringAvatar";
 import { useCreatePostMutationAndUpdateCache } from "../../hooks";
 import { useAlert } from "../alert";
@@ -68,11 +67,11 @@ const CreateOrEditPost = ({
     <Box
       component="form"
       onSubmit={handleCreatePost}
-      sx={{
+      sx={({ palette }) => ({
         p: "1rem",
         display: "flex",
-        borderBottom: `1px solid ${theme.palette.background.paper}`
-      }}>
+        borderBottom: `1px solid ${palette.background.paper}`
+      })}>
       <Avatar {...stringAvatar(meData?.me?.name)} />
 
       <TextField

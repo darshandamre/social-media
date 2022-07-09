@@ -23,11 +23,11 @@ import {
   Typography
 } from "@mui/material";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { useMeQuery } from "../../generated/graphql";
 import { stringAvatar } from "../../utils/stringAvatar";
 import { CreateOrEditPostModal } from "../post";
 import { MyNavLink } from "./MyNavLink";
+import { NextLinkComposed } from "./NextLinkComposed";
 
 const LeftSidebar = () => {
   const { data, loading } = useMeQuery();
@@ -48,7 +48,7 @@ const LeftSidebar = () => {
         top={0}>
         <Box display="flex">
           <Box
-            component={Link}
+            component={NextLinkComposed}
             to="/"
             sx={{
               py: "0.5rem",
@@ -126,7 +126,7 @@ const LeftSidebar = () => {
             </Box>
           ) : (
             <Box
-              component={Link}
+              component={NextLinkComposed}
               to={`/u/${data?.me?.username}`}
               sx={{
                 p: 1,

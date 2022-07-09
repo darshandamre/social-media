@@ -1,9 +1,9 @@
 import { ChatBubbleOutline } from "@mui/icons-material";
 import { Avatar, Box, IconButton, Typography } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { useRouter } from "next/router";
 import type { PostWithAuthorFieldFragment } from "../../generated/graphql";
-import { theme } from "../../theme";
 import { stringAvatar } from "../../utils/stringAvatar";
+import { NextLinkComposed } from "../common";
 import { BookmarkButton } from "./BookmarkButton";
 import { LikeButton } from "./LikeButton";
 import { PostActionContainer } from "./PostActionContainer";
@@ -17,13 +17,13 @@ const PostCard = ({ post }: PostCardProps) => {
   const { id, content, author, likes, isLikedByMe, isBookmarkedByMe } = post;
   const profileUrl = `/u/${author?.username}`;
   const postPageUrl = `/p/${id}`;
-  const navigate = useNavigate();
+  const router = useRouter();
 
   return (
     <Box
-      onClick={() => navigate(postPageUrl)}
+      onClick={() => router.push(postPageUrl)}
       tabIndex={0}
-      sx={{
+      sx={({ palette }) => ({
         px: "1rem",
         pt: "0.75rem",
         pb: "0.25rem",
@@ -31,11 +31,11 @@ const PostCard = ({ post }: PostCardProps) => {
         alignItems: "start",
         position: "relative",
         cursor: "pointer",
-        borderBottom: `1px solid ${theme.palette.background.paper}`
-      }}>
+        borderBottom: `1px solid ${palette.background.paper}`
+      })}>
       <Box onClick={e => e.stopPropagation()}>
         <Avatar
-          component={Link}
+          component={NextLinkComposed}
           to={profileUrl}
           sx={{ textDecoration: "none", ...stringAvatar(author?.name)?.sx }}>
           {stringAvatar(author?.name)?.children}
@@ -45,7 +45,7 @@ const PostCard = ({ post }: PostCardProps) => {
         <Box display="flex" onClick={e => e.stopPropagation()}>
           {author?.name ? (
             <Typography
-              component={Link}
+              component={NextLinkComposed}
               to={profileUrl}
               sx={{
                 mr: "0.5rem",
@@ -57,7 +57,7 @@ const PostCard = ({ post }: PostCardProps) => {
             </Typography>
           ) : null}
           <Typography
-            component={Link}
+            component={NextLinkComposed}
             to={profileUrl}
             color="InactiveCaptionText"
             sx={{ textDecoration: "none" }}>
@@ -70,7 +70,7 @@ const PostCard = ({ post }: PostCardProps) => {
             <IconButton
               onClick={e => {
                 e.stopPropagation();
-                navigate(postPageUrl, { state: { autoFocusComment: true } });
+                router.push(`${postPageUrl}?fc=true`);
               }}>
               <ChatBubbleOutline fontSize="small" />
             </IconButton>

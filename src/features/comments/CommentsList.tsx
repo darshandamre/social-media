@@ -1,11 +1,11 @@
 import { Avatar, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import { Link } from "react-router-dom";
 import {
   PostWithAuthorFieldFragment,
   useCommentsQuery
 } from "../../generated/graphql";
 import { stringAvatar } from "../../utils/stringAvatar";
+import { NextLinkComposed } from "../common";
 
 type CommentsListProps = {
   post: PostWithAuthorFieldFragment;
@@ -31,7 +31,7 @@ const CommentsList = ({ post }: CommentsListProps) => {
               borderBottom: `1px solid ${theme.palette.background.paper}`
             })}>
             <Avatar
-              component={Link}
+              component={NextLinkComposed}
               to={profileUrl}
               sx={{
                 textDecoration: "none",
@@ -43,7 +43,7 @@ const CommentsList = ({ post }: CommentsListProps) => {
               <Box display="flex">
                 {author?.name ? (
                   <Typography
-                    component={Link}
+                    component={NextLinkComposed}
                     to={profileUrl}
                     sx={{
                       mr: "0.5rem",
@@ -55,7 +55,7 @@ const CommentsList = ({ post }: CommentsListProps) => {
                   </Typography>
                 ) : null}
                 <Typography
-                  component={Link}
+                  component={NextLinkComposed}
                   to={profileUrl}
                   color="InactiveCaptionText"
                   sx={{ textDecoration: "none" }}>

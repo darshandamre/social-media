@@ -1,9 +1,12 @@
 import { Grid } from "@mui/material";
-import { Outlet } from "react-router-dom";
-import { theme } from "../../theme";
+// import theme from "../../theme";
 import { LeftSidebar } from "./LeftSidebar";
 
-const Layout = () => {
+type LayoutProps = {
+  children: React.ReactNode;
+};
+
+const Layout = ({ children }: LayoutProps) => {
   return (
     <Grid container height="100%" maxWidth="60rem" mx="auto">
       <Grid item xs={3}>
@@ -12,13 +15,12 @@ const Layout = () => {
       <Grid
         item
         xs={8}
-        sx={{
-          borderLeft: `1px solid ${theme.palette.background.paper}`,
-          borderRight: `1px solid ${theme.palette.background.paper}`
-        }}>
-        <Outlet />
+        sx={({ palette }) => ({
+          borderLeft: `1px solid ${palette.background.paper}`,
+          borderRight: `1px solid ${palette.background.paper}`
+        })}>
+        {children}
       </Grid>
-      {/* TODO: right sidebar */}
     </Grid>
   );
 };
