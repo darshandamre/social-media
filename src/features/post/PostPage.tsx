@@ -60,7 +60,7 @@ const PostPage = () => {
   }
 
   const { author, content, likes, isLikedByMe, isBookmarkedByMe } = post;
-  const profileUrl = `/u/${author?.username}`;
+  const profileUrl = `/user/${author?.username}`;
 
   return (
     <>

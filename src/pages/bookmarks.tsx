@@ -1,11 +1,28 @@
+import { Typography } from "@mui/material";
 import { NextPage } from "next";
-import { BookmarksPage } from "../features/bookmarks";
-import { Layout } from "../features/common";
+import { Layout, Loader } from "../features/common";
+import { PostCard } from "../features/post";
+import { useBookmarkedPostsQuery } from "../generated/graphql";
 
 const Bookmarks: NextPage = () => {
+  const { data, loading } = useBookmarkedPostsQuery();
+
+  if (loading) return <Loader />;
+
   return (
     <Layout>
-      <BookmarksPage />
+      <Typography
+        variant="h5"
+        sx={({ palette }) => ({
+          px: 3,
+          py: 2,
+          borderBottom: `1px solid ${palette.background.paper}`
+        })}>
+        Bookmarks
+      </Typography>
+      {data?.bookmarkedPosts?.map(post => (
+        <PostCard key={post.id} post={post} />
+      ))}
     </Layout>
   );
 };

@@ -1,2 +1,1 @@
-export { UserFeed } from "./UserFeed";
-export { ExploreFeed } from "./ExploreFeed";
+export { BaseFeed } from "./BaseFeed";

@@ -20,7 +20,7 @@ const CommentsList = ({ post }: CommentsListProps) => {
         borderTop: `1px solid ${theme.palette.background.paper}`
       })}>
       {data?.comments.map(({ id, content, author }) => {
-        const profileUrl = `/u/${author?.username}`;
+        const profileUrl = `/user/${author?.username}`;
         return (
           <Box
             key={id}

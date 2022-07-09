@@ -99,7 +99,7 @@ const LeftSidebar = () => {
           Notifications
         </MyNavLink>
         <MyNavLink
-          to={data?.me ? `/u/${data.me.username}` : "/login"}
+          to={data?.me ? `/user/${data.me.username}` : "/login"}
           icon={AccountCircleOutlined}
           activeIcon={AccountCircle}>
           Profile
@@ -127,7 +127,7 @@ const LeftSidebar = () => {
           ) : (
             <Box
               component={NextLinkComposed}
-              to={`/u/${data?.me?.username}`}
+              to={`/user/${data?.me?.username}`}
               sx={{
                 p: 1,
                 maxWidth: "20rem",
