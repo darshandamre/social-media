@@ -1,4 +1,5 @@
 import { NextPage } from "next";
+import { useRouter } from "next/router";
 import { Layout } from "../features/common";
 import { BaseFeed } from "../features/feed";
 import { useUserFeedQuery } from "../generated/graphql";
