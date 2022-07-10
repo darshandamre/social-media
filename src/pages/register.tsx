@@ -6,6 +6,7 @@ import { MyTextField, NextLinkComposed } from "../features/common";
 import { useRegisterMutation, MeQuery, MeDocument } from "../generated/graphql";
 import * as yup from "yup";
 import { useRouter } from "next/router";
+import { NextPage } from "next";
 
 const registerSchema = yup.object().shape({
   username: yup
@@ -29,7 +30,7 @@ type RegisterFormData = {
   password: string;
 };
 
-const Register = () => {
+const Register: NextPage = () => {
   const {
     control,
     handleSubmit,

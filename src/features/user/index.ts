@@ -1,1 +1,1 @@
-export { Profile } from "./Profile";
+export { ProfileButton } from "./ProfileButton";

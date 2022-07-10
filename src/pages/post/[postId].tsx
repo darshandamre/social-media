@@ -1,5 +1,6 @@
 import { ArrowBack, ChatBubbleOutline } from "@mui/icons-material";
 import { Avatar, Box, IconButton, Typography } from "@mui/material";
+import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useRef } from "react";
 import { CommentBox, CommentsList } from "../../features/comments";
@@ -13,7 +14,7 @@ import {
 import { usePostQuery } from "../../generated/graphql";
 import { stringAvatar } from "../../utils";
 
-const PostPage = () => {
+const PostPage: NextPage = () => {
   const router = useRouter();
   const commentRef = useRef<HTMLInputElement>(null);
 
