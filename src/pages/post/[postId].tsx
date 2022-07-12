@@ -1,6 +1,6 @@
 import { ArrowBack, ChatBubbleOutline } from "@mui/icons-material";
 import { Avatar, Box, IconButton, Typography } from "@mui/material";
-import { NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { useRef } from "react";
 import { CommentBox, CommentsList } from "../../features/comments";
@@ -11,8 +11,14 @@ import {
   PostActionContainer,
   PostCardOptions
 } from "../../features/post";
-import { usePostQuery } from "../../generated/graphql";
+import {
+  PostDocument,
+  PostQuery,
+  PostQueryVariables,
+  usePostQuery
+} from "../../generated/graphql";
 import { stringAvatar } from "../../utils";
+import { addApolloState, initializeApollo } from "../../utils/apolloClient";
 
 const PostPage: NextPage = () => {
   const router = useRouter();
@@ -153,3 +159,23 @@ const PostPage: NextPage = () => {
 };
 
 export default PostPage;
+
+export const getServerSideProps: GetServerSideProps = async ctx => {
+  if (typeof ctx.query.postId !== "string") {
+    return { notFound: true };
+  }
+
+  const apolloClient = initializeApollo({ cookies: ctx.req.cookies });
+  const { data } = await apolloClient.query<PostQuery, PostQueryVariables>({
+    query: PostDocument,
+    variables: { postId: ctx.query.postId }
+  });
+
+  if (!data.post) {
+    return { notFound: true };
+  }
+
+  return addApolloState(apolloClient, {
+    props: {}
+  });
+};
