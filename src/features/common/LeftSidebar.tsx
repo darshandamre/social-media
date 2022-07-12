@@ -93,12 +93,6 @@ const LeftSidebar = () => {
           Bookmarks
         </MyNavLink>
         <MyNavLink
-          to="/notifications"
-          icon={NotificationsNone}
-          activeIcon={Notifications}>
-          Notifications
-        </MyNavLink>
-        <MyNavLink
           to={data?.me ? `/user/${data.me.username}` : "/login"}
           icon={AccountCircleOutlined}
           activeIcon={AccountCircle}>
