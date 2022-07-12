@@ -7,6 +7,7 @@ import { useRegisterMutation, MeQuery, MeDocument } from "../generated/graphql";
 import * as yup from "yup";
 import { useRouter } from "next/router";
 import { NextPage } from "next";
+import { AuthPagesLayout } from "../features/auth";
 
 const registerSchema = yup.object().shape({
   username: yup
@@ -83,48 +84,55 @@ const Register: NextPage = () => {
   });
 
   return (
-    <Box>
-      <Typography variant="h4" component="div" align="center" pb={4}>
-        Sign up.
-      </Typography>
-      <form onSubmit={handleRegister}>
-        <MyTextField control={control} name="name" label="name" />
-        <MyTextField control={control} name="username" label="username" />
-        <MyTextField control={control} name="email" label="email" />
-        <MyTextField
-          control={control}
-          name="password"
-          label="password"
-          type="password"
-        />
-        <Button
-          sx={{ width: "100%", my: 1, borderRadius: "16px", fontWeight: "600" }}
-          size="large"
-          type="submit"
-          variant="contained"
-          disabled={isSubmitting}>
-          Sign up
-        </Button>
-      </form>
-
-      <Typography variant="body1" align="center" my={1}>
-        Already have an account?{" "}
-        <Typography
-          variant="body1"
-          component={NextLinkComposed}
-          to="/login"
-          sx={{
-            textDecoration: "none",
-            color: "primary.main",
-            fontWeight: "600",
-            "&:hover": {
-              textDecoration: "underline"
-            }
-          }}>
-          Log in.
+    <AuthPagesLayout>
+      <Box>
+        <Typography variant="h4" component="div" align="center" pb={4}>
+          Sign up.
         </Typography>
-      </Typography>
-    </Box>
+        <form onSubmit={handleRegister}>
+          <MyTextField control={control} name="name" label="name" />
+          <MyTextField control={control} name="username" label="username" />
+          <MyTextField control={control} name="email" label="email" />
+          <MyTextField
+            control={control}
+            name="password"
+            label="password"
+            type="password"
+          />
+          <Button
+            sx={{
+              width: "100%",
+              my: 1,
+              borderRadius: "16px",
+              fontWeight: "600"
+            }}
+            size="large"
+            type="submit"
+            variant="contained"
+            disabled={isSubmitting}>
+            Sign up
+          </Button>
+        </form>
+
+        <Typography variant="body1" align="center" my={1}>
+          Already have an account?{" "}
+          <Typography
+            variant="body1"
+            component={NextLinkComposed}
+            to="/login"
+            sx={{
+              textDecoration: "none",
+              color: "primary.main",
+              fontWeight: "600",
+              "&:hover": {
+                textDecoration: "underline"
+              }
+            }}>
+            Log in.
+          </Typography>
+        </Typography>
+      </Box>
+    </AuthPagesLayout>
   );
 };
 

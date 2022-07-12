@@ -14,9 +14,10 @@ interface PostCardProps {
 }
 
 const PostCard = ({ post }: PostCardProps) => {
-  const { id, content, author, likes, isLikedByMe, isBookmarkedByMe } = post;
+  const { publicId, content, author, likes, isLikedByMe, isBookmarkedByMe } =
+    post;
   const profileUrl = `/user/${author?.username}`;
-  const postPageUrl = `/post/${id}`;
+  const postPageUrl = `/post/${publicId}`;
   const router = useRouter();
 
   return (

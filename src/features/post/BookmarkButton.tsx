@@ -8,7 +8,7 @@ import { PostActionContainer } from "./PostActionContainer";
 
 interface BookmarkButtonProps {
   isBookmarkedByMe: boolean;
-  postId: string;
+  postId: number;
 }
 
 const BookmarkButton = ({ isBookmarkedByMe, postId }: BookmarkButtonProps) => {

@@ -13,7 +13,7 @@ const LikeButton = ({
 }: {
   likes: number;
   isLiked: boolean;
-  postId: string;
+  postId: number;
 }) => {
   const [like, { loading: isLikeLoading }] = useLikeMutationAndUpdateCache({
     variables: { postId }

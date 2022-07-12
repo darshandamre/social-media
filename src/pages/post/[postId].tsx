@@ -22,9 +22,7 @@ const PostPage: NextPage = () => {
     typeof router.query.postId === "string" ? router.query.postId : "skip";
   const { data: postData, loading: isPostLoading } = usePostQuery({
     skip: postId === "skip",
-    variables: {
-      postId: postId
-    }
+    variables: { postId }
   });
 
   let post = postData?.post;

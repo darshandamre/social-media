@@ -154,6 +154,7 @@ export type Post = {
   isLikedByMe: Scalars['Boolean'];
   likedBy?: Maybe<Array<User>>;
   likes: Scalars['Int'];
+  publicId: Scalars['String'];
   updatedAt: Scalars['String'];
 };
 
@@ -177,7 +178,7 @@ export type QueryCommentsArgs = {
 
 
 export type QueryPostArgs = {
-  id: Scalars['Int'];
+  id: Scalars['String'];
 };
 
 
@@ -219,7 +220,7 @@ export type UserResponse = {
   user?: Maybe<User>;
 };
 
-export type PostWithAuthorFieldFragment = { __typename: 'Post', id: number, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: number, createdAt: string, updatedAt: string, author?: { __typename: 'User', id: number, name?: string | null, username: string, amIFollowingThem: boolean } | null };
+export type PostWithAuthorFieldFragment = { __typename: 'Post', id: number, publicId: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: number, createdAt: string, updatedAt: string, author?: { __typename: 'User', id: number, name?: string | null, username: string, amIFollowingThem: boolean } | null };
 
 export type RegularErrorFragment = { __typename?: 'FieldError', field?: string | null, message: string };
 
@@ -343,7 +344,7 @@ export type UnfollowMutation = { __typename?: 'Mutation', unfollow: boolean };
 export type BookmarkedPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type BookmarkedPostsQuery = { __typename?: 'Query', bookmarkedPosts?: Array<{ __typename: 'Post', id: number, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: number, createdAt: string, updatedAt: string, author?: { __typename: 'User', id: number, name?: string | null, username: string, amIFollowingThem: boolean } | null }> | null };
+export type BookmarkedPostsQuery = { __typename?: 'Query', bookmarkedPosts?: Array<{ __typename: 'Post', id: number, publicId: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: number, createdAt: string, updatedAt: string, author?: { __typename: 'User', id: number, name?: string | null, username: string, amIFollowingThem: boolean } | null }> | null };
 
 export type CommentsQueryVariables = Exact<{
   postId: Scalars['Int'];
@@ -360,7 +361,7 @@ export type HelloQuery = { __typename?: 'Query', hello: string };
 export type LikedPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type LikedPostsQuery = { __typename?: 'Query', likedPosts?: Array<{ __typename: 'Post', id: number, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: number, createdAt: string, updatedAt: string, author?: { __typename: 'User', id: number, name?: string | null, username: string, amIFollowingThem: boolean } | null }> | null };
+export type LikedPostsQuery = { __typename?: 'Query', likedPosts?: Array<{ __typename: 'Post', id: number, publicId: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: number, createdAt: string, updatedAt: string, author?: { __typename: 'User', id: number, name?: string | null, username: string, amIFollowingThem: boolean } | null }> | null };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -368,28 +369,28 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 export type MeQuery = { __typename?: 'Query', me?: { __typename: 'User', id: number, name?: string | null, username: string, amIFollowingThem: boolean } | null };
 
 export type PostQueryVariables = Exact<{
-  postId: Scalars['Int'];
+  postId: Scalars['String'];
 }>;
 
 
-export type PostQuery = { __typename?: 'Query', post?: { __typename: 'Post', id: number, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: number, createdAt: string, updatedAt: string, author?: { __typename: 'User', id: number, name?: string | null, username: string, amIFollowingThem: boolean } | null } | null };
+export type PostQuery = { __typename?: 'Query', post?: { __typename: 'Post', id: number, publicId: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: number, createdAt: string, updatedAt: string, author?: { __typename: 'User', id: number, name?: string | null, username: string, amIFollowingThem: boolean } | null } | null };
 
 export type PostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type PostsQuery = { __typename?: 'Query', posts: Array<{ __typename: 'Post', id: number, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: number, createdAt: string, updatedAt: string, author?: { __typename: 'User', id: number, name?: string | null, username: string, amIFollowingThem: boolean } | null }> };
+export type PostsQuery = { __typename?: 'Query', posts: Array<{ __typename: 'Post', id: number, publicId: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: number, createdAt: string, updatedAt: string, author?: { __typename: 'User', id: number, name?: string | null, username: string, amIFollowingThem: boolean } | null }> };
 
 export type UserQueryVariables = Exact<{
   username: Scalars['String'];
 }>;
 
 
-export type UserQuery = { __typename?: 'Query', user?: { __typename: 'User', bio?: string | null, portfolioLink?: string | null, numFollowers?: number | null, numFollowing?: number | null, isMyFollower: boolean, id: number, name?: string | null, username: string, amIFollowingThem: boolean, posts?: Array<{ __typename: 'Post', id: number, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: number, createdAt: string, updatedAt: string, author?: { __typename: 'User', id: number, name?: string | null, username: string, amIFollowingThem: boolean } | null }> | null } | null };
+export type UserQuery = { __typename?: 'Query', user?: { __typename: 'User', bio?: string | null, portfolioLink?: string | null, numFollowers?: number | null, numFollowing?: number | null, isMyFollower: boolean, id: number, name?: string | null, username: string, amIFollowingThem: boolean, posts?: Array<{ __typename: 'Post', id: number, publicId: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: number, createdAt: string, updatedAt: string, author?: { __typename: 'User', id: number, name?: string | null, username: string, amIFollowingThem: boolean } | null }> | null } | null };
 
 export type UserFeedQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserFeedQuery = { __typename?: 'Query', userFeed: Array<{ __typename: 'Post', id: number, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: number, createdAt: string, updatedAt: string, author?: { __typename: 'User', id: number, name?: string | null, username: string, amIFollowingThem: boolean } | null }> };
+export type UserFeedQuery = { __typename?: 'Query', userFeed: Array<{ __typename: 'Post', id: number, publicId: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: number, createdAt: string, updatedAt: string, author?: { __typename: 'User', id: number, name?: string | null, username: string, amIFollowingThem: boolean } | null }> };
 
 export const RegularUserFragmentDoc = gql`
     fragment RegularUser on User {
@@ -403,6 +404,7 @@ export const RegularUserFragmentDoc = gql`
 export const PostWithAuthorFieldFragmentDoc = gql`
     fragment PostWithAuthorField on Post {
   id
+  publicId
   content
   likes
   isLikedByMe
@@ -1181,7 +1183,7 @@ export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const PostDocument = gql`
-    query Post($postId: Int!) {
+    query Post($postId: String!) {
   post(id: $postId) {
     ...PostWithAuthorField
     __typename
