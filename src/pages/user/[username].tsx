@@ -1,12 +1,19 @@
+import { ApolloError } from "@apollo/client";
 import { ArrowBack } from "@mui/icons-material";
 import { Box, Typography, IconButton, Avatar } from "@mui/material";
-import { NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { Layout, Loader } from "../../features/common";
 import { PostCard } from "../../features/post";
 import { ProfileButton } from "../../features/user";
-import { useUserQuery } from "../../generated/graphql";
+import {
+  UserDocument,
+  UserQuery,
+  UserQueryVariables,
+  useUserQuery
+} from "../../generated/graphql";
 import { stringAvatar } from "../../utils";
+import { addApolloState, initializeApollo } from "../../utils/apolloClient";
 
 const ProfilePage: NextPage = () => {
   const router = useRouter();
@@ -116,3 +123,23 @@ const ProfilePage: NextPage = () => {
 };
 
 export default ProfilePage;
+
+export const getServerSideProps: GetServerSideProps = async ctx => {
+  if (typeof ctx.query.username !== "string") {
+    return { notFound: true };
+  }
+
+  const apolloClient = initializeApollo({ cookies: ctx.req.cookies });
+  const { data } = await apolloClient.query<UserQuery, UserQueryVariables>({
+    query: UserDocument,
+    variables: { username: ctx.query.username }
+  });
+
+  if (!data.user) {
+    return { notFound: true };
+  }
+
+  return addApolloState(apolloClient, {
+    props: {}
+  });
+};
