@@ -1,8 +1,10 @@
 import { Typography } from "@mui/material";
 import { NextPage } from "next";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { Layout, Loader } from "../features/common";
 import { PostCard } from "../features/post";
-import { useLikedPostsQuery } from "../generated/graphql";
+import { useLikedPostsQuery, useMeQuery } from "../generated/graphql";
 
 const Likes: NextPage = () => {
   const { data, loading } = useLikedPostsQuery();

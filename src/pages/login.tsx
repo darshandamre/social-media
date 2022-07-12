@@ -118,7 +118,7 @@ const Login: NextPage = () => {
         </form>
 
         <Typography variant="body1" align="center" my={1}>
-          Don't have an account?{" "}
+          Don&apos;t have an account?{" "}
           <Typography
             variant="body1"
             component={NextLinkComposed}

@@ -1,8 +1,9 @@
-import { NextPage } from "next";
-import { useRouter } from "next/router";
+import { ApolloError } from "@apollo/client";
+import { GetServerSideProps, NextPage } from "next";
 import { Layout } from "../features/common";
 import { BaseFeed } from "../features/feed";
-import { useUserFeedQuery } from "../generated/graphql";
+import { UserFeedDocument, useUserFeedQuery } from "../generated/graphql";
+import { addApolloState, initializeApollo } from "../utils/apolloClient";
 
 const Home: NextPage = () => {
   const { data, loading } = useUserFeedQuery();
@@ -15,3 +16,30 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
+export const getServerSideProps: GetServerSideProps = async ctx => {
+  try {
+    const apolloClient = initializeApollo({ cookies: ctx.req.cookies });
+    await apolloClient.query({
+      query: UserFeedDocument
+    });
+
+    return addApolloState(apolloClient, {
+      props: {}
+    });
+  } catch (err) {
+    if (
+      err instanceof ApolloError &&
+      err.graphQLErrors[0].message === "not authenticated"
+    ) {
+      return {
+        redirect: {
+          destination: "/login?from=" + ctx.resolvedUrl,
+          permanent: false
+        }
+      };
+    }
+
+    throw err;
+  }
+};
