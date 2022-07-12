@@ -1,4 +1,4 @@
-query Post($postId: String!) {
+query Post($postId: Int!) {
   post(id: $postId) {
     ...PostWithAuthorField
     __typename

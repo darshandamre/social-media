@@ -1,4 +1,4 @@
-query Comments($postId: String!) {
+query Comments($postId: Int!) {
   comments(postId: $postId) {
     id
     content

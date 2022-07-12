@@ -18,12 +18,12 @@ export type Scalars = {
 export type Comment = {
   __typename?: 'Comment';
   author?: Maybe<User>;
-  authorId: Scalars['ID'];
+  authorId: Scalars['Float'];
   content: Scalars['String'];
   createdAt: Scalars['String'];
-  id: Scalars['ID'];
+  id: Scalars['Float'];
   post?: Maybe<Post>;
-  postId: Scalars['ID'];
+  postId: Scalars['Float'];
   updatedAt: Scalars['String'];
 };
 
@@ -66,13 +66,13 @@ export type Mutation = {
 
 
 export type MutationAddBookmarkArgs = {
-  id: Scalars['String'];
+  id: Scalars['Int'];
 };
 
 
 export type MutationCreateCommentArgs = {
   content: Scalars['String'];
-  postId: Scalars['String'];
+  postId: Scalars['Int'];
 };
 
 
@@ -82,29 +82,29 @@ export type MutationCreatePostArgs = {
 
 
 export type MutationDeleteCommentArgs = {
-  id: Scalars['String'];
+  id: Scalars['Int'];
 };
 
 
 export type MutationDeletePostArgs = {
-  id: Scalars['String'];
+  id: Scalars['Int'];
 };
 
 
 export type MutationDislikeArgs = {
-  id: Scalars['String'];
+  id: Scalars['Int'];
 };
 
 
 export type MutationEditCommentArgs = {
   content: Scalars['String'];
-  id: Scalars['String'];
+  id: Scalars['Int'];
 };
 
 
 export type MutationEditPostArgs = {
   content: Scalars['String'];
-  id: Scalars['String'];
+  id: Scalars['Int'];
 };
 
 
@@ -114,12 +114,12 @@ export type MutationEditUserArgs = {
 
 
 export type MutationFollowArgs = {
-  followId: Scalars['String'];
+  followId: Scalars['Int'];
 };
 
 
 export type MutationLikeArgs = {
-  id: Scalars['String'];
+  id: Scalars['Int'];
 };
 
 
@@ -134,22 +134,22 @@ export type MutationRegisterArgs = {
 
 
 export type MutationRemoveBookmarkArgs = {
-  id: Scalars['String'];
+  id: Scalars['Int'];
 };
 
 
 export type MutationUnfollowArgs = {
-  unfollowId: Scalars['String'];
+  unfollowId: Scalars['Int'];
 };
 
 export type Post = {
   __typename?: 'Post';
   author?: Maybe<User>;
-  authorId: Scalars['ID'];
+  authorId: Scalars['Float'];
   comments?: Maybe<Comment>;
   content: Scalars['String'];
   createdAt: Scalars['String'];
-  id: Scalars['ID'];
+  id: Scalars['Float'];
   isBookmarkedByMe: Scalars['Boolean'];
   isLikedByMe: Scalars['Boolean'];
   likedBy?: Maybe<Array<User>>;
@@ -172,12 +172,12 @@ export type Query = {
 
 
 export type QueryCommentsArgs = {
-  postId: Scalars['String'];
+  postId: Scalars['Int'];
 };
 
 
 export type QueryPostArgs = {
-  id: Scalars['String'];
+  id: Scalars['Int'];
 };
 
 
@@ -201,7 +201,7 @@ export type User = {
   email: Scalars['String'];
   followers?: Maybe<Array<User>>;
   following?: Maybe<Array<User>>;
-  id: Scalars['ID'];
+  id: Scalars['Float'];
   isMyFollower: Scalars['Boolean'];
   likes?: Maybe<Array<Post>>;
   name?: Maybe<Scalars['String']>;
@@ -219,16 +219,16 @@ export type UserResponse = {
   user?: Maybe<User>;
 };
 
-export type PostWithAuthorFieldFragment = { __typename: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean } | null };
+export type PostWithAuthorFieldFragment = { __typename: 'Post', id: number, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: number, createdAt: string, updatedAt: string, author?: { __typename: 'User', id: number, name?: string | null, username: string, amIFollowingThem: boolean } | null };
 
 export type RegularErrorFragment = { __typename?: 'FieldError', field?: string | null, message: string };
 
-export type RegularUserFragment = { __typename: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean };
+export type RegularUserFragment = { __typename: 'User', id: number, name?: string | null, username: string, amIFollowingThem: boolean };
 
-export type RegularUserResponseFragment = { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field?: string | null, message: string }> | null, user?: { __typename: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean } | null };
+export type RegularUserResponseFragment = { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field?: string | null, message: string }> | null, user?: { __typename: 'User', id: number, name?: string | null, username: string, amIFollowingThem: boolean } | null };
 
 export type AddBookmarkMutationVariables = Exact<{
-  postId: Scalars['String'];
+  postId: Scalars['Int'];
 }>;
 
 
@@ -236,35 +236,35 @@ export type AddBookmarkMutation = { __typename?: 'Mutation', addBookmark: boolea
 
 export type CreateCommentMutationVariables = Exact<{
   content: Scalars['String'];
-  postId: Scalars['String'];
+  postId: Scalars['Int'];
 }>;
 
 
-export type CreateCommentMutation = { __typename?: 'Mutation', createComment: { __typename: 'Comment', id: string, content: string, authorId: string, postId: string, createdAt: string, updatedAt: string } };
+export type CreateCommentMutation = { __typename?: 'Mutation', createComment: { __typename: 'Comment', id: number, content: string, authorId: number, postId: number, createdAt: string, updatedAt: string } };
 
 export type CreatePostMutationVariables = Exact<{
   content: Scalars['String'];
 }>;
 
 
-export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __typename: 'Post', id: string, content: string, authorId: string, createdAt: string, updatedAt: string } };
+export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __typename: 'Post', id: number, content: string, authorId: number, createdAt: string, updatedAt: string } };
 
 export type DeleteCommentMutationVariables = Exact<{
-  commentId: Scalars['String'];
+  commentId: Scalars['Int'];
 }>;
 
 
 export type DeleteCommentMutation = { __typename?: 'Mutation', deleteComment: boolean };
 
 export type DeletePostMutationVariables = Exact<{
-  postId: Scalars['String'];
+  postId: Scalars['Int'];
 }>;
 
 
 export type DeletePostMutation = { __typename?: 'Mutation', deletePost: boolean };
 
 export type DislikeMutationVariables = Exact<{
-  postId: Scalars['String'];
+  postId: Scalars['Int'];
 }>;
 
 
@@ -272,36 +272,36 @@ export type DislikeMutation = { __typename?: 'Mutation', dislike: boolean };
 
 export type EditCommentMutationVariables = Exact<{
   content: Scalars['String'];
-  commentId: Scalars['String'];
+  commentId: Scalars['Int'];
 }>;
 
 
-export type EditCommentMutation = { __typename?: 'Mutation', editComment?: { __typename: 'Comment', id: string, content: string, authorId: string, postId: string, createdAt: string, updatedAt: string } | null };
+export type EditCommentMutation = { __typename?: 'Mutation', editComment?: { __typename: 'Comment', id: number, content: string, authorId: number, postId: number, createdAt: string, updatedAt: string } | null };
 
 export type EditPostMutationVariables = Exact<{
   content: Scalars['String'];
-  postId: Scalars['String'];
+  postId: Scalars['Int'];
 }>;
 
 
-export type EditPostMutation = { __typename?: 'Mutation', editPost?: { __typename: 'Post', id: string, content: string, authorId: string, createdAt: string, updatedAt: string } | null };
+export type EditPostMutation = { __typename?: 'Mutation', editPost?: { __typename: 'Post', id: number, content: string, authorId: number, createdAt: string, updatedAt: string } | null };
 
 export type EditUserMutationVariables = Exact<{
   input: EditUserInput;
 }>;
 
 
-export type EditUserMutation = { __typename?: 'Mutation', editUser: { __typename?: 'UserResponse', user?: { __typename: 'User', id: string, username: string, name?: string | null, bio?: string | null, portfolioLink?: string | null, createdAt?: string | null, updatedAt?: string | null } | null, errors?: Array<{ __typename?: 'FieldError', field?: string | null, message: string }> | null } };
+export type EditUserMutation = { __typename?: 'Mutation', editUser: { __typename?: 'UserResponse', user?: { __typename: 'User', id: number, username: string, name?: string | null, bio?: string | null, portfolioLink?: string | null, createdAt?: string | null, updatedAt?: string | null } | null, errors?: Array<{ __typename?: 'FieldError', field?: string | null, message: string }> | null } };
 
 export type FollowMutationVariables = Exact<{
-  followId: Scalars['String'];
+  followId: Scalars['Int'];
 }>;
 
 
 export type FollowMutation = { __typename?: 'Mutation', follow: boolean };
 
 export type LikeMutationVariables = Exact<{
-  postId: Scalars['String'];
+  postId: Scalars['Int'];
 }>;
 
 
@@ -312,7 +312,7 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', user?: { __typename?: 'User', id: string, name?: string | null, username: string, email: string, createdAt?: string | null, updatedAt?: string | null } | null, errors?: Array<{ __typename?: 'FieldError', field?: string | null, message: string }> | null } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', user?: { __typename?: 'User', id: number, name?: string | null, username: string, email: string, createdAt?: string | null, updatedAt?: string | null } | null, errors?: Array<{ __typename?: 'FieldError', field?: string | null, message: string }> | null } };
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -324,17 +324,17 @@ export type RegisterMutationVariables = Exact<{
 }>;
 
 
-export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', user?: { __typename: 'User', id: string, email: string, name?: string | null, username: string, createdAt?: string | null, updatedAt?: string | null } | null, errors?: Array<{ __typename?: 'FieldError', field?: string | null, message: string }> | null } };
+export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', user?: { __typename: 'User', id: number, email: string, name?: string | null, username: string, createdAt?: string | null, updatedAt?: string | null } | null, errors?: Array<{ __typename?: 'FieldError', field?: string | null, message: string }> | null } };
 
 export type RemoveBookmarkMutationVariables = Exact<{
-  postId: Scalars['String'];
+  postId: Scalars['Int'];
 }>;
 
 
 export type RemoveBookmarkMutation = { __typename?: 'Mutation', removeBookmark: boolean };
 
 export type UnfollowMutationVariables = Exact<{
-  unfollowId: Scalars['String'];
+  unfollowId: Scalars['Int'];
 }>;
 
 
@@ -343,14 +343,14 @@ export type UnfollowMutation = { __typename?: 'Mutation', unfollow: boolean };
 export type BookmarkedPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type BookmarkedPostsQuery = { __typename?: 'Query', bookmarkedPosts?: Array<{ __typename: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean } | null }> | null };
+export type BookmarkedPostsQuery = { __typename?: 'Query', bookmarkedPosts?: Array<{ __typename: 'Post', id: number, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: number, createdAt: string, updatedAt: string, author?: { __typename: 'User', id: number, name?: string | null, username: string, amIFollowingThem: boolean } | null }> | null };
 
 export type CommentsQueryVariables = Exact<{
-  postId: Scalars['String'];
+  postId: Scalars['Int'];
 }>;
 
 
-export type CommentsQuery = { __typename?: 'Query', comments: Array<{ __typename: 'Comment', id: string, content: string, authorId: string, postId: string, createdAt: string, updatedAt: string, author?: { __typename: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean } | null }> };
+export type CommentsQuery = { __typename?: 'Query', comments: Array<{ __typename: 'Comment', id: number, content: string, authorId: number, postId: number, createdAt: string, updatedAt: string, author?: { __typename: 'User', id: number, name?: string | null, username: string, amIFollowingThem: boolean } | null }> };
 
 export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -360,36 +360,36 @@ export type HelloQuery = { __typename?: 'Query', hello: string };
 export type LikedPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type LikedPostsQuery = { __typename?: 'Query', likedPosts?: Array<{ __typename: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean } | null }> | null };
+export type LikedPostsQuery = { __typename?: 'Query', likedPosts?: Array<{ __typename: 'Post', id: number, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: number, createdAt: string, updatedAt: string, author?: { __typename: 'User', id: number, name?: string | null, username: string, amIFollowingThem: boolean } | null }> | null };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: { __typename: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean } | null };
+export type MeQuery = { __typename?: 'Query', me?: { __typename: 'User', id: number, name?: string | null, username: string, amIFollowingThem: boolean } | null };
 
 export type PostQueryVariables = Exact<{
-  postId: Scalars['String'];
+  postId: Scalars['Int'];
 }>;
 
 
-export type PostQuery = { __typename?: 'Query', post?: { __typename: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean } | null } | null };
+export type PostQuery = { __typename?: 'Query', post?: { __typename: 'Post', id: number, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: number, createdAt: string, updatedAt: string, author?: { __typename: 'User', id: number, name?: string | null, username: string, amIFollowingThem: boolean } | null } | null };
 
 export type PostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type PostsQuery = { __typename?: 'Query', posts: Array<{ __typename: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean } | null }> };
+export type PostsQuery = { __typename?: 'Query', posts: Array<{ __typename: 'Post', id: number, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: number, createdAt: string, updatedAt: string, author?: { __typename: 'User', id: number, name?: string | null, username: string, amIFollowingThem: boolean } | null }> };
 
 export type UserQueryVariables = Exact<{
   username: Scalars['String'];
 }>;
 
 
-export type UserQuery = { __typename?: 'Query', user?: { __typename: 'User', bio?: string | null, portfolioLink?: string | null, numFollowers?: number | null, numFollowing?: number | null, isMyFollower: boolean, id: string, name?: string | null, username: string, amIFollowingThem: boolean, posts?: Array<{ __typename: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean } | null }> | null } | null };
+export type UserQuery = { __typename?: 'Query', user?: { __typename: 'User', bio?: string | null, portfolioLink?: string | null, numFollowers?: number | null, numFollowing?: number | null, isMyFollower: boolean, id: number, name?: string | null, username: string, amIFollowingThem: boolean, posts?: Array<{ __typename: 'Post', id: number, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: number, createdAt: string, updatedAt: string, author?: { __typename: 'User', id: number, name?: string | null, username: string, amIFollowingThem: boolean } | null }> | null } | null };
 
 export type UserFeedQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserFeedQuery = { __typename?: 'Query', userFeed: Array<{ __typename: 'Post', id: string, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: string, createdAt: string, updatedAt: string, author?: { __typename: 'User', id: string, name?: string | null, username: string, amIFollowingThem: boolean } | null }> };
+export type UserFeedQuery = { __typename?: 'Query', userFeed: Array<{ __typename: 'Post', id: number, content: string, likes: number, isLikedByMe: boolean, isBookmarkedByMe: boolean, authorId: number, createdAt: string, updatedAt: string, author?: { __typename: 'User', id: number, name?: string | null, username: string, amIFollowingThem: boolean } | null }> };
 
 export const RegularUserFragmentDoc = gql`
     fragment RegularUser on User {
@@ -434,7 +434,7 @@ export const RegularUserResponseFragmentDoc = gql`
     ${RegularErrorFragmentDoc}
 ${RegularUserFragmentDoc}`;
 export const AddBookmarkDocument = gql`
-    mutation AddBookmark($postId: String!) {
+    mutation AddBookmark($postId: Int!) {
   addBookmark(id: $postId)
 }
     `;
@@ -465,7 +465,7 @@ export type AddBookmarkMutationHookResult = ReturnType<typeof useAddBookmarkMuta
 export type AddBookmarkMutationResult = Apollo.MutationResult<AddBookmarkMutation>;
 export type AddBookmarkMutationOptions = Apollo.BaseMutationOptions<AddBookmarkMutation, AddBookmarkMutationVariables>;
 export const CreateCommentDocument = gql`
-    mutation CreateComment($content: String!, $postId: String!) {
+    mutation CreateComment($content: String!, $postId: Int!) {
   createComment(content: $content, postId: $postId) {
     id
     content
@@ -543,7 +543,7 @@ export type CreatePostMutationHookResult = ReturnType<typeof useCreatePostMutati
 export type CreatePostMutationResult = Apollo.MutationResult<CreatePostMutation>;
 export type CreatePostMutationOptions = Apollo.BaseMutationOptions<CreatePostMutation, CreatePostMutationVariables>;
 export const DeleteCommentDocument = gql`
-    mutation DeleteComment($commentId: String!) {
+    mutation DeleteComment($commentId: Int!) {
   deleteComment(id: $commentId)
 }
     `;
@@ -574,7 +574,7 @@ export type DeleteCommentMutationHookResult = ReturnType<typeof useDeleteComment
 export type DeleteCommentMutationResult = Apollo.MutationResult<DeleteCommentMutation>;
 export type DeleteCommentMutationOptions = Apollo.BaseMutationOptions<DeleteCommentMutation, DeleteCommentMutationVariables>;
 export const DeletePostDocument = gql`
-    mutation DeletePost($postId: String!) {
+    mutation DeletePost($postId: Int!) {
   deletePost(id: $postId)
 }
     `;
@@ -605,7 +605,7 @@ export type DeletePostMutationHookResult = ReturnType<typeof useDeletePostMutati
 export type DeletePostMutationResult = Apollo.MutationResult<DeletePostMutation>;
 export type DeletePostMutationOptions = Apollo.BaseMutationOptions<DeletePostMutation, DeletePostMutationVariables>;
 export const DislikeDocument = gql`
-    mutation Dislike($postId: String!) {
+    mutation Dislike($postId: Int!) {
   dislike(id: $postId)
 }
     `;
@@ -636,7 +636,7 @@ export type DislikeMutationHookResult = ReturnType<typeof useDislikeMutation>;
 export type DislikeMutationResult = Apollo.MutationResult<DislikeMutation>;
 export type DislikeMutationOptions = Apollo.BaseMutationOptions<DislikeMutation, DislikeMutationVariables>;
 export const EditCommentDocument = gql`
-    mutation EditComment($content: String!, $commentId: String!) {
+    mutation EditComment($content: String!, $commentId: Int!) {
   editComment(content: $content, id: $commentId) {
     id
     content
@@ -676,7 +676,7 @@ export type EditCommentMutationHookResult = ReturnType<typeof useEditCommentMuta
 export type EditCommentMutationResult = Apollo.MutationResult<EditCommentMutation>;
 export type EditCommentMutationOptions = Apollo.BaseMutationOptions<EditCommentMutation, EditCommentMutationVariables>;
 export const EditPostDocument = gql`
-    mutation EditPost($content: String!, $postId: String!) {
+    mutation EditPost($content: String!, $postId: Int!) {
   editPost(content: $content, id: $postId) {
     id
     content
@@ -760,7 +760,7 @@ export type EditUserMutationHookResult = ReturnType<typeof useEditUserMutation>;
 export type EditUserMutationResult = Apollo.MutationResult<EditUserMutation>;
 export type EditUserMutationOptions = Apollo.BaseMutationOptions<EditUserMutation, EditUserMutationVariables>;
 export const FollowDocument = gql`
-    mutation Follow($followId: String!) {
+    mutation Follow($followId: Int!) {
   follow(followId: $followId)
 }
     `;
@@ -791,7 +791,7 @@ export type FollowMutationHookResult = ReturnType<typeof useFollowMutation>;
 export type FollowMutationResult = Apollo.MutationResult<FollowMutation>;
 export type FollowMutationOptions = Apollo.BaseMutationOptions<FollowMutation, FollowMutationVariables>;
 export const LikeDocument = gql`
-    mutation Like($postId: String!) {
+    mutation Like($postId: Int!) {
   like(id: $postId)
 }
     `;
@@ -939,7 +939,7 @@ export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
 export const RemoveBookmarkDocument = gql`
-    mutation RemoveBookmark($postId: String!) {
+    mutation RemoveBookmark($postId: Int!) {
   removeBookmark(id: $postId)
 }
     `;
@@ -970,7 +970,7 @@ export type RemoveBookmarkMutationHookResult = ReturnType<typeof useRemoveBookma
 export type RemoveBookmarkMutationResult = Apollo.MutationResult<RemoveBookmarkMutation>;
 export type RemoveBookmarkMutationOptions = Apollo.BaseMutationOptions<RemoveBookmarkMutation, RemoveBookmarkMutationVariables>;
 export const UnfollowDocument = gql`
-    mutation Unfollow($unfollowId: String!) {
+    mutation Unfollow($unfollowId: Int!) {
   unfollow(unfollowId: $unfollowId)
 }
     `;
@@ -1036,7 +1036,7 @@ export type BookmarkedPostsQueryHookResult = ReturnType<typeof useBookmarkedPost
 export type BookmarkedPostsLazyQueryHookResult = ReturnType<typeof useBookmarkedPostsLazyQuery>;
 export type BookmarkedPostsQueryResult = Apollo.QueryResult<BookmarkedPostsQuery, BookmarkedPostsQueryVariables>;
 export const CommentsDocument = gql`
-    query Comments($postId: String!) {
+    query Comments($postId: Int!) {
   comments(postId: $postId) {
     id
     content
@@ -1181,7 +1181,7 @@ export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const PostDocument = gql`
-    query Post($postId: String!) {
+    query Post($postId: Int!) {
   post(id: $postId) {
     ...PostWithAuthorField
     __typename

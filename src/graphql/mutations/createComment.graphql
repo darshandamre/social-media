@@ -1,4 +1,4 @@
-mutation CreateComment($content: String!, $postId: String!) {
+mutation CreateComment($content: String!, $postId: Int!) {
   createComment(content: $content, postId: $postId) {
     id
     content

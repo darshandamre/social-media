@@ -1,4 +1,4 @@
-mutation EditPost($content: String!, $postId: String!) {
+mutation EditPost($content: String!, $postId: Int!) {
   editPost(content: $content, id: $postId) {
     id
     content
