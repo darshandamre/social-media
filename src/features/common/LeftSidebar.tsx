@@ -9,8 +9,6 @@ import {
   HomeOutlined,
   LocalFireDepartment,
   MoreHoriz,
-  Notifications,
-  NotificationsNone,
   Rocket,
   RocketOutlined
 } from "@mui/icons-material";
