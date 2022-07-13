@@ -1,6 +1,7 @@
 mutation CreatePost($content: String!) {
   createPost(content: $content) {
     id
+    publicId
     content
     authorId
     createdAt

@@ -14,7 +14,7 @@ export type CreateOrEditPostProps = (
   | {
       type: "edit";
       editContent: string;
-      postId: string;
+      postId: number;
     }
 ) & {
   onClose?: () => void;
