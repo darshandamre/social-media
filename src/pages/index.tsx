@@ -10,7 +10,7 @@ const Home: NextPage = () => {
 
   return (
     <Layout>
-      <BaseFeed isLoading={loading} posts={data?.userFeed} />;
+      <BaseFeed isLoading={loading} posts={data?.userFeed} />
     </Layout>
   );
 };

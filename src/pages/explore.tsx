@@ -8,7 +8,7 @@ const Explore: NextPage = () => {
 
   return (
     <Layout>
-      <BaseFeed isLoading={loading} posts={data?.posts} />;
+      <BaseFeed isLoading={loading} posts={data?.posts} />
     </Layout>
   );
 };
