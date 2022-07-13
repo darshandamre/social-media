@@ -112,7 +112,7 @@ const ProfilePage: NextPage = () => {
               id,
               username: user.username,
               name,
-              amIFollowingThem: false,
+              amIFollowingThem: user.amIFollowingThem,
               __typename: "User"
             }
           }}
