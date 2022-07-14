@@ -35,6 +35,7 @@ const Login: NextPage = () => {
   });
 
   const router = useRouter();
+  const from = typeof router.query.from === "string" ? router.query.from : "/";
   const apolloClient = useApolloClient();
   const [login] = useLoginMutation({
     onCompleted: ({ login }) => {
@@ -61,7 +62,7 @@ const Login: NextPage = () => {
             }
           }
         });
-        router.push("/");
+        router.push(from);
       }
     }
   });
@@ -122,7 +123,7 @@ const Login: NextPage = () => {
           <Typography
             variant="body1"
             component={NextLinkComposed}
-            to="/register"
+            to={"/register?from=" + encodeURIComponent(from)}
             sx={{
               textDecoration: "none",
               color: "primary.main",

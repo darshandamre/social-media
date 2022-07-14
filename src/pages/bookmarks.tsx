@@ -7,9 +7,9 @@ import { useIsAuth } from "../hooks/useIsAuth";
 
 const Bookmarks: NextPage = () => {
   const { data, loading: postLoading } = useBookmarkedPostsQuery();
-  const { authLoading } = useIsAuth();
+  const { authLoading, isAuth } = useIsAuth();
 
-  if (authLoading) return <Loader />;
+  if (authLoading || !isAuth) return <Loader />;
 
   return (
     <Layout>

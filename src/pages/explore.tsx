@@ -6,9 +6,9 @@ import { useIsAuth } from "../hooks/useIsAuth";
 
 const Explore: NextPage = () => {
   const { data, loading } = usePostsQuery();
-  const { authLoading } = useIsAuth();
+  const { authLoading, isAuth } = useIsAuth();
 
-  if (authLoading) return <Loader />;
+  if (authLoading || !isAuth) return <Loader />;
 
   return (
     <Layout>

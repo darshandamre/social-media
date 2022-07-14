@@ -7,24 +7,30 @@ import { useIsAuth } from "../hooks/useIsAuth";
 
 const Likes: NextPage = () => {
   const { data, loading: postLoading } = useLikedPostsQuery();
-  const { authLoading } = useIsAuth();
+  const { authLoading, isAuth } = useIsAuth();
 
-  if (postLoading || authLoading) return <Loader />;
+  if (authLoading || !isAuth) return <Loader />;
 
   return (
     <Layout>
-      <Typography
-        variant="h5"
-        sx={({ palette }) => ({
-          px: 3,
-          py: 2,
-          borderBottom: `1px solid ${palette.background.paper}`
-        })}>
-        Likes
-      </Typography>
-      {data?.likedPosts?.map(post => (
-        <PostCard key={post.id} post={post} />
-      ))}
+      {postLoading ? (
+        <Loader />
+      ) : (
+        <>
+          <Typography
+            variant="h5"
+            sx={({ palette }) => ({
+              px: 3,
+              py: 2,
+              borderBottom: `1px solid ${palette.background.paper}`
+            })}>
+            Likes
+          </Typography>
+          {data?.likedPosts?.map(post => (
+            <PostCard key={post.id} post={post} />
+          ))}
+        </>
+      )}
     </Layout>
   );
 };
