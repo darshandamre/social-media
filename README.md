@@ -1,3 +1,3 @@
-# sauce
+# Blaze
 
 social media app
