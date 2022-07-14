@@ -12,6 +12,7 @@ const AuthPagesLayout = ({ children, title }: AuthPagesLayoutProps) => {
     <>
       <Head>
         <title>{title ? title + " | Blaze Social" : "Blaze Social"}</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <Grid
         container
