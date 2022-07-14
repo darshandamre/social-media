@@ -7,7 +7,7 @@ export const useIsAuth = () => {
   const router = useRouter();
   useEffect(() => {
     if (!loading && !data?.me) {
-      router.replace("/login?from=" + router.asPath);
+      router.replace("/login?from=" + encodeURIComponent(router.asPath));
     }
   }, [router, loading, data?.me]);
 

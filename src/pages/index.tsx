@@ -30,11 +30,11 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
   } catch (err) {
     if (
       err instanceof ApolloError &&
-      err.graphQLErrors[0]?.message === "not authenticated"
+      err.graphQLErrors.some(e => e.message === "not authenticated")
     ) {
       return {
         redirect: {
-          destination: "/login?from=" + ctx.resolvedUrl,
+          destination: "/login?from=" + encodeURIComponent(ctx.resolvedUrl),
           permanent: false
         }
       };

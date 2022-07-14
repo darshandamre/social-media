@@ -129,17 +129,33 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
     return { notFound: true };
   }
 
-  const apolloClient = initializeApollo({ cookies: ctx.req.cookies });
-  const { data } = await apolloClient.query<UserQuery, UserQueryVariables>({
-    query: UserDocument,
-    variables: { username: ctx.query.username }
-  });
+  try {
+    const apolloClient = initializeApollo({ cookies: ctx.req.cookies });
+    const { data } = await apolloClient.query<UserQuery, UserQueryVariables>({
+      query: UserDocument,
+      variables: { username: ctx.query.username }
+    });
 
-  if (!data.user) {
-    return { notFound: true };
+    if (!data.user) {
+      return { notFound: true };
+    }
+
+    return addApolloState(apolloClient, {
+      props: {}
+    });
+  } catch (err) {
+    if (
+      err instanceof ApolloError &&
+      err.graphQLErrors.some(e => e.message === "not authenticated")
+    ) {
+      return {
+        redirect: {
+          destination: "/login?from=" + encodeURIComponent(ctx.resolvedUrl),
+          permanent: false
+        }
+      };
+    }
+
+    throw err;
   }
-
-  return addApolloState(apolloClient, {
-    props: {}
-  });
 };

@@ -1,3 +1,4 @@
+import { ApolloError } from "@apollo/client";
 import { ArrowBack, ChatBubbleOutline } from "@mui/icons-material";
 import { Avatar, Box, IconButton, Typography } from "@mui/material";
 import { GetServerSideProps, NextPage } from "next";
@@ -165,17 +166,33 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
     return { notFound: true };
   }
 
-  const apolloClient = initializeApollo({ cookies: ctx.req.cookies });
-  const { data } = await apolloClient.query<PostQuery, PostQueryVariables>({
-    query: PostDocument,
-    variables: { postId: ctx.query.postId }
-  });
+  try {
+    const apolloClient = initializeApollo({ cookies: ctx.req.cookies });
+    const { data } = await apolloClient.query<PostQuery, PostQueryVariables>({
+      query: PostDocument,
+      variables: { postId: ctx.query.postId }
+    });
 
-  if (!data.post) {
-    return { notFound: true };
+    if (!data.post) {
+      return { notFound: true };
+    }
+
+    return addApolloState(apolloClient, {
+      props: {}
+    });
+  } catch (err) {
+    if (
+      err instanceof ApolloError &&
+      err.graphQLErrors.some(e => e.message === "not authenticated")
+    ) {
+      return {
+        redirect: {
+          destination: "/login?from=" + encodeURIComponent(ctx.resolvedUrl),
+          permanent: false
+        }
+      };
+    }
+
+    throw err;
   }
-
-  return addApolloState(apolloClient, {
-    props: {}
-  });
 };
