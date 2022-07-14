@@ -1,10 +1,14 @@
 import { NextPage } from "next";
-import { Layout } from "../features/common";
+import { Layout, Loader } from "../features/common";
 import { BaseFeed } from "../features/feed";
 import { usePostsQuery } from "../generated/graphql";
+import { useIsAuth } from "../hooks/useIsAuth";
 
 const Explore: NextPage = () => {
   const { data, loading } = usePostsQuery();
+  const { authLoading } = useIsAuth();
+
+  if (authLoading) return <Loader />;
 
   return (
     <Layout>

@@ -1,15 +1,15 @@
 import { Typography } from "@mui/material";
 import { NextPage } from "next";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
 import { Layout, Loader } from "../features/common";
 import { PostCard } from "../features/post";
-import { useLikedPostsQuery, useMeQuery } from "../generated/graphql";
+import { useLikedPostsQuery } from "../generated/graphql";
+import { useIsAuth } from "../hooks/useIsAuth";
 
 const Likes: NextPage = () => {
-  const { data, loading } = useLikedPostsQuery();
+  const { data, loading: postLoading } = useLikedPostsQuery();
+  const { authLoading } = useIsAuth();
 
-  if (loading) return <Loader />;
+  if (postLoading || authLoading) return <Loader />;
 
   return (
     <Layout>
