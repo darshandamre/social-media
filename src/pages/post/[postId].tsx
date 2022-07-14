@@ -1,7 +1,6 @@
-import { ApolloError } from "@apollo/client";
 import { ArrowBack, ChatBubbleOutline } from "@mui/icons-material";
 import { Avatar, Box, IconButton, Typography } from "@mui/material";
-import { GetServerSideProps, NextPage } from "next";
+import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useRef } from "react";
 import { CommentBox, CommentsList } from "../../features/comments";
@@ -12,14 +11,8 @@ import {
   PostActionContainer,
   PostCardOptions
 } from "../../features/post";
-import {
-  PostDocument,
-  PostQuery,
-  PostQueryVariables,
-  usePostQuery
-} from "../../generated/graphql";
+import { usePostQuery } from "../../generated/graphql";
 import { stringAvatar } from "../../utils";
-import { addApolloState, initializeApollo } from "../../utils/apolloClient";
 
 const PostPage: NextPage = () => {
   const router = useRouter();
@@ -36,7 +29,11 @@ const PostPage: NextPage = () => {
 
   if (!post) {
     if (isPostLoading) {
-      return <Loader />;
+      return (
+        <Layout>
+          <Loader />
+        </Layout>
+      );
     } else {
       return (
         <Box
@@ -160,39 +157,3 @@ const PostPage: NextPage = () => {
 };
 
 export default PostPage;
-
-export const getServerSideProps: GetServerSideProps = async ctx => {
-  if (typeof ctx.query.postId !== "string") {
-    return { notFound: true };
-  }
-
-  try {
-    const apolloClient = initializeApollo({ cookies: ctx.req.cookies });
-    const { data } = await apolloClient.query<PostQuery, PostQueryVariables>({
-      query: PostDocument,
-      variables: { postId: ctx.query.postId }
-    });
-
-    if (!data.post) {
-      return { notFound: true };
-    }
-
-    return addApolloState(apolloClient, {
-      props: {}
-    });
-  } catch (err) {
-    if (
-      err instanceof ApolloError &&
-      err.graphQLErrors.some(e => e.message === "not authenticated")
-    ) {
-      return {
-        redirect: {
-          destination: "/login?from=" + encodeURIComponent(ctx.resolvedUrl),
-          permanent: false
-        }
-      };
-    }
-
-    throw err;
-  }
-};

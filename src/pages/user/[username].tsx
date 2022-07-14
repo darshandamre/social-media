@@ -1,19 +1,12 @@
-import { ApolloError } from "@apollo/client";
 import { ArrowBack } from "@mui/icons-material";
-import { Box, Typography, IconButton, Avatar } from "@mui/material";
-import { GetServerSideProps, NextPage } from "next";
+import { Avatar, Box, IconButton, Typography } from "@mui/material";
+import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { Layout, Loader } from "../../features/common";
 import { PostCard } from "../../features/post";
 import { ProfileButton } from "../../features/user";
-import {
-  UserDocument,
-  UserQuery,
-  UserQueryVariables,
-  useUserQuery
-} from "../../generated/graphql";
+import { useUserQuery } from "../../generated/graphql";
 import { stringAvatar } from "../../utils";
-import { addApolloState, initializeApollo } from "../../utils/apolloClient";
 
 const ProfilePage: NextPage = () => {
   const router = useRouter();
@@ -27,7 +20,13 @@ const ProfilePage: NextPage = () => {
     variables: { username: router.query.username as string }
   });
 
-  if (loading) return <Loader />;
+  if (loading) {
+    return (
+      <Layout title={userData?.user?.username}>
+        <Loader />
+      </Layout>
+    );
+  }
 
   if (!userData?.user) return <Box>user not found</Box>;
 
@@ -123,39 +122,3 @@ const ProfilePage: NextPage = () => {
 };
 
 export default ProfilePage;
-
-export const getServerSideProps: GetServerSideProps = async ctx => {
-  if (typeof ctx.query.username !== "string") {
-    return { notFound: true };
-  }
-
-  try {
-    const apolloClient = initializeApollo({ cookies: ctx.req.cookies });
-    const { data } = await apolloClient.query<UserQuery, UserQueryVariables>({
-      query: UserDocument,
-      variables: { username: ctx.query.username }
-    });
-
-    if (!data.user) {
-      return { notFound: true };
-    }
-
-    return addApolloState(apolloClient, {
-      props: {}
-    });
-  } catch (err) {
-    if (
-      err instanceof ApolloError &&
-      err.graphQLErrors.some(e => e.message === "not authenticated")
-    ) {
-      return {
-        redirect: {
-          destination: "/login?from=" + encodeURIComponent(ctx.resolvedUrl),
-          permanent: false
-        }
-      };
-    }
-
-    throw err;
-  }
-};
