@@ -1,5 +1,4 @@
 import { Grid } from "@mui/material";
-// import theme from "../../theme";
 import { LeftSidebar } from "./LeftSidebar";
 
 type LayoutProps = {
