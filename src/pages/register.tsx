@@ -85,7 +85,7 @@ const Register: NextPage = () => {
   });
 
   return (
-    <AuthPagesLayout>
+    <AuthPagesLayout title="Register">
       <Box>
         <Typography variant="h4" component="div" align="center" pb={4}>
           Sign up.

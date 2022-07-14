@@ -35,7 +35,7 @@ const ProfilePage: NextPage = () => {
   const { id, username, name, bio, portfolioLink, posts } = user;
 
   return (
-    <Layout>
+    <Layout title={username}>
       <Typography
         variant="h5"
         sx={({ palette }) => ({

@@ -9,7 +9,7 @@ const Home: NextPage = () => {
   const { data, loading } = useUserFeedQuery();
 
   return (
-    <Layout>
+    <Layout title="Home">
       <BaseFeed isLoading={loading} posts={data?.userFeed} />
     </Layout>
   );

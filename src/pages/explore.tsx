@@ -11,7 +11,7 @@ const Explore: NextPage = () => {
   if (authLoading || !isAuth) return <Loader />;
 
   return (
-    <Layout>
+    <Layout title="Explore">
       <BaseFeed isLoading={loading} posts={data?.posts} />
     </Layout>
   );

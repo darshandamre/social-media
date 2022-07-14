@@ -1,26 +1,33 @@
 import { Grid } from "@mui/material";
+import Head from "next/head";
 import { LeftSidebar } from "./LeftSidebar";
 
 type LayoutProps = {
   children: React.ReactNode;
+  title?: string;
 };
 
-const Layout = ({ children }: LayoutProps) => {
+const Layout = ({ children, title }: LayoutProps) => {
   return (
-    <Grid container height="100%" maxWidth="60rem" mx="auto">
-      <Grid item xs={3}>
-        <LeftSidebar />
+    <>
+      <Head>
+        <title>{title ? title + " | Blaze Social" : "Blaze Social"}</title>
+      </Head>
+      <Grid container height="100%" maxWidth="60rem" mx="auto">
+        <Grid item xs={3}>
+          <LeftSidebar />
+        </Grid>
+        <Grid
+          item
+          xs={8}
+          sx={({ palette }) => ({
+            borderLeft: `1px solid ${palette.background.paper}`,
+            borderRight: `1px solid ${palette.background.paper}`
+          })}>
+          {children}
+        </Grid>
       </Grid>
-      <Grid
-        item
-        xs={8}
-        sx={({ palette }) => ({
-          borderLeft: `1px solid ${palette.background.paper}`,
-          borderRight: `1px solid ${palette.background.paper}`
-        })}>
-        {children}
-      </Grid>
-    </Grid>
+    </>
   );
 };
 

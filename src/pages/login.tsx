@@ -72,7 +72,7 @@ const Login: NextPage = () => {
   });
 
   return (
-    <AuthPagesLayout>
+    <AuthPagesLayout title="Login">
       <Box mb={8}>
         <Typography variant="h4" component="div" align="center" pb={4}>
           Login.

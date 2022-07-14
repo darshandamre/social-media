@@ -63,7 +63,7 @@ const PostPage: NextPage = () => {
   });
 
   return (
-    <Layout>
+    <Layout title={author?.username}>
       <Typography
         variant="h5"
         sx={({ palette }) => ({

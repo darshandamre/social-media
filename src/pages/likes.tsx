@@ -12,7 +12,7 @@ const Likes: NextPage = () => {
   if (authLoading || !isAuth) return <Loader />;
 
   return (
-    <Layout>
+    <Layout title="Likes">
       {postLoading ? (
         <Loader />
       ) : (

@@ -12,7 +12,7 @@ const Bookmarks: NextPage = () => {
   if (authLoading || !isAuth) return <Loader />;
 
   return (
-    <Layout>
+    <Layout title="Bookmarks">
       {postLoading ? (
         <Loader />
       ) : (
