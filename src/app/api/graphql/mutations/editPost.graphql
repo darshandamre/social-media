@@ -1,9 +1,0 @@
-mutation EditPost($content: String!, $postId: String!) {
-  editPost(content: $content, id: $postId) {
-    id
-    content
-    authorId
-    createdAt
-    updatedAt
-  }
-}

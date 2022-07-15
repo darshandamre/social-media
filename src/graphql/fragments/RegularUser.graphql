@@ -1,0 +1,7 @@
+fragment RegularUser on User {
+  id
+  name
+  username
+  amIFollowingThem
+  __typename
+}

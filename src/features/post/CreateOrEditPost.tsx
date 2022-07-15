@@ -1,14 +1,9 @@
 import { Avatar, Box, Button, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import {
-  useCreatePostMutation,
-  useEditPostMutation,
-  useMeQuery
-} from "../../app/api";
-import { useAppDispatch } from "../../app/hooks";
-import { theme } from "../../theme";
+import { useEditPostMutation, useMeQuery } from "../../generated/graphql";
 import { stringAvatar } from "../../utils/stringAvatar";
-import { showAlertThenHide } from "../alert";
+import { useCreatePostMutationAndUpdateCache } from "../../hooks";
+import { useAlert } from "../alert";
 
 export type CreateOrEditPostProps = (
   | {
@@ -19,7 +14,7 @@ export type CreateOrEditPostProps = (
   | {
       type: "edit";
       editContent: string;
-      postId: string;
+      postId: number;
     }
 ) & {
   onClose?: () => void;
@@ -31,14 +26,12 @@ const CreateOrEditPost = ({
   postId,
   onClose
 }: CreateOrEditPostProps) => {
-  const { data } = useMeQuery();
-  const [createPost, { isLoading: isCreatePostLoading }] =
-    useCreatePostMutation();
-  const [saveEditPost, { isLoading: isEditPostLoading }] =
-    useEditPostMutation();
-  const dispatch = useAppDispatch();
-
+  const { data: meData } = useMeQuery();
+  const [createPost, { loading: isCreatePostLoading }] =
+    useCreatePostMutationAndUpdateCache();
+  const [saveEditPost, { loading: isEditPostLoading }] = useEditPostMutation();
   const isLoading = type === "edit" ? isEditPostLoading : isCreatePostLoading;
+  const { showAlert } = useAlert();
 
   const [content, setContent] = useState(type === "edit" ? editContent : "");
   const [error, setError] = useState("");
@@ -59,10 +52,10 @@ const CreateOrEditPost = ({
     }
     if (error) return;
     type === "edit"
-      ? await saveEditPost({ postId, content })
-      : await createPost({ content });
+      ? await saveEditPost({ variables: { postId, content } })
+      : await createPost({ variables: { content } });
 
-    showAlertThenHide(dispatch, {
+    showAlert({
       message: `Post ${type === "edit" ? "edited" : "created"} successfully`,
       severity: "success"
     });
@@ -74,12 +67,12 @@ const CreateOrEditPost = ({
     <Box
       component="form"
       onSubmit={handleCreatePost}
-      sx={{
+      sx={({ palette }) => ({
         p: "1rem",
         display: "flex",
-        borderBottom: `1px solid ${theme.palette.background.paper}`
-      }}>
-      <Avatar {...stringAvatar(data?.me?.name)} />
+        borderBottom: `1px solid ${palette.background.paper}`
+      })}>
+      <Avatar {...stringAvatar(meData?.me?.name)} />
 
       <TextField
         multiline

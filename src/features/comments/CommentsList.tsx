@@ -1,16 +1,18 @@
 import { Avatar, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import { Link } from "react-router-dom";
-import { useCommentsQuery } from "../../app/api";
-import { PostWithAuthorFieldFragment } from "../../app/api/generated/graphql";
+import {
+  PostWithAuthorFieldFragment,
+  useCommentsQuery
+} from "../../generated/graphql";
 import { stringAvatar } from "../../utils/stringAvatar";
+import { NextLinkComposed } from "../common";
 
 type CommentsListProps = {
   post: PostWithAuthorFieldFragment;
 };
 
 const CommentsList = ({ post }: CommentsListProps) => {
-  const { data } = useCommentsQuery({ postId: post.id });
+  const { data } = useCommentsQuery({ variables: { postId: post.id } });
 
   return (
     <Box
@@ -18,7 +20,7 @@ const CommentsList = ({ post }: CommentsListProps) => {
         borderTop: `1px solid ${theme.palette.background.paper}`
       })}>
       {data?.comments.map(({ id, content, author }) => {
-        const profileUrl = `/u/${author?.username}`;
+        const profileUrl = `/user/${author?.username}`;
         return (
           <Box
             key={id}
@@ -29,7 +31,7 @@ const CommentsList = ({ post }: CommentsListProps) => {
               borderBottom: `1px solid ${theme.palette.background.paper}`
             })}>
             <Avatar
-              component={Link}
+              component={NextLinkComposed}
               to={profileUrl}
               sx={{
                 textDecoration: "none",
@@ -41,7 +43,7 @@ const CommentsList = ({ post }: CommentsListProps) => {
               <Box display="flex">
                 {author?.name ? (
                   <Typography
-                    component={Link}
+                    component={NextLinkComposed}
                     to={profileUrl}
                     sx={{
                       mr: "0.5rem",
@@ -53,7 +55,7 @@ const CommentsList = ({ post }: CommentsListProps) => {
                   </Typography>
                 ) : null}
                 <Typography
-                  component={Link}
+                  component={NextLinkComposed}
                   to={profileUrl}
                   color="InactiveCaptionText"
                   sx={{ textDecoration: "none" }}>

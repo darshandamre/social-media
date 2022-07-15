@@ -1,3 +1,4 @@
+import { useApolloClient } from "@apollo/client";
 import {
   AccountCircle,
   AccountCircleOutlined,
@@ -9,8 +10,6 @@ import {
   HomeOutlined,
   LocalFireDepartment,
   MoreHoriz,
-  Notifications,
-  NotificationsNone,
   Rocket,
   RocketOutlined
 } from "@mui/icons-material";
@@ -20,21 +19,48 @@ import {
   Button,
   CircularProgress,
   IconButton,
+  Menu,
+  MenuItem,
   Typography
 } from "@mui/material";
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { useMeQuery } from "../../app/api";
+import { useRouter } from "next/router";
+import { useRef, useState } from "react";
+import { useLogoutMutation, useMeQuery } from "../../generated/graphql";
 import { stringAvatar } from "../../utils/stringAvatar";
+import { useAlert } from "../alert";
 import { CreateOrEditPostModal } from "../post";
 import { MyNavLink } from "./MyNavLink";
+import { NextLinkComposed } from "./NextLinkComposed";
 
 const LeftSidebar = () => {
-  const { data, isLoading } = useMeQuery();
-  const [isOpen, setIsOpen] = useState(false);
+  const { data, loading } = useMeQuery();
+  const [isCreatePostModalOpen, setIsCreatePostModalOpen] = useState(false);
+  const [isLogoutMenuOpen, setIsLogoutMenuOpen] = useState(false);
+  const anchorRef = useRef(null);
+  const apolloClient = useApolloClient();
+  const router = useRouter();
+  const { showAlert } = useAlert();
 
-  const handleOpen = () => setIsOpen(true);
-  const handleClose = () => setIsOpen(false);
+  const closeLogoutMenu = () => {
+    setIsLogoutMenuOpen(false);
+  };
+
+  const [logout] = useLogoutMutation({
+    onError: () => {
+      showAlert({
+        message: "some error occured, please try again",
+        severity: "error"
+      });
+      closeLogoutMenu();
+    },
+    onCompleted: data => {
+      if (data.logout) {
+        apolloClient.clearStore();
+        closeLogoutMenu();
+        router.push("/login");
+      }
+    }
+  });
 
   return (
     <>
@@ -48,7 +74,7 @@ const LeftSidebar = () => {
         top={0}>
         <Box display="flex">
           <Box
-            component={Link}
+            component={NextLinkComposed}
             to="/"
             sx={{
               py: "0.5rem",
@@ -93,13 +119,7 @@ const LeftSidebar = () => {
           Bookmarks
         </MyNavLink>
         <MyNavLink
-          to="/notifications"
-          icon={NotificationsNone}
-          activeIcon={Notifications}>
-          Notifications
-        </MyNavLink>
-        <MyNavLink
-          to={data?.me ? `/u/${data.me.username}` : "/login"}
+          to={data?.me ? `/user/${data.me.username}` : "/login"}
           icon={AccountCircleOutlined}
           activeIcon={AccountCircle}>
           Profile
@@ -115,19 +135,19 @@ const LeftSidebar = () => {
           }}
           size="large"
           variant="contained"
-          onClick={handleOpen}>
+          onClick={() => setIsCreatePostModalOpen(true)}>
           create post
         </Button>
 
         <Box mt="auto">
-          {isLoading ? (
+          {loading ? (
             <Box display="flex" alignItems="center" justifyContent="center">
               <CircularProgress color="primary" />
             </Box>
           ) : (
             <Box
-              component={Link}
-              to={`/u/${data?.me?.username}`}
+              component={NextLinkComposed}
+              to={`/user/${data?.me?.username}`}
               sx={{
                 p: 1,
                 maxWidth: "20rem",
@@ -149,17 +169,52 @@ const LeftSidebar = () => {
                   @{data?.me?.username}
                 </Typography>
               </Box>
-              <IconButton onClick={e => e.preventDefault()} sx={{ ml: "auto" }}>
+              <IconButton
+                ref={anchorRef}
+                id="logout-button"
+                aria-controls={isLogoutMenuOpen ? "logout-menu" : undefined}
+                aria-haspopup="true"
+                aria-expanded={isLogoutMenuOpen ? "true" : undefined}
+                onClick={e => {
+                  e.preventDefault();
+                  setIsLogoutMenuOpen(true);
+                }}
+                sx={{ ml: "auto" }}>
                 <MoreHoriz />
               </IconButton>
+              <Menu
+                id="logout-menu"
+                anchorEl={anchorRef.current}
+                open={isLogoutMenuOpen}
+                onClose={closeLogoutMenu}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "left"
+                }}
+                transformOrigin={{
+                  vertical: "bottom",
+                  horizontal: "left"
+                }}
+                MenuListProps={{
+                  "aria-labelledby": "logout-button"
+                }}
+                onClick={e => e.preventDefault()}>
+                <MenuItem
+                  onClick={e => {
+                    e.preventDefault();
+                    logout();
+                  }}>
+                  Logout
+                </MenuItem>
+              </Menu>
             </Box>
           )}
         </Box>
       </Box>
       <CreateOrEditPostModal
         type="create"
-        open={isOpen}
-        onClose={handleClose}
+        open={isCreatePostModalOpen}
+        onClose={() => setIsCreatePostModalOpen(false)}
       />
     </>
   );

@@ -1,2 +1,2 @@
 export { AlertContainer } from "./AlertContainer";
-export * from "./alertSlice";
+export { AlertProvider, useAlert } from "./AlertContext";

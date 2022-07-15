@@ -1,17 +1,18 @@
 import { MoreHoriz } from "@mui/icons-material";
 import { Box, IconButton, MenuItem } from "@mui/material";
-import React, { useReducer, useRef, useState } from "react";
+import { useReducer, useRef, useState } from "react";
 import {
-  useFollowMutation,
-  useMeQuery,
-  useUnfollowMutation
-} from "../../app/api";
-import { PostWithAuthorFieldFragment } from "../../app/api/generated/graphql";
-import { useAppDispatch } from "../../app/hooks";
-import { showAlertThenHide } from "../alert";
+  PostWithAuthorFieldFragment,
+  useMeQuery
+} from "../../generated/graphql";
 import { CreateOrEditPostModal } from "./CreateOrEditPostModal";
 import { DeletePostModal } from "./DeletePostModal";
 import { PostCardMenu } from "./PostCardMenu";
+import {
+  useFollowMutationAndUpdateCache,
+  useUnFollowMutationAndUpdateCache
+} from "../../hooks";
+import { useAlert } from "../alert";
 
 type PostCardOptionsProps = {
   post: PostWithAuthorFieldFragment;
@@ -28,30 +29,34 @@ const PostCardOptions = ({ post }: PostCardOptionsProps) => {
   const [openMenu, setOpenMenu] = useState<boolean>(false);
   const toggleMenu = () => setOpenMenu(prevOpen => !prevOpen);
   const closeMenu = () => setOpenMenu(false);
+  const { showAlert } = useAlert();
 
-  const dispatch = useAppDispatch();
-  const [follow] = useFollowMutation();
-  const [unfollow] = useUnfollowMutation();
-
-  const handleFollowUnfollow = async () => {
-    try {
-      const result = post.author?.amIFollowingThem
-        ? await unfollow({ unfollowId: post.authorId }).unwrap()
-        : await follow({ followId: post.authorId }).unwrap();
-
-      if ("follow" in result && result.follow) {
-        showAlertThenHide(dispatch, {
+  const [follow] = useFollowMutationAndUpdateCache({
+    variables: { followId: post.authorId },
+    onCompleted: data => {
+      if (data?.follow) {
+        showAlert({
           message: `You Followed @${post.author?.username}`
         });
       }
-      if ("unfollow" in result && result.unfollow) {
-        showAlertThenHide(dispatch, {
+    }
+  });
+  const [unfollow] = useUnFollowMutationAndUpdateCache({
+    variables: { unfollowId: post.authorId },
+    onCompleted: data => {
+      if (data?.unfollow) {
+        showAlert({
           message: `You unfollowed @${post.author?.username}`
         });
       }
-    } catch (err) {
-      console.error(err);
-      showAlertThenHide(dispatch, {
+    }
+  });
+
+  const handleFollowUnfollow = async () => {
+    try {
+      post.author?.amIFollowingThem ? await unfollow() : await follow();
+    } catch {
+      showAlert({
         message: "some error occured",
         severity: "error"
       });

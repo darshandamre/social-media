@@ -1,0 +1,13 @@
+query User($username: String!) {
+  user(username: $username) {
+    ...RegularUser
+    bio
+    portfolioLink
+    numFollowers
+    numFollowing
+    isMyFollower
+    posts {
+      ...PostWithAuthorField
+    }
+  }
+}

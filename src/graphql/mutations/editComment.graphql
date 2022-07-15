@@ -1,0 +1,11 @@
+mutation EditComment($content: String!, $commentId: Int!) {
+  editComment(content: $content, id: $commentId) {
+    id
+    content
+    authorId
+    postId
+    createdAt
+    updatedAt
+    __typename
+  }
+}

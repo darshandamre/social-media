@@ -1,6 +1,9 @@
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import { IconButton, Typography } from "@mui/material";
-import { useDislikeMutation, useLikeMutation } from "../../app/api";
+import {
+  useLikeMutationAndUpdateCache,
+  useDislikeMutationAndUpdateCache
+} from "../../hooks";
 import { PostActionContainer } from "./PostActionContainer";
 
 const LikeButton = ({
@@ -10,10 +13,13 @@ const LikeButton = ({
 }: {
   likes: number;
   isLiked: boolean;
-  postId: string;
+  postId: number;
 }) => {
-  const [like, { isLoading: isLikeLoading }] = useLikeMutation();
-  const [dislike, { isLoading: isDislikeLoading }] = useDislikeMutation();
+  const [like, { loading: isLikeLoading }] = useLikeMutationAndUpdateCache({
+    variables: { postId }
+  });
+  const [dislike, { loading: isDislikeLoading }] =
+    useDislikeMutationAndUpdateCache({ variables: { postId } });
 
   const likeIcon = isLiked ? (
     <Favorite fontSize="small" color="error" />
@@ -27,7 +33,7 @@ const LikeButton = ({
         onClick={e => {
           e.stopPropagation();
           if (isLikeLoading || isDislikeLoading) return;
-          isLiked ? dislike({ postId }) : like({ postId });
+          isLiked ? dislike() : like();
         }}>
         {likeIcon}
       </IconButton>

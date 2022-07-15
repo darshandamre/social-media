@@ -1,21 +1,31 @@
 import { Grid } from "@mui/material";
-import { Outlet } from "react-router-dom";
+import Head from "next/head";
+import React from "react";
 
-// interface AuthPagesLayoutProps {}
+type AuthPagesLayoutProps = {
+  children: React.ReactNode;
+  title?: string;
+};
 
-const AuthPagesLayout = () => {
+const AuthPagesLayout = ({ children, title }: AuthPagesLayoutProps) => {
   return (
-    <Grid
-      container
-      spacing={0}
-      px={2}
-      alignItems="center"
-      justifyContent="center"
-      sx={{ minHeight: "100vh" }}>
-      <Grid item maxWidth="22rem">
-        <Outlet />
+    <>
+      <Head>
+        <title>{title ? title + " | Blaze Social" : "Blaze Social"}</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
+      <Grid
+        container
+        spacing={0}
+        px={2}
+        alignItems="center"
+        justifyContent="center"
+        sx={{ minHeight: "100vh" }}>
+        <Grid item maxWidth="22rem">
+          {children}
+        </Grid>
       </Grid>
-    </Grid>
+    </>
   );
 };
 

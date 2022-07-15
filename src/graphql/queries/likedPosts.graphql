@@ -1,0 +1,6 @@
+query LikedPosts {
+  likedPosts {
+    ...PostWithAuthorField
+    __typename
+  }
+}

@@ -1,0 +1,6 @@
+query UserFeed {
+  userFeed {
+    ...PostWithAuthorField
+    __typename
+  }
+}

@@ -1,9 +1,10 @@
 import { Avatar, Box, Button, Modal, Typography } from "@mui/material";
-import { useDeletePostMutation } from "../../app/api";
-import { PostWithAuthorFieldFragment } from "../../app/api/generated/graphql";
-import { useAppDispatch } from "../../app/hooks";
+import {
+  PostWithAuthorFieldFragment,
+  useDeletePostMutation
+} from "../../generated/graphql";
 import { stringAvatar } from "../../utils/stringAvatar";
-import { showAlertThenHide } from "../alert";
+import { useAlert } from "../alert";
 
 type DeletePostModalProps = {
   open: boolean;
@@ -13,8 +14,33 @@ type DeletePostModalProps = {
 
 const DeletePostModal = ({ post, open, handleClose }: DeletePostModalProps) => {
   const { id, author, content } = post;
-  const [deletePost, { isLoading }] = useDeletePostMutation();
-  const dispatch = useAppDispatch();
+  const { showAlert } = useAlert();
+  const [deletePost, { loading }] = useDeletePostMutation({
+    update(cache, { data }) {
+      if (!data?.deletePost) return;
+      cache.evict({ id: `Post:${id}` });
+    },
+    onCompleted: ({ deletePost }) => {
+      if (deletePost) {
+        showAlert({
+          message: "post deleted successfully",
+          severity: "success"
+        });
+      } else {
+        showAlert({
+          message: "some error occured, post not deleted",
+          severity: "error"
+        });
+      }
+    },
+    onError: () => {
+      showAlert({
+        message: "some error occured, post not deleted",
+        severity: "error"
+      });
+    }
+  });
+
   return (
     <Modal
       open={open}
@@ -69,26 +95,10 @@ const DeletePostModal = ({ post, open, handleClose }: DeletePostModalProps) => {
           </Button>
           <Button
             onClick={async () => {
-              if (isLoading) return;
-              try {
-                const response = await deletePost({ postId: id }).unwrap();
-                if (response.deletePost) {
-                  showAlertThenHide(dispatch, {
-                    message: "post deleted successfully",
-                    severity: "success"
-                  });
-                } else {
-                  showAlertThenHide(dispatch, {
-                    message: "some error occured, post not deleted",
-                    severity: "error"
-                  });
-                }
-              } catch {
-                showAlertThenHide(dispatch, {
-                  message: "some error occured, post not deleted",
-                  severity: "error"
-                });
-              }
+              if (loading) return;
+              await deletePost({
+                variables: { postId: id }
+              });
               handleClose();
             }}
             variant="contained"

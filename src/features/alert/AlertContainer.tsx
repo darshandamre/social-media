@@ -1,8 +1,46 @@
-import { Alert, Slide, Snackbar } from "@mui/material";
-import { useAlert } from "./alertSlice";
+import { Alert, AlertProps, Slide, Snackbar } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
 
-const AlertContainer = () => {
-  const { open, message, severity } = useAlert();
+type AlertState = {
+  open: boolean;
+  severity?: AlertProps["severity"];
+  message: string;
+};
+
+export type AlertInfo = Omit<AlertState, "open">;
+
+const initialState: AlertState = {
+  message: "",
+  open: false
+};
+
+type AlertContainerProps = {
+  alertCallbackRef: React.MutableRefObject<
+    ((alertInfo: AlertInfo) => void) | undefined
+  >;
+};
+
+const AlertContainer = ({ alertCallbackRef }: AlertContainerProps) => {
+  const [alertState, setAlertState] = useState<AlertState>(initialState);
+  const { open, message, severity } = alertState;
+  const timeoutId = useRef<ReturnType<typeof setTimeout>>();
+
+  useEffect(() => {
+    alertCallbackRef.current = alertInfo => {
+      setAlertState({ ...alertInfo, open: true });
+
+      if (timeoutId.current) clearTimeout(timeoutId.current);
+
+      timeoutId.current = setTimeout(() => {
+        setAlertState(initialState);
+      }, 4000);
+    };
+
+    return () => {
+      alertCallbackRef.current = undefined;
+      timeoutId.current = undefined;
+    };
+  }, [alertCallbackRef]);
 
   return (
     <Snackbar

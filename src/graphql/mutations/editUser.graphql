@@ -1,0 +1,17 @@
+mutation EditUser($input: EditUserInput!) {
+  editUser(input: $input) {
+    user {
+      id
+      username
+      name
+      bio
+      portfolioLink
+      createdAt
+      updatedAt
+      __typename
+    }
+    errors {
+      ...RegularError
+    }
+  }
+}

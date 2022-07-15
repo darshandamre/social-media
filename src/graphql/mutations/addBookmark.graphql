@@ -1,0 +1,3 @@
+mutation AddBookmark($postId: Int!) {
+  addBookmark(id: $postId)
+}
